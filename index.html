@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Ajuste de Slump - NBR 12655</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        input[type=number]::-webkit-inner-spin-button, 
+        input[type=number]::-webkit-outer-spin-button { 
+            -webkit-appearance: none; margin: 0; 
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 font-sans">
+
+<div class="max-w-4xl mx-auto p-4 md:p-8">
+    <header class="mb-8 border-b pb-4">
+        <h1 class="text-3xl font-bold text-blue-800">APAVAN_Engenharia de Concreto: Ajuste de Trabalhabilidade</h1>
+        <p class="text-slate-600">Conformidade com ABNT NBR 12655 e NBR NM 67</p>
+    </header>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 bg-white p-6 rounded-xl shadow-lg border border-slate-200">
+        <!-- Input Section -->
+        <div class="space-y-4">
+            <h2 class="text-xl font-semibold border-l-4 border-blue-500 pl-2 text-slate-700">Dados de Entrada</h2>
+            
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium">Slump Medido (mm)</label>
+                    <input type="number" id="slumpMedido" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Ex: 60">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Slump Projeto (mm)</label>
+                    <input type="number" id="slumpProjeto" class="w-full border rounded p-2 focus:ring-2 focus:ring-blue-400 outline-none" placeholder="Ex: 100">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium">Volume (m³)</label>
+                    <input type="number" id="volume" class="w-full border rounded p-2" placeholder="Ex: 8">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Cimento (kg/m³)</label>
+                    <input type="number" id="cimento" class="w-full border rounded p-2" placeholder="Ex: 350">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium">Relação a/c Projeto</label>
+                    <input type="number" step="0.01" id="acProjeto" class="w-full border rounded p-2" placeholder="Ex: 0.50">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium">Água Atual (L/m³)</label>
+                    <input type="number" id="aguaAtual" class="w-full border rounded p-2" placeholder="Ex: 160">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Uso de Aditivo</label>
+                <select id="aditivo" class="w-full border rounded p-2">
+                    <option value="nenhum">Nenhum</option>
+                    <option value="plastificante">Plastificante (P)</option>
+                    <option value="super">Superplastificante (SP)</option>
+                </select>
+            </div>
+
+            <button onclick="calcular()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg transition shadow-md">
+                Avaliar e Ajustar
+            </button>
+        </div>
+
+        <!-- Output Section -->
+        <div id="resultado" class="hidden space-y-4 bg-slate-50 p-6 rounded-lg border border-slate-200">
+            <h2 class="text-xl font-semibold border-l-4 border-green-500 pl-2 text-slate-700">Parecer Técnico</h2>
+            
+            <div id="statusBadge" class="inline-block px-4 py-1 rounded-full text-sm font-bold uppercase mb-2"></div>
+
+            <div class="space-y-2 text-sm">
+                <p><strong>Nova Relação a/c:</strong> <span id="resAC">--</span></p>
+                <p><strong>Diferença de Slump:</strong> <span id="resDelta">--</span> mm</p>
+                <p><strong>Água Máx. Permitida (Total):</strong> <span id="resAguaMax">--</span> L</p>
+                <p class="text-blue-700 font-bold"><strong>Adição Recomendada:</strong> <span id="resSugestao">--</span></p>
+            </div>
+
+            <div id="alerta" class="p-3 rounded text-xs"></div>
+            
+            <div class="mt-4 p-3 bg-white rounded border italic text-xs text-slate-500">
+                "O ajuste hídrico em obra deve ser a última opção. Priorize aditivos superplastificantes para manter a integridade da relação a/c."
+            </div>
+        </div>
+    </div>
+
+    <footer class="mt-8 text-center text-slate-400 text-xs">
+        Desenvolvido para Controle Tecnológico de Obras | Engenheiro Civil Responsável
+    </footer>
+</div>
+
+<script>
+function calcular() {
+    const sMedido = parseFloat(document.getElementById('slumpMedido').value);
+    const sProjeto = parseFloat(document.getElementById('slumpProjeto').value);
+    const vol = parseFloat(document.getElementById('volume').value);
+    const cim = parseFloat(document.getElementById('cimento').value);
+    const acProj = parseFloat(document.getElementById('acProjeto').value);
+    const h2oAtual = parseFloat(document.getElementById('aguaAtual').value);
+    const tipoAditivo = document.getElementById('aditivo').value;
+
+    if (!sMedido || !sProjeto || !vol || !cim || !acProj || !h2oAtual) {
+        alert("Por favor, preencha todos os campos técnicos.");
+        return;
+    }
+
+    const delta = sProjeto - sMedido;
+    const aguaLivrePorM3 = (acProj * cim) - h2oAtual;
+    const aguaMaxTotal = Math.max(0, aguaLivrePorM3 * vol);
+    
+    // Estimativa de água necessária (2.5 L por 10mm de slump)
+    let aguaNecessaria = (delta / 10) * 2.5 * vol;
+    if (aguaNecessaria < 0) aguaNecessaria = 0;
+
+    let status = "";
+    let statusClass = "";
+    let mensagem = "";
+    let novaAC = h2oAtual / cim;
+
+    if (delta <= 0) {
+        status = "Permitida (Sem Ajuste)";
+        statusClass = "bg-green-100 text-green-800";
+        mensagem = "O concreto já atende ou supera a trabalhabilidade de projeto. Não adicionar água.";
+        novaAC = h2oAtual / cim;
+    } else if (aguaNecessaria <= aguaMaxTotal) {
+        status = "Permitida com Ressalvas";
+        statusClass = "bg-yellow-100 text-yellow-800";
+        novaAC = (h2oAtual + (aguaNecessaria/vol)) / cim;
+        mensagem = `Adição de ${aguaNecessaria.toFixed(1)}L permitida. ATENÇÃO: Redosagem de aditivo é preferível para evitar aumento de permeabilidade.`;
+    } else {
+        status = "NÃO PERMITIDA (BLOQUEIO)";
+        statusClass = "bg-red-100 text-red-800";
+        novaAC = (h2oAtual + (aguaMaxTotal/vol)) / cim;
+        mensagem = `ERRO: A adição de água para atingir o slump violaria a relação a/c de ${acProj}. Use SUPERPLASTIFICANTE ou REJEITE o caminhão.`;
+    }
+
+    // Update UI
+    document.getElementById('resultado').classList.remove('hidden');
+    document.getElementById('statusBadge').innerText = status;
+    document.getElementById('statusBadge').className = `inline-block px-4 py-1 rounded-full text-sm font-bold uppercase mb-2 ${statusClass}`;
+    document.getElementById('resAC').innerText = novaAC.toFixed(3);
+    document.getElementById('resDelta').innerText = delta;
+    document.getElementById('resAguaMax').innerText = (aguaMaxTotal).toFixed(1);
+    document.getElementById('resSugestao').innerText = delta > 0 ? (aguaNecessaria <= aguaMaxTotal ? `+${aguaNecessaria.toFixed(1)} L de água` : "Apenas Aditivo SP") : "Nenhum";
+    document.getElementById('alerta').innerText = mensagem;
+    document.getElementById('alerta').className = `p-3 rounded text-xs ${statusClass}`;
+}
+</script>
+
+</body>
+</html>
