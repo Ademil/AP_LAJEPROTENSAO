@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>APAVAN — Simulador de Laje Protendida v17.2</title>
+<title>APAVAN — Simulador de Laje Protendida v17.3</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%233d7dff'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-weight='bold' font-family='sans-serif'>AP</text></svg>">
 <style>
 :root{--bg:#0b1220;--bg2:#131c2e;--bg3:#1c2740;--fg:#e8eefc;--mut:#8fa3c4;--ac:#3d7dff;--ok:#22c55e;--wn:#f59e0b;--er:#ef4444;--bd:#243352}
@@ -53,7 +53,7 @@ input[type=checkbox]{width:auto;margin-left:6px}
 .chip{background:var(--bg3);color:var(--mut);border:1px solid var(--bd);border-radius:14px;padding:3px 10px;font-size:10px;cursor:pointer}
 .chip.active{background:var(--ac);color:#fff;border-color:var(--ac)}
 canvas{width:100%;display:block;border-radius:6px;background:#0a0f1c}
-.cv-sm{max-height:280px}
+.cv-sm{max-height:320px}
 .hint{font-size:10px;color:var(--mut);text-align:center;margin-top:4px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:760px){.row2{grid-template-columns:1fr}}
@@ -92,7 +92,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     <div class="logo">AP</div>
     <div>
       <div class="brand-name">APAVAN ENGENHARIA E CONSULTORIA</div>
-      <div class="brand-sub">SIMULADOR DE LAJE PROTENDIDA v17.2</div>
+      <div class="brand-sub">SIMULADOR DE LAJE PROTENDIDA v17.3</div>
     </div>
   </div>
   <div class="top-actions">
@@ -150,7 +150,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <label>Contorno<select id="g_cont"><option value="biapoiada" selected>Bi-apoiada</option><option value="engaste_apoio">Engastada/apoiada</option><option value="biengastada">Bi-engastada</option></select></label>
 </details>
 
-<details open><summary>3.1 · Vigas-faixa <span class="vf-badge">v17.2</span></summary>
+<details open><summary>3.1 · Vigas-faixa <span class="vf-badge">v17.3</span></summary>
   <label style="display:flex;align-items:center;gap:6px">
     <input type="checkbox" id="vf_ativa" checked> Ativar vigas-faixa
   </label>
@@ -172,10 +172,9 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <label>y₄<input id="vf_y4" type="number" step="0.05" value="3.00"></label>
       <label>y₅<input id="vf_y5" type="number" step="0.05" value="3.00"></label>
     </div>
-
     <label style="display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:8px;border-top:1px dashed var(--bd)">
       <input type="checkbox" id="vf_prot_ativa" checked> Protensão concentrada nas vigas-faixa
-      <span class="vf-protn">v17.2</span>
+      <span class="vf-protn">v17.3</span>
     </label>
     <div id="blocoVFProt">
       <div class="grid2">
@@ -413,7 +412,11 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <div class="hint">Arraste para girar · Roda/pinça para zoom · Duplo clique reseta</div>
     </div>
     <div class="row2">
-      <div class="card"><div class="card-head"><span>Corte transversal</span></div><canvas id="cvCorte" class="cv-sm"></canvas></div>
+      <div class="card">
+        <div class="card-head"><span>Corte transversal</span></div>
+        <canvas id="cvCorte" class="cv-sm"></canvas>
+        <div id="infoCorte" style="margin-top:10px"></div>
+      </div>
       <div class="card"><div class="card-head"><span>Resumo</span></div><div id="resumoGlobal" class="kpis"></div></div>
     </div>
     <div class="card">
@@ -585,8 +588,8 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     <div class="card"><div class="card-head"><span>Punção — NBR 6118 (contornos C e C')</span></div><div id="resPuncao" class="verif-lista"></div></div>
     <div class="card"><div class="card-head"><span>Protensão mínima — NBR 6118:2023 item 20.3.2.1</span></div><div id="resProtMin" class="verif-lista"></div></div>
     <div class="card"><div class="card-head"><span>ELS-D — Descompressão da laje (NBR 6118 Tabela 13.4)</span></div><div id="resDescomp" class="verif-lista"></div></div>
-    <div class="card"><div class="card-head"><span>ELS-D — Descompressão das vigas-faixa <span class="vf-protn">v17.2</span></span></div><div id="resDescompVF" class="verif-lista"></div></div>
-    <div class="card"><div class="card-head"><span>Vigas-faixa — ELU/ELS <span class="vf-badge">v17.2</span></span></div><div id="resVerifVF" class="verif-lista"></div></div>
+    <div class="card"><div class="card-head"><span>ELS-D — Descompressão das vigas-faixa <span class="vf-protn">v17.3</span></span></div><div id="resDescompVF" class="verif-lista"></div></div>
+    <div class="card"><div class="card-head"><span>Vigas-faixa — ELU/ELS <span class="vf-badge">v17.3</span></span></div><div id="resVerifVF" class="verif-lista"></div></div>
   </div>
 
   <div class="view" id="v-quant">
@@ -1149,18 +1152,10 @@ function lerDados() {
       const P_ef_vf = Pi_vf * (1 - perda_pct_vf/100);
       const w_bal_vf = 8 * P_ef_vf * e_vf / (Lvao * Lvao);
       vf_prot = {
-        ativa: true,
-        nCabos: nCabos_vf,
-        nCord: nCord_vf,
-        Ap_cabo: Ap_cabo_vf,
-        Ap_total: Ap_total_vf,
-        sigma_pi: sigma_pi_vf,
-        Pi: Pi_vf,
-        P_ef: P_ef_vf,
-        perda_pct: perda_pct_vf,
-        e: e_vf,
-        d: d_vf_cabo,
-        w_bal: w_bal_vf
+        ativa: true, nCabos: nCabos_vf, nCord: nCord_vf,
+        Ap_cabo: Ap_cabo_vf, Ap_total: Ap_total_vf,
+        sigma_pi: sigma_pi_vf, Pi: Pi_vf, P_ef: P_ef_vf,
+        perda_pct: perda_pct_vf, e: e_vf, d: d_vf_cabo, w_bal: w_bal_vf
       };
     }
 
@@ -1496,7 +1491,6 @@ function setupCanvas(cv) {
   return { ctx, w, h };
 }
 
-/* Trajetória dos cabos */
 function drawCaboGenerico(cv, R, dir, e_dir, label, corForcada) {
   if (!cv) return;
   cv.dataset.h = '240';
@@ -1747,17 +1741,14 @@ function drawPerdas(R) {
   ctx.fillText(`P efetiva = ${R.P_efetiva.toFixed(0)} kN`, x0+6, y1+26);
 }
 
-/* drawBal DINÂMICO */
 function drawBal(R) {
   const cv = $('cvBal'); cv.dataset.h = '340';
   if (!cv) return;
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
-
   const bal_frac = parseFloat($('bal_frac').value) || 0.8;
   const bal_tipo = $('bal_tipo').value;
   const psi2 = 0.30;
-
   let carga_base, carga_nome;
   switch (bal_tipo) {
     case 'pp':       carga_base = R.pp;              carga_nome = 'pp';        break;
@@ -1767,11 +1758,9 @@ function drawBal(R) {
     default:         carga_base = R.pp;              carga_nome = 'pp';
   }
   const w_target = bal_frac * carga_base;
-
   const Np_m = R.modo_prot === 'bi_assim' ? R.Np_X : R.P_efetiva / R.L_transv;
   const e_uso = R.modo_prot === 'bi_assim' ? R.e_X : R.e_meio;
   const w_bal_atual = e_uso > 0.001 ? 8 * Np_m * e_uso / (R.L_ef * R.L_ef) : 0;
-
   const P_ef_req_por_m = e_uso > 0.001 ? w_target * R.L_ef * R.L_ef / (8 * e_uso) : 0;
   const P_ef_req_total = P_ef_req_por_m * R.L_transv;
   const perda_est = R.perda_total_pct > 0 ? R.perda_total_pct / 100 : 0.20;
@@ -1801,7 +1790,6 @@ function drawBal(R) {
     ctx.fillText(b.label, bx + bw/2, y0 + 14);
   });
   ctx.textAlign = 'left';
-
   ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px system-ui';
   ctx.fillText(`Alvo: ${(bal_frac*100).toFixed(0)}% de ${carga_nome} = ${w_target.toFixed(2)} kN/m²`, 10, 14);
   ctx.fillStyle = '#8fa3c4'; ctx.font = '10px system-ui';
@@ -1828,13 +1816,8 @@ function drawBal(R) {
     kpi('Nº cabos atual', n_cabos_atual + ' cabos', n_cabos_atual >= n_cabos_req ? 'ok' : 'er');
 
   window.lastBal = {
-    n_cabos_req: n_cabos_req,
-    P_ef_req: P_ef_req_total,
-    Pi_req: Pi_req_total,
-    w_target: w_target,
-    carga_nome: carga_nome,
-    bal_frac: bal_frac,
-    bal_tipo: bal_tipo
+    n_cabos_req, P_ef_req: P_ef_req_total, Pi_req: Pi_req_total,
+    w_target, carga_nome, bal_frac, bal_tipo
   };
 }
 
@@ -1903,29 +1886,199 @@ function drawTensao(R) {
   ctx.fillText(convCompPos ? '+ comp / − tração' : '+ tração / − comp', 12, yBot + 30);
 }
 
+/* ==================== v17.3: CORTE TRANSVERSAL COM COTAS E ÁREAS ==================== */
 function drawCorte(R) {
-  const cv = $('cvCorte'); cv.dataset.h = '220';
+  const cv = $('cvCorte');
+  cv.dataset.h = '320';
   const { ctx, w, h } = setupCanvas(cv);
-  ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0,0,w,h);
-  const pad = 30, x0 = pad, x1 = w-pad, y0 = h-pad, y1 = pad;
-  const scale = (y0-y1) / (R.h * 1.2);
-  ctx.fillStyle = 'rgba(80,120,200,0.35)';
-  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
-  ctx.beginPath();
-  ctx.rect(x0, y0 - R.h*scale, x1-x0, R.h*scale);
-  ctx.fill(); ctx.stroke();
-  ctx.fillStyle = '#e8eefc'; ctx.font = '11px system-ui';
-  ctx.fillText('Laje maciça', x0+8, y0 - R.h*scale + 16);
-  if (R.vf && R.vf.ativa) {
-    R.vf.vigas.forEach((v) => {
-      const yv = v.y / R.vf.Ltrans;
-      const xv = x0 + yv * (x1 - x0);
-      const bw = Math.max(3, R.vf.bf * 60);
-      ctx.fillStyle = 'rgba(61,125,255,0.5)';
-      ctx.fillRect(xv - bw/2, y0 - R.vf.hvf*scale, bw, R.vf.hvf*scale);
-      ctx.strokeRect(xv - bw/2, y0 - R.vf.hvf*scale, bw, R.vf.hvf*scale);
+  ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
+
+  const padL = 70, padR = 90, padT = 45, padB = 70;
+  const secX0 = padL, secX1 = w - padR;
+  const secY0 = h - padB, secY1 = padT;
+  const secW = secX1 - secX0;
+  const secH = secY0 - secY1;
+
+  const dirCabo = R.dir_cabo === 'y' ? 'y' : 'x';
+  const largura_corte = dirCabo === 'x' ? R.Ly : R.Lx;
+  const largura_label = dirCabo === 'x' ? 'Ly' : 'Lx';
+
+  const hvfAtiva = R.vf && R.vf.ativa && R.vf.hvf > R.h;
+  const hvf = hvfAtiva ? R.vf.hvf : R.h;
+  const hMax = Math.max(R.h, hvf) * 1.30;
+
+  const escalaV = secH / hMax;
+  const escalaH = secW / largura_corte;
+  const Hpx = R.h * escalaV;
+  const Hvfpx = hvfAtiva ? R.vf.hvf * escalaV : 0;
+
+  const yTopLaje = secY1 + 8;
+  const yBotLaje = yTopLaje + Hpx;
+  const yBotVF   = hvfAtiva ? yTopLaje + Hvfpx : yBotLaje;
+
+  if (hvfAtiva) {
+    const vf = R.vf;
+    vf.vigas.forEach((v) => {
+      const y_rel = (vf.direcao === 'x') ? v.y / vf.Ltrans : v.y / vf.Lvao;
+      const xc = secX0 + y_rel * secW;
+      const bf_px = vf.bf * escalaH;
+      const vf_y0 = yTopLaje + Hpx;
+      const vf_y1 = yTopLaje + Hvfpx;
+      ctx.fillStyle = 'rgba(61,125,255,0.55)';
+      ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 1.5;
+      ctx.fillRect(xc - bf_px/2, vf_y0, bf_px, vf_y1 - vf_y0);
+      ctx.strokeRect(xc - bf_px/2, vf_y0, bf_px, vf_y1 - vf_y0);
+      if (vf.prot && vf.prot.ativa && vf.prot.nCabos > 0) {
+        const y_cabo = vf_y1 - vf.prot.d * escalaV;
+        const nShowVF = Math.min(vf.prot.nCabos, 5);
+        for (let k = 0; k < nShowVF; k++) {
+          const xk = xc - bf_px/2 + bf_px * ((k + 0.5) / nShowVF);
+          ctx.fillStyle = '#22c55e';
+          ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8;
+          ctx.beginPath(); ctx.arc(xk, y_cabo, 3, 0, 2*Math.PI);
+          ctx.fill(); ctx.stroke();
+        }
+      }
+      ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 9px system-ui';
+      ctx.textAlign = 'center';
+      ctx.fillText(`VF${v.index}`, xc, vf_y1 + 12);
+      ctx.textAlign = 'left';
     });
   }
+
+  ctx.fillStyle = 'rgba(80,120,200,0.35)';
+  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
+  ctx.fillRect(secX0, yTopLaje, secW, Hpx);
+  ctx.strokeRect(secX0, yTopLaje, secW, Hpx);
+
+  const yCG = yTopLaje + Hpx / 2;
+  ctx.setLineDash([4, 3]); ctx.strokeStyle = '#8fa3c4'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(secX0, yCG); ctx.lineTo(secX1, yCG); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#8fa3c4'; ctx.font = '9px system-ui'; ctx.textAlign = 'right';
+  ctx.fillText('CG', secX0 - 6, yCG + 3);
+  ctx.textAlign = 'left';
+
+  const y_cabo = yBotLaje - R.dinf * escalaV;
+  const nShow = Math.min(R.nCabos, 14);
+  const corCabo = R.modo_prot === 'bi_assim' ? '#f59e0b' : '#ef4444';
+  for (let i = 0; i < nShow; i++) {
+    const xc = secX0 + ((i + 0.5) / nShow) * secW;
+    ctx.fillStyle = corCabo;
+    ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.arc(xc, y_cabo, 3, 0, 2*Math.PI);
+    ctx.fill(); ctx.stroke();
+  }
+
+  ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b';
+  ctx.lineWidth = 1; ctx.font = 'bold 10px system-ui';
+
+  const xDimH = secX1 + 22;
+  ctx.beginPath(); ctx.moveTo(xDimH, yTopLaje); ctx.lineTo(xDimH, yBotLaje); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(xDimH, yTopLaje); ctx.lineTo(xDimH - 4, yTopLaje + 8);
+  ctx.lineTo(xDimH + 4, yTopLaje + 8); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(xDimH, yBotLaje); ctx.lineTo(xDimH - 4, yBotLaje - 8);
+  ctx.lineTo(xDimH + 4, yBotLaje - 8); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(secX1, yTopLaje); ctx.lineTo(xDimH + 6, yTopLaje); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(secX1, yBotLaje); ctx.lineTo(xDimH + 6, yBotLaje); ctx.stroke();
+  ctx.save();
+  ctx.translate(xDimH + 18, (yTopLaje + yBotLaje) / 2);
+  ctx.rotate(-Math.PI/2); ctx.textAlign = 'center';
+  ctx.fillText(`h = ${(R.h*100).toFixed(1)} cm`, 0, 0);
+  ctx.restore();
+
+  if (hvfAtiva) {
+    const xDimHvf = secX1 + 60;
+    ctx.strokeStyle = '#22c55e'; ctx.fillStyle = '#22c55e';
+    ctx.beginPath(); ctx.moveTo(xDimHvf, yTopLaje); ctx.lineTo(xDimHvf, yBotVF); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xDimHvf, yTopLaje); ctx.lineTo(xDimHvf - 4, yTopLaje + 8);
+    ctx.lineTo(xDimHvf + 4, yTopLaje + 8); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(xDimHvf, yBotVF); ctx.lineTo(xDimHvf - 4, yBotVF - 8);
+    ctx.lineTo(xDimHvf + 4, yBotVF - 8); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(secX1, yTopLaje); ctx.lineTo(xDimHvf + 6, yTopLaje); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(secX1, yBotVF); ctx.lineTo(xDimHvf + 6, yBotVF); ctx.stroke();
+    ctx.save();
+    ctx.translate(xDimHvf + 18, (yTopLaje + yBotVF) / 2);
+    ctx.rotate(-Math.PI/2); ctx.textAlign = 'center';
+    ctx.fillText(`hvf = ${(R.vf.hvf*100).toFixed(1)} cm`, 0, 0);
+    ctx.restore();
+  }
+
+  ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b';
+  const yDimW = yBotVF + 34;
+  ctx.beginPath(); ctx.moveTo(secX0, yDimW); ctx.lineTo(secX1, yDimW); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(secX0, yDimW); ctx.lineTo(secX0 + 8, yDimW - 4);
+  ctx.lineTo(secX0 + 8, yDimW + 4); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(secX1, yDimW); ctx.lineTo(secX1 - 8, yDimW - 4);
+  ctx.lineTo(secX1 - 8, yDimW + 4); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(secX0, yBotVF); ctx.lineTo(secX0, yDimW + 8); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(secX1, yBotVF); ctx.lineTo(secX1, yDimW + 8); ctx.stroke();
+  ctx.textAlign = 'center';
+  ctx.fillText(`${largura_corte.toFixed(2)} m (${largura_label})`, (secX0 + secX1) / 2, yDimW + 16);
+
+  const xDimD = secX0 - 38;
+  ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b'; ctx.lineWidth = 0.8;
+  ctx.beginPath(); ctx.moveTo(xDimD, y_cabo); ctx.lineTo(xDimD, yBotLaje); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(xDimD, y_cabo); ctx.lineTo(xDimD - 3, y_cabo + 6);
+  ctx.lineTo(xDimD + 3, y_cabo + 6); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(xDimD, yBotLaje); ctx.lineTo(xDimD - 3, yBotLaje - 6);
+  ctx.lineTo(xDimD + 3, yBotLaje - 6); ctx.closePath(); ctx.fill();
+  ctx.beginPath(); ctx.moveTo(xDimD - 5, y_cabo); ctx.lineTo(secX0, y_cabo); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(xDimD - 5, yBotLaje); ctx.lineTo(secX0, yBotLaje); ctx.stroke();
+  ctx.textAlign = 'right'; ctx.font = '9px system-ui';
+  ctx.fillText(`d=${(R.dinf*100).toFixed(1)} cm`, xDimD - 5, (y_cabo + yBotLaje) / 2 + 3);
+
+  ctx.textAlign = 'left'; ctx.font = '9px system-ui';
+  ctx.fillStyle = '#8fa3c4';
+  ctx.fillText(`Cobrimento = ${(R.cob*1000).toFixed(0)} mm · Corte ⊥ ${dirCabo.toUpperCase()} · ${nShow}/${R.nCabos} cabos visíveis`, 10, h - 6);
+
+  // INFO HTML
+  const Ap_X_mm2 = R.modo_prot === 'bi_assim' ? R.faixas_X.reduce((s,fx)=>s+fx.Ap,0) : R.Ap_total;
+  const Ap_Y_mm2 = R.modo_prot === 'bi_assim' ? R.nCabos_Y * R.Ap_cabo : 0;
+  const nX = R.modo_prot === 'bi_assim' ? R.nCabos_X : R.nCabos;
+  const nY = R.modo_prot === 'bi_assim' ? R.nCabos_Y : 0;
+
+  const vfInfo = (R.vf && R.vf.ativa && R.vf.prot && R.vf.prot.ativa)
+    ? `<div style="margin-top:8px;padding:8px;background:rgba(34,197,94,.1);border-left:3px solid #22c55e;border-radius:4px;font-size:11px">
+        <b style="color:#22c55e">Vigas-faixa protendidas</b><br>
+        Nº cabos por VF: <b>${R.vf.prot.nCabos}</b> · Nº VFs: <b>${R.vf.n}</b><br>
+        Ap total VF: <b>${(R.vf.prot.Ap_total * R.vf.n).toFixed(0)} mm²</b> = <b>${(R.vf.prot.Ap_total * R.vf.n / 100).toFixed(2)} cm²</b><br>
+        P_ef total VF: <b>${(R.vf.prot.P_ef * R.vf.n).toFixed(0)} kN</b> · e_vf = <b>${(R.vf.prot.e*1000).toFixed(0)} mm</b>
+      </div>`
+    : '';
+
+  const infoHTML = `
+    <table style="font-size:11px;width:100%;border-collapse:collapse">
+      <tr style="background:var(--bg3)">
+        <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--bd)">Direção</th>
+        <th style="padding:5px 8px;text-align:right;border-bottom:1px solid var(--bd)">Nº cabos</th>
+        <th style="padding:5px 8px;text-align:right;border-bottom:1px solid var(--bd)">Ap (mm²)</th>
+        <th style="padding:5px 8px;text-align:right;border-bottom:1px solid var(--bd)">Ap (cm²)</th>
+      </tr>
+      <tr>
+        <td style="padding:5px 8px;color:#3d7dff;font-weight:700">X</td>
+        <td style="padding:5px 8px;text-align:right">${nX}</td>
+        <td style="padding:5px 8px;text-align:right">${Ap_X_mm2.toFixed(0)}</td>
+        <td style="padding:5px 8px;text-align:right"><b>${(Ap_X_mm2/100).toFixed(2)}</b></td>
+      </tr>
+      <tr>
+        <td style="padding:5px 8px;color:#8b5cf6;font-weight:700">Y</td>
+        <td style="padding:5px 8px;text-align:right">${nY}</td>
+        <td style="padding:5px 8px;text-align:right">${Ap_Y_mm2.toFixed(0)}</td>
+        <td style="padding:5px 8px;text-align:right"><b>${(Ap_Y_mm2/100).toFixed(2)}</b></td>
+      </tr>
+      <tr style="background:var(--bg3)">
+        <td style="padding:5px 8px;font-weight:700">TOTAL</td>
+        <td style="padding:5px 8px;text-align:right;font-weight:700">${R.nCabos}</td>
+        <td style="padding:5px 8px;text-align:right;font-weight:700">${R.Ap_total.toFixed(0)}</td>
+        <td style="padding:5px 8px;text-align:right;font-weight:700;color:var(--ac)">${(R.Ap_total/100).toFixed(2)}</td>
+      </tr>
+    </table>
+    ${vfInfo}
+  `;
+
+  const infoDiv = $('infoCorte');
+  if (infoDiv) infoDiv.innerHTML = infoHTML;
 }
 
 function drawVF(R) {
@@ -2030,8 +2183,7 @@ function drawVFDef(R) {
     {d: vmax.delta_tot, c: '#3d7dff', l: 'Resultante VF', bold: true}
   ];
   curves.forEach((c, idx) => {
-    ctx.strokeStyle = c.c;
-    ctx.lineWidth = c.bold ? 2.5 : 1.8;
+    ctx.strokeStyle = c.c; ctx.lineWidth = c.bold ? 2.5 : 1.8;
     ctx.setLineDash(c.dash || []);
     ctx.beginPath();
     const N = 60;
@@ -2042,8 +2194,7 @@ function drawVFDef(R) {
       const yy = yBase + d*esc;
       if (i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
     }
-    ctx.stroke();
-    ctx.setLineDash([]);
+    ctx.stroke(); ctx.setLineDash([]);
     ctx.fillStyle = c.c; ctx.fillRect(x0+idx*180, 12, 14, 4);
     ctx.fillStyle = '#e8eefc'; ctx.font = '10px system-ui';
     ctx.fillText(c.l, x0+idx*180+20, 18);
@@ -2450,7 +2601,7 @@ function renderVigasFaixaDetalhe(R) {
 
   const L = [];
   const P = s => L.push(s);
-  P('VIGAS-FAIXA — TRIBUTARY WIDTH + PROTENSÃO CONCENTRADA (v17.2)');
+  P('VIGAS-FAIXA — TRIBUTARY WIDTH + PROTENSÃO CONCENTRADA (v17.3)');
   P('='.repeat(72));
   P('');
   P(`Direção: ${vf.direcao.toUpperCase()}  |  Lvao = ${vf.Lvao.toFixed(2)} m  |  Ltrans = ${vf.Ltrans.toFixed(2)} m`);
@@ -2570,14 +2721,21 @@ function renderBiAssim(R) {
 function gerarMemoria(R) {
   const Lm = [];
   const P = s => Lm.push(s);
-  P('MEMÓRIA — APAVAN v17.2');
-  P('Bugs #1/#2 corrigidos · Vigas-faixa · ELS-D · Protensão VF · Balanceamento dinâmico + Aplicar cabos');
+  P('MEMÓRIA — APAVAN v17.3');
+  P('Bugs #1/#2 corrigidos · Vigas-faixa · ELS-D · Protensão VF · Balanceamento dinâmico + Aplicar cabos · Corte com cotas e áreas');
   P('='.repeat(72));
   P(`Projeto: ${$('p_nome').value}`);
   P(`Modo laje: ${R.modo_prot}`);
   P(`Lx = ${R.Lx.toFixed(2)} m · Ly = ${R.Ly.toFixed(2)} m · h = ${R.h.toFixed(3)} m`);
   P(`fck = ${R.fck} MPa · Ecs = ${R.Ecm.toFixed(0)} MPa`);
   P(`p = ${R.p.toFixed(2)} kN/m² · Mx = ${R.Mx.toFixed(2)} kN·m/m`);
+  P('');
+  P('ÁREAS DE AÇO ATIVO:');
+  const Ap_X_mm2 = R.modo_prot === 'bi_assim' ? R.faixas_X.reduce((s,fx)=>s+fx.Ap,0) : R.Ap_total;
+  const Ap_Y_mm2 = R.modo_prot === 'bi_assim' ? R.nCabos_Y * R.Ap_cabo : 0;
+  P(`  Direção X: ${R.modo_prot === 'bi_assim' ? R.nCabos_X : R.nCabos} cabos · Ap = ${Ap_X_mm2.toFixed(0)} mm² = ${(Ap_X_mm2/100).toFixed(2)} cm²`);
+  P(`  Direção Y: ${R.modo_prot === 'bi_assim' ? R.nCabos_Y : 0} cabos · Ap = ${Ap_Y_mm2.toFixed(0)} mm² = ${(Ap_Y_mm2/100).toFixed(2)} cm²`);
+  P(`  TOTAL: ${R.nCabos} cabos · Ap = ${R.Ap_total.toFixed(0)} mm² = ${(R.Ap_total/100).toFixed(2)} cm²`);
   P('');
   P('TRAJETÓRIA DO CABO (laje):');
   P(`  d_inf meio = ${(R.dinf*1000).toFixed(0)} mm · e_meio = ${(R.e_meio*1000).toFixed(0)} mm`);
@@ -2595,6 +2753,7 @@ function gerarMemoria(R) {
     if (R.vf.prot && R.vf.prot.ativa) {
       P(`  PROTENSÃO CONCENTRADA: ${R.vf.prot.nCabos} cabos × ${R.vf.prot.nCord} cord.`);
       P(`  P_ef = ${R.vf.prot.P_ef.toFixed(1)} kN · e = ${(R.vf.prot.e*1000).toFixed(0)} mm · w_bal = ${R.vf.prot.w_bal.toFixed(2)} kN/m`);
+      P(`  Ap total VFs = ${(R.vf.prot.Ap_total * R.vf.n).toFixed(0)} mm² = ${(R.vf.prot.Ap_total * R.vf.n / 100).toFixed(2)} cm²`);
     }
     R.vf.vigas.forEach(v => {
       P(`  VF${v.index} (y=${v.y.toFixed(2)}m): w=${v.w_carga.toFixed(2)} (w_bal=${v.w_bal.toFixed(2)}) · M=${v.M_carga.toFixed(2)} → M_net=${v.M_net.toFixed(2)} kN·m`);
@@ -2840,28 +2999,22 @@ $('btnAplicarCabos').addEventListener('click', () => {
   alert('Cabos atualizados.');
 });
 
-/* v17.2: aplicar nº sugerido do balanceamento */
 $('btnAplicarBal').addEventListener('click', () => {
   if (!window.lastBal || !lastR) { alert('Simule primeiro.'); return; }
   const bal = window.lastBal;
   const modo = $('bal_modo').value;
   const nReq = bal.n_cabos_req;
-
   const vfAtiva = $('vf_ativa').checked;
   const vfProtAtiva = $('vf_prot_ativa').checked;
-
   let aplicado = '';
   let aplicouLaje = false, aplicouVF = false;
-
   const aplicarLaje = (modo === 'laje') || (modo === 'auto' && !vfAtiva);
   const aplicarVF   = (modo === 'vf')   || (modo === 'auto' && vfAtiva && vfProtAtiva);
-
   if (aplicarLaje) {
     $('pr_ncabos').value = nReq;
     aplicouLaje = true;
     aplicado += `laje (${nReq} cabos)`;
   }
-
   if (aplicarVF) {
     const nVF = Math.max(1, Math.min(5, parseInt($('vf_n').value) || 2));
     const e_vf = $n('vf_e');
@@ -2869,24 +3022,19 @@ $('btnAplicarBal').addEventListener('click', () => {
     const fator_efic = Math.max(0.15, e_laje / Math.max(0.001, e_vf));
     const nReqVF = Math.max(1, Math.ceil(nReq * fator_efic));
     const porVF_ef = Math.ceil(nReqVF / nVF);
-
     $('vf_ncabos').value = porVF_ef;
     aplicouVF = true;
     aplicado += `${aplicado ? ' + ' : ''}vigas-faixa (${porVF_ef} cabos × ${nVF} VFs = ${porVF_ef * nVF} cabos)`;
   }
-
   if (!aplicouLaje && !aplicouVF) {
     alert('Nada a aplicar — verifique o modo selecionado ou ative as vigas-faixa.');
     return;
   }
-
   atualizar();
-
   const status = $('balStatus');
   status.innerHTML = `✅ Aplicado em: <b>${aplicado}</b>`;
   status.style.color = 'var(--ok)';
-
-  console.log('[v17.2] Aplicar cabos:', { nReq, modo, aplicouLaje, aplicouVF });
+  console.log('[v17.3] Aplicar cabos:', { nReq, modo, aplicouLaje, aplicouVF });
 });
 
 $('btnTheme').addEventListener('click', () => {
@@ -2962,7 +3110,7 @@ $('btnExp').addEventListener('click', () => {
   dados['bal_frac'] = $('bal_frac').value;
   dados['bal_tipo'] = $('bal_tipo').value;
   dados['bal_modo'] = $('bal_modo').value;
-  const blob = new Blob([JSON.stringify({_apavan:17.2, dados, ts:Date.now()}, null, 2)], {type:'application/json'});
+  const blob = new Blob([JSON.stringify({_apavan:17.3, dados, ts:Date.now()}, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = ($('p_nome').value || 'projeto') + '.prot';
