@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>APAVAN — Simulador de Laje Protendida v18.4.1</title>
+<title>APAVAN — Simulador de Laje Protendida v18.4.2</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%233d7dff'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-weight='bold' font-family='sans-serif'>AP</text></svg>">
 <style>
 :root{--bg:#0b1220;--bg2:#131c2e;--bg3:#1c2740;--fg:#e8eefc;--mut:#8fa3c4;--ac:#3d7dff;--ok:#22c55e;--wn:#f59e0b;--er:#ef4444;--bd:#243352}
@@ -88,6 +88,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
 .pp-badge{background:rgba(34,197,94,.15);color:#22c55e;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700}
 .gr-badge{background:rgba(139,92,246,.15);color:#8b5cf6;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-left:6px}
 .tt-badge{background:rgba(61,125,255,.15);color:#3d7dff;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-left:6px}
+.fix-badge{background:rgba(34,197,94,.15);color:#22c55e;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-left:6px}
 .cfg-opt{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:8px;margin-top:6px;font-size:11px}
 </style>
 </head>
@@ -98,7 +99,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     <div class="logo">AP</div>
     <div>
       <div class="brand-name">APAVAN ENGENHARIA E CONSULTORIA</div>
-      <div class="brand-sub">SIMULADOR DE LAJE PROTENDIDA v18.4.1</div>
+      <div class="brand-sub">SIMULADOR DE LAJE PROTENDIDA v18.4.2</div>
     </div>
   </div>
   <div class="top-actions">
@@ -138,7 +139,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   </select></label>
 </details>
 
-<details open><summary>3.0 · Vão a vencer <span class="vv-badge">v18.4.1</span></summary>
+<details open><summary>3.0 · Vão a vencer <span class="vv-badge">v18.4.2</span></summary>
   <div class="grid2">
     <label>Vão a vencer (m)<input id="vv_vao" type="number" step="0.05" value="8.00"></label>
     <label>Tipo de apoio<select id="vv_tipo">
@@ -182,7 +183,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <label>Contorno<select id="g_cont"><option value="biapoiada" selected>Bi-apoiada</option><option value="engaste_apoio">Engastada/apoiada</option><option value="biengastada">Bi-engastada</option></select></label>
 </details>
 
-<details open><summary>3.1 · Vigas-faixa <span class="vf-badge">v18.4.1</span> <span class="anc-badge">Rudloff</span></summary>
+<details open><summary>3.1 · Vigas-faixa <span class="vf-badge">v18.4.2</span> <span class="anc-badge">Rudloff</span></summary>
   <label style="display:flex;align-items:center;gap:6px">
     <input type="checkbox" id="vf_ativa" checked> Ativar vigas-faixa
   </label>
@@ -226,7 +227,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
 
     <label style="display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:8px;border-top:1px dashed var(--bd)">
       <input type="checkbox" id="vf_prot_ativa" checked> Protensão concentrada nas vigas-faixa
-      <span class="vf-protn">v18.4.1</span>
+      <span class="vf-protn">v18.4.2</span>
     </label>
     <div id="blocoVFProt">
       <div class="grid2">
@@ -262,7 +263,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   </div>
 </details>
 
-<details open><summary>3.2 · Otimização & Diagnóstico <span class="vv-badge">v18.4.1</span></summary>
+<details open><summary>3.2 · Otimização & Diagnóstico <span class="vv-badge">v18.4.2</span></summary>
   <div class="grid2">
     <label>Preço concreto (R$/m³)<input id="opt_pc" type="number" step="10" value="500"></label>
     <label>Preço aço CA-50 (R$/kg)<input id="opt_pa" type="number" step="0.5" value="12"></label>
@@ -451,6 +452,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <div class="aviso-escala">Deformação visual amplificada. Não representa escala real.</div>
 </div>
 </aside>
+
 <section class="stage">
 <nav class="tabs" id="tabs">
   <button data-tab="modelo" class="active">Modelo</button>
@@ -505,7 +507,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <div class="card"><div class="card-head"><span>Resumo</span></div><div id="resumoGlobal" class="kpis"></div></div>
     </div>
     <div class="card">
-      <div class="card-head"><span>Trajetória do cabo na VF <span class="vf-protn">v18.4.1</span></span></div>
+      <div class="card-head"><span>Trajetória do cabo na VF</span></div>
       <canvas id="cvCaboVF" class="cv-sm"></canvas>
     </div>
     <div class="card">
@@ -536,8 +538,8 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <div class="view" id="v-protensao">
     <div class="card"><div class="card-head"><span>Força de protensão ao longo do cabo</span></div><canvas id="cvPerdas"></canvas></div>
     <div class="row2">
-      <div class="card"><div class="card-head"><span>Trajetória do cabo — <span class="tag-x">direção X</span></span></div><canvas id="cvCaboX" class="cv-sm"></canvas></div>
-      <div class="card"><div class="card-head"><span>Trajetória do cabo — <span class="tag-y">direção Y</span></span></div><canvas id="cvCaboY" class="cv-sm"></canvas></div>
+      <div class="card"><div class="card-head"><span>Trajetória — <span class="tag-x">X</span></span></div><canvas id="cvCaboX" class="cv-sm"></canvas></div>
+      <div class="card"><div class="card-head"><span>Trajetória — <span class="tag-y">Y</span></span></div><canvas id="cvCaboY" class="cv-sm"></canvas></div>
     </div>
     <div class="card">
       <div class="card-head"><span>Perdas — NBR 6118 (detalhado)</span></div>
@@ -623,7 +625,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <div class="view" id="v-tensoes">
     <div class="card">
       <div class="card-head">
-        <span>Diagramas detalhados — P, g, V, q, S <span class="vv-badge">v18.4.1</span></span>
+        <span>Diagramas detalhados — P, g, V, q, S</span>
         <span class="legenda-sinal"><b class="trac">+ tração</b> · <b class="comp">− compressão</b></span>
       </div>
       <canvas id="cvTensaoDetalhada" class="cv-sm"></canvas>
@@ -655,7 +657,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <canvas id="cvVF"></canvas>
     </div>
     <div class="card">
-      <div class="card-head"><span>Diagrama de contraflecha (VF com protensão)</span></div>
+      <div class="card-head"><span>Diagrama de contraflecha</span></div>
       <canvas id="cvVFDef"></canvas>
     </div>
     <div class="card">
@@ -667,7 +669,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <div class="view" id="v-grelha">
     <div class="card">
       <div class="card-head">
-        <span>Análise por grelha <span class="gr-badge">v18.4.1</span> <span class="tt-badge">tooltip</span></span>
+        <span>Análise por grelha <span class="gr-badge">v18.4.2</span> <span class="fix-badge">BC corrigido</span> <span class="tt-badge">tooltip</span></span>
         <div class="chips">
           <button class="chip active" id="grelha_w">Deslocamento w</button>
           <button class="chip" id="grelha_Mx">Momento Mx</button>
@@ -684,13 +686,14 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
             <option value="0.50">0,50 m</option>
           </select>
         </span>
+        <button class="btn sm" id="grelha_validar" style="margin-left:8px">🔍 Validar solver</button>
         <span style="font-size:10px;color:var(--mut);margin-left:12px">💡 Passe o mouse sobre um nó para ver os valores</span>
       </div>
       <canvas id="cvGrelha"></canvas>
       <div id="resGrelha" class="kpis" style="margin-top:12px"></div>
     </div>
     <div class="card">
-      <div class="card-head"><span>Comparação — tributary width × grelha</span></div>
+      <div class="card-head"><span>Comparação — Marcus × Grelha (laje) e Tributary × Grelha (VF)</span></div>
       <div id="resComp"></div>
     </div>
   </div>
@@ -776,54 +779,40 @@ function espacMinAncoragem(nCord, diam) {
   }
 }
 
-/* ============ SOLVER DE GRELHA ============ */
+/* ============================================================
+   SOLVER DE GRELHA v18.4.2 — CORRIGIDO
+   Bugs corrigidos:
+   #1 — RHS = p·dx⁴/D (não mais p·dx⁶/D)
+   #2 — Condição de contorno ANTISIMÉTRICA (borda simplesmente apoiada)
+   ============================================================ */
 function resolverGrelha(R, dx) {
   dx = dx || 0.25;
   const Lx = R.Lx, Ly = R.Ly, h = R.h, p = R.p, nu = R.nu;
   const E = R.Ecm_kPa;
   const D = E * Math.pow(h, 3) / (12 * (1 - nu * nu));
-  const D_vf = R.vf && R.vf.ativa
-    ? E * Math.pow(R.vf.hvf, 3) / (12 * (1 - nu * nu))
-    : D;
   const nx = Math.round(Lx / dx) + 1;
   const ny = Math.round(Ly / dx) + 1;
   const dx2 = dx * dx;
   const dx4 = dx2 * dx2;
-  const q_node = p * dx2;
-
-  const Dn = new Float64Array(nx * ny).fill(D);
-  if (R.vf && R.vf.ativa) {
-    R.vf.vigas.forEach(v => {
-      const bf_half = Math.max(0, Math.round((R.vf.bf / 2) / dx));
-      if (R.vf.direcao === 'x') {
-        const jy = Math.round(v.y / dx);
-        for (let i = 0; i < nx; i++)
-          for (let d = -bf_half; d <= bf_half; d++) {
-            const j = jy + d;
-            if (j >= 0 && j < ny) Dn[i * ny + j] = Math.max(Dn[i * ny + j], D_vf);
-          }
-      } else {
-        const jx = Math.round(v.y / dx);
-        for (let j = 0; j < ny; j++)
-          for (let d = -bf_half; d <= bf_half; d++) {
-            const i = jx + d;
-            if (i >= 0 && i < nx) Dn[i * ny + j] = Math.max(Dn[i * ny + j], D_vf);
-          }
-      }
-    });
-  }
 
   const w = new Float64Array(nx * ny);
   const omega = 1.85;
-  const maxIter = 4000;
-  const tol = 1e-8;
+  const maxIter = 8000;
+  const tol = 1e-9;
+
+  /* v18.4.2 — Reflexão ANTISIMÉTRICA (borda simplesmente apoiada) */
   const getw = (M, i, j) => {
-    if (i < 0) i = -i;
-    if (i >= nx) i = 2 * (nx - 1) - i;
-    if (j < 0) j = -j;
-    if (j >= ny) j = 2 * (ny - 1) - j;
-    return M[i * ny + j];
+    let sign = 1;
+    if (i < 0)      { i = -i;              sign = -sign; }
+    if (i >= nx)    { i = 2*(nx-1) - i;    sign = -sign; }
+    if (j < 0)      { j = -j;              sign = -sign; }
+    if (j >= ny)    { j = 2*(ny-1) - j;    sign = -sign; }
+    return sign * M[i * ny + j];
   };
+
+  /* v18.4.2 — RHS = p · dx⁴ / D */
+  const rhs_const = p * dx4 / D;
+
   let iter = 0;
   for (iter = 0; iter < maxIter; iter++) {
     let maxDiff = 0;
@@ -833,8 +822,7 @@ function resolverGrelha(R, dx) {
         const w4 = getw(w, i-1, j) + getw(w, i+1, j) + getw(w, i, j-1) + getw(w, i, j+1);
         const wD = getw(w, i-1, j-1) + getw(w, i-1, j+1) + getw(w, i+1, j-1) + getw(w, i+1, j+1);
         const w2 = getw(w, i-2, j) + getw(w, i+2, j) + getw(w, i, j-2) + getw(w, i, j+2);
-        const rhs = q_node * dx4 / Dn[idx];
-        const w_new = (rhs + 8 * w4 - 2 * wD - w2) / 20;
+        const w_new = (rhs_const + 8 * w4 - 2 * wD - w2) / 20;
         const d = Math.abs(w_new - w[idx]);
         if (d > maxDiff) maxDiff = d;
         w[idx] = w[idx] + omega * (w_new - w[idx]);
@@ -843,6 +831,7 @@ function resolverGrelha(R, dx) {
     if (maxDiff < tol) break;
   }
 
+  /* Momentos fletores */
   const Mx = new Float64Array(nx * ny);
   const My = new Float64Array(nx * ny);
   for (let i = 1; i < nx - 1; i++) {
@@ -850,8 +839,8 @@ function resolverGrelha(R, dx) {
       const idx = i * ny + j;
       const d2x = (w[(i-1)*ny+j] - 2*w[idx] + w[(i+1)*ny+j]) / dx2;
       const d2y = (w[i*ny+j-1] - 2*w[idx] + w[i*ny+j+1]) / dx2;
-      Mx[idx] = -Dn[idx] * (d2x + nu * d2y);
-      My[idx] = -Dn[idx] * (d2y + nu * d2x);
+      Mx[idx] = -D * (d2x + nu * d2y);
+      My[idx] = -D * (d2y + nu * d2x);
     }
   }
 
@@ -864,6 +853,14 @@ function resolverGrelha(R, dx) {
     if (My[idx] > My_max) My_max = My[idx];
     if (My[idx] < My_min) My_min = My[idx];
   }
+
+  /* Sanity check */
+  if (iter >= maxIter) {
+    console.warn(`[grelha] Não convergiu em ${maxIter} iterações.`);
+  }
+  const L_check = Math.min(Lx, Ly);
+  const delta_analitico = 0.0050 * p * Math.pow(L_check, 4) / D;
+  console.log(`[grelha v18.4.2] δ_max=${(w_max*1000).toFixed(3)} mm · analítico≈${(delta_analitico*1000).toFixed(3)} mm · ratio=${(w_max/delta_analitico).toFixed(3)}`);
 
   return { nx, ny, dx, w, Mx, My, w_max, w_min, Mx_max, Mx_min, My_max, My_min, iter };
 }
@@ -962,6 +959,33 @@ $('grelha_nos').addEventListener('click', () => {
   mostrarNosValores = !mostrarNosValores;
   $('grelha_nos').classList.toggle('active', mostrarNosValores);
   if (grelhaResult && window.lastR) drawGrelha(window.lastR, grelhaResult);
+});
+$('grelha_validar').addEventListener('click', () => {
+  if (!grelhaResult || !lastR) { alert('Rode a simulação primeiro.'); return; }
+  const G = grelhaResult;
+  const R = lastR;
+  const E = R.Ecm_kPa;
+  const D = E * Math.pow(R.h, 3) / (12 * (1 - R.nu * R.nu));
+  const L_menor = Math.min(R.Lx, R.Ly);
+  const delta_analitico = 0.0050 * R.p * Math.pow(L_menor, 4) / D;
+  const delta_num = Math.abs(G.w_max);
+  const ratio = delta_num / delta_analitico;
+  const status = (ratio > 0.95 && ratio < 1.05) ? '🟢 EXCELENTE'
+                : (ratio > 0.85 && ratio < 1.15) ? '🟢 BOM'
+                : (ratio > 0.70 && ratio < 1.30) ? '🟡 ACEITÁVEL'
+                : '🔴 ERRO';
+  alert(
+    `VALIDAÇÃO DA GRELHA v18.4.2\n` +
+    `─────────────────────────────────\n` +
+    `E = ${(E/1e6).toFixed(2)} GPa\n` +
+    `D = ${D.toExponential(3)} kN·m\n` +
+    `L_menor = ${L_menor.toFixed(2)} m\n` +
+    `p = ${R.p.toFixed(2)} kN/m²\n\n` +
+    `δ_num  = ${(delta_num*1000).toFixed(3)} mm\n` +
+    `δ_ana  = ${(delta_analitico*1000).toFixed(3)} mm\n` +
+    `ratio  = ${ratio.toFixed(3)}\n\n` +
+    `${status}`
+  );
 });
 
 /* ==================== DATA READING ==================== */
