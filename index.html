@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>APAVAN — Simulador de Laje Protendida v17.3</title>
+<title>APAVAN — Simulador de Laje Protendida v18.4.1</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%233d7dff'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-weight='bold' font-family='sans-serif'>AP</text></svg>">
 <style>
 :root{--bg:#0b1220;--bg2:#131c2e;--bg3:#1c2740;--fg:#e8eefc;--mut:#8fa3c4;--ac:#3d7dff;--ok:#22c55e;--wn:#f59e0b;--er:#ef4444;--bd:#243352}
@@ -53,7 +53,7 @@ input[type=checkbox]{width:auto;margin-left:6px}
 .chip{background:var(--bg3);color:var(--mut);border:1px solid var(--bd);border-radius:14px;padding:3px 10px;font-size:10px;cursor:pointer}
 .chip.active{background:var(--ac);color:#fff;border-color:var(--ac)}
 canvas{width:100%;display:block;border-radius:6px;background:#0a0f1c}
-.cv-sm{max-height:320px}
+.cv-sm{max-height:340px}
 .hint{font-size:10px;color:var(--mut);text-align:center;margin-top:4px}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 @media(max-width:760px){.row2{grid-template-columns:1fr}}
@@ -83,6 +83,12 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
 .tag-y{color:#8b5cf6;font-weight:700}
 .vf-badge{background:rgba(61,125,255,.15);color:#3d7dff;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700}
 .vf-protn{background:rgba(34,197,94,.15);color:#22c55e;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-left:6px}
+.vv-badge{background:rgba(139,92,246,.15);color:#8b5cf6;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700}
+.anc-badge{background:rgba(245,158,11,.15);color:#f59e0b;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-left:6px}
+.pp-badge{background:rgba(34,197,94,.15);color:#22c55e;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700}
+.gr-badge{background:rgba(139,92,246,.15);color:#8b5cf6;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-left:6px}
+.tt-badge{background:rgba(61,125,255,.15);color:#3d7dff;padding:2px 6px;border-radius:4px;font-size:10px;font-weight:700;margin-left:6px}
+.cfg-opt{background:rgba(34,197,94,.08);border:1px solid rgba(34,197,94,.3);border-radius:6px;padding:8px;margin-top:6px;font-size:11px}
 </style>
 </head>
 <body>
@@ -92,7 +98,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     <div class="logo">AP</div>
     <div>
       <div class="brand-name">APAVAN ENGENHARIA E CONSULTORIA</div>
-      <div class="brand-sub">SIMULADOR DE LAJE PROTENDIDA v17.3</div>
+      <div class="brand-sub">SIMULADOR DE LAJE PROTENDIDA v18.4.1</div>
     </div>
   </div>
   <div class="top-actions">
@@ -132,6 +138,32 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   </select></label>
 </details>
 
+<details open><summary>3.0 · Vão a vencer <span class="vv-badge">v18.4.1</span></summary>
+  <div class="grid2">
+    <label>Vão a vencer (m)<input id="vv_vao" type="number" step="0.05" value="8.00"></label>
+    <label>Tipo de apoio<select id="vv_tipo">
+      <option value="biapoiada" selected>Biapoiada</option>
+      <option value="continua">Contínua</option>
+      <option value="balanco">Balanço</option>
+      <option value="cogumelo">Cogumelo (sem capitel)</option>
+    </select></label>
+    <label>Uso<select id="vv_uso">
+      <option value="piso" selected>Piso (L/45)</option>
+      <option value="cobertura">Cobertura (L/48)</option>
+    </select></label>
+    <label>Sistema<select id="vv_sis">
+      <option value="maciça_prot" selected>Maciça protendida</option>
+      <option value="maciça_ca">Maciça CA-50</option>
+      <option value="nervurada_prot">Nervurada protendida + VFs</option>
+      <option value="nervurada_ca">Nervurada CA-50 + VFs</option>
+    </select></label>
+  </div>
+  <button class="btn btn-primary" id="btnAplicarH" style="width:100%;margin-top:8px">⚙ Aplicar altura h sugerida</button>
+  <div id="vvStatus" style="margin-top:8px;padding:8px;background:var(--bg);border-radius:6px;font-size:11px;line-height:1.5">
+    <div style="color:var(--mut)">Simule para ver a sugestão.</div>
+  </div>
+</details>
+
 <details open><summary>3 · Geometria</summary>
   <div class="grid2">
     <label>Lx (m)<input id="g_Lx" type="number" step="0.05" value="8.00"></label>
@@ -150,20 +182,24 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <label>Contorno<select id="g_cont"><option value="biapoiada" selected>Bi-apoiada</option><option value="engaste_apoio">Engastada/apoiada</option><option value="biengastada">Bi-engastada</option></select></label>
 </details>
 
-<details open><summary>3.1 · Vigas-faixa <span class="vf-badge">v17.3</span></summary>
+<details open><summary>3.1 · Vigas-faixa <span class="vf-badge">v18.4.1</span> <span class="anc-badge">Rudloff</span></summary>
   <label style="display:flex;align-items:center;gap:6px">
     <input type="checkbox" id="vf_ativa" checked> Ativar vigas-faixa
   </label>
   <div id="blocoVF">
     <div class="grid2">
       <label>Nº vigas<input id="vf_n" type="number" step="1" value="2" min="1" max="5"></label>
-      <label>Largura bf (m)<input id="vf_b" type="number" step="0.05" value="1.20"></label>
-      <label>Altura hvf (m)<input id="vf_h" type="number" step="0.005" value="0.35"></label>
+      <label>Largura bf (m)<input id="vf_b" type="number" step="0.05" value="1.00"></label>
+      <label>Altura hvf (m)<input id="vf_h" type="number" step="0.005" value="0.20"></label>
       <label>Direção do vão<select id="vf_dir">
         <option value="x" selected>Sentido Lx (vão = Lx)</option>
         <option value="y">Sentido Ly (vão = Ly)</option>
       </select></label>
     </div>
+    <label style="display:flex;align-items:center;gap:6px;margin-top:4px">
+      <input type="checkbox" id="vf_embutida" checked>
+      <span>VF embutida na laje (sem projeção abaixo)</span>
+    </label>
     <label style="margin-top:6px">Posições perpendiculares (m)</label>
     <div class="grid3">
       <label>y₁<input id="vf_y1" type="number" step="0.05" value="2.00"></label>
@@ -172,24 +208,73 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <label>y₄<input id="vf_y4" type="number" step="0.05" value="3.00"></label>
       <label>y₅<input id="vf_y5" type="number" step="0.05" value="3.00"></label>
     </div>
+    <label style="margin-top:8px">Painel máx. entre VFs (m)
+      <select id="vf_painel_max">
+        <option value="3.0">3,0 m (rígido)</option>
+        <option value="4.0" selected>4,0 m (recomendado)</option>
+        <option value="5.0">5,0 m (limite)</option>
+      </select>
+    </label>
+    <button class="btn btn-primary" id="btnSugerirVF" style="width:100%;margin-top:8px">📐 Sugerir posições das VFs</button>
+    <div id="vfStatus" style="margin-top:8px;padding:8px;background:var(--bg);border-radius:6px;font-size:11px;line-height:1.5">
+      <div style="color:var(--mut)">Clique em "Sugerir" para calcular.</div>
+    </div>
+
+    <div id="vf_pp_info" style="margin:8px 12px;padding:8px;background:rgba(34,197,94,.08);border-left:3px solid #22c55e;border-radius:4px;font-size:11px;line-height:1.6">
+      <div style="color:var(--mut)">PP da VF aparece após simular.</div>
+    </div>
+
     <label style="display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:8px;border-top:1px dashed var(--bd)">
       <input type="checkbox" id="vf_prot_ativa" checked> Protensão concentrada nas vigas-faixa
-      <span class="vf-protn">v17.3</span>
+      <span class="vf-protn">v18.4.1</span>
     </label>
     <div id="blocoVFProt">
       <div class="grid2">
         <label>Nº cabos por VF<input id="vf_ncabos" type="number" step="1" value="2" min="0"></label>
         <label>Cord./cabo<input id="vf_ncord" type="number" step="1" value="7"></label>
-        <label>Excentricidade e_vf (m)<input id="vf_e" type="number" step="0.005" value="0.12"></label>
-        <label>d_cabo_vf (m)<input id="vf_d" type="number" step="0.005" value="0.05"></label>
+        <label>Ø cordoalha<select id="vf_diam">
+          <option value="12.7" selected>Ø12,7 mm (CP-190 RB)</option>
+          <option value="15.2">Ø15,2 mm (CP-190 RB)</option>
+        </select></label>
+        <label>Tipo ancoragem<select id="vf_anc_tipo">
+          <option value="auto" selected>Automático (recomendado)</option>
+          <option value="AF">AF — mono engraxada</option>
+          <option value="EL">EL — laje (nicho)</option>
+          <option value="E">E — multicordoalha</option>
+        </select></label>
+        <label>d_inf no MEIO (m)<input id="vf_d_inf" type="number" step="0.005" value="0.07"></label>
+        <label>d_sup no APOIO (m)<input id="vf_d_sup" type="number" step="0.005" value="0.05"></label>
         <label>σpi/fptk<input id="vf_ratio" type="number" step="0.01" value="0.74"></label>
         <label>Perda total (%)<input id="vf_perda" type="number" step="1" value="20" min="0" max="50"></label>
       </div>
-      <p style="font-size:10px;color:var(--mut);padding:6px 12px 8px">
-        <b>w_bal = 8·P_ef·e_vf / Lvao²</b>. O balanceamento subtrai do momento e da flecha da VF.
-        <b>e_vf</b> medido do CG da VF ao cabo.
-      </p>
+      <input type="hidden" id="vf_e" value="0.08">
+      <input type="hidden" id="vf_d" value="0.05">
+      <div id="vf_e_info" style="font-size:10px;color:var(--mut);padding:6px 12px 8px;line-height:1.6">
+        <div style="background:var(--bg);border-radius:4px;padding:6px 8px">
+          <div><b>e_vf (meio)</b> = hvf/2 − d_inf = <span id="vf_e_meio_txt">—</span> m</div>
+          <div><b>e_vf (apoio)</b> = d_sup − hvf/2 = <span id="vf_e_apoio_txt">—</span> m</div>
+        </div>
+      </div>
+      <div id="vf_anc_info" style="margin:8px 12px;padding:8px;background:var(--bg);border-radius:6px;font-size:11px;line-height:1.6">
+        <div style="color:var(--mut)">Selecione a ancoragem para ver detalhes.</div>
+      </div>
     </div>
+  </div>
+</details>
+
+<details open><summary>3.2 · Otimização & Diagnóstico <span class="vv-badge">v18.4.1</span></summary>
+  <div class="grid2">
+    <label>Preço concreto (R$/m³)<input id="opt_pc" type="number" step="10" value="500"></label>
+    <label>Preço aço CA-50 (R$/kg)<input id="opt_pa" type="number" step="0.5" value="12"></label>
+    <label>Preço cordoalha (R$/kg)<input id="opt_pcp" type="number" step="0.5" value="25"></label>
+    <label>Peso forma (R$/m²)<input id="opt_pf" type="number" step="5" value="80"></label>
+  </div>
+  <button class="btn btn-primary" id="btnOtimizar" style="width:100%;margin-top:8px">💰 Otimizar por custo</button>
+  <div id="optStatus" style="margin-top:8px;padding:8px;background:var(--bg);border-radius:6px;font-size:11px;line-height:1.5">
+    <div style="color:var(--mut)">Clique em "Otimizar" para comparar configurações.</div>
+  </div>
+  <div id="diagStatus" style="margin-top:8px;padding:8px;background:var(--bg);border-radius:6px;font-size:11px;line-height:1.5">
+    <div style="color:var(--mut)">Diagnósticos aparecem após simular.</div>
   </div>
 </details>
 
@@ -256,7 +341,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     </select></label>
     <label>Cord./cabo<input id="pr_ncord" type="number" step="1" value="4"></label>
     <label>σpi/fptk<input id="pr_ratio" type="number" step="0.01" value="0.74"></label>
-    <label>Acomodação δ (mm)<input id="pr_slip" type="number" step="0.5" value="6"></label>
+    <label>Acomodação δ (mm)<input id="pr_slip" type="number" step="0.5" value="4"></label>
   </div>
   <label>Modo de protensão<select id="pr_modo">
     <option value="uni" selected>Unidirecional (só X ou só Y)</option>
@@ -366,7 +451,6 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <div class="aviso-escala">Deformação visual amplificada. Não representa escala real.</div>
 </div>
 </aside>
-
 <section class="stage">
 <nav class="tabs" id="tabs">
   <button data-tab="modelo" class="active">Modelo</button>
@@ -376,6 +460,8 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <button data-tab="flechas">Flechas</button>
   <button data-tab="tensoes">Tensões</button>
   <button data-tab="vigasfaixa">Vigas-Faixa</button>
+  <button data-tab="grelha">Grelha</button>
+  <button data-tab="otim">Otimização</button>
   <button data-tab="verif">Verificações</button>
   <button data-tab="quant">Quantitativos</button>
   <button data-tab="memoria">Memória</button>
@@ -387,7 +473,6 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
 </div>
 
 <div class="views">
-
   <div class="view active" id="v-modelo">
     <div class="card">
       <div class="card-head"><span>Modelo 3D — arraste para girar · roda para zoom</span>
@@ -420,6 +505,10 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <div class="card"><div class="card-head"><span>Resumo</span></div><div id="resumoGlobal" class="kpis"></div></div>
     </div>
     <div class="card">
+      <div class="card-head"><span>Trajetória do cabo na VF <span class="vf-protn">v18.4.1</span></span></div>
+      <canvas id="cvCaboVF" class="cv-sm"></canvas>
+    </div>
+    <div class="card">
       <div class="card-head"><span>Vigas-faixa — resumo rápido</span></div>
       <div id="resVigasFaixaQuick" class="kpis"></div>
     </div>
@@ -441,7 +530,6 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     <div class="card">
       <div class="card-head"><span>Distribuição de momentos em faixas (NBR)</span></div>
       <div id="resFaixas" class="kpis"></div>
-      <div id="memFaixas" class="memoria" style="margin-top:10px;max-height:280px"></div>
     </div>
   </div>
 
@@ -452,17 +540,14 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <div class="card"><div class="card-head"><span>Trajetória do cabo — <span class="tag-y">direção Y</span></span></div><canvas id="cvCaboY" class="cv-sm"></canvas></div>
     </div>
     <div class="card">
-      <div class="card-head"><span>Perdas</span></div>
+      <div class="card-head"><span>Perdas — NBR 6118 (detalhado)</span></div>
       <div id="resProtensao" class="kpis"></div>
+      <div id="memPerdasDetalhado" class="memoria" style="margin-top:10px;max-height:380px"></div>
     </div>
     <div class="card" id="cardBiAssim" style="display:none">
-      <div class="card-head"><span>Protensão bidirecional assimétrica — comparativo</span></div>
+      <div class="card-head"><span>Protensão bidirecional assimétrica</span></div>
       <div id="resBiAssim" class="kpis"></div>
       <div id="memBiAssim" class="memoria" style="margin-top:10px;max-height:360px"></div>
-    </div>
-    <div class="card">
-      <div class="card-head"><span>Perdas segundo NBR 6118 — memória detalhada</span></div>
-      <div id="memPerdasNBR" class="memoria" style="max-height:420px"></div>
     </div>
     <div class="card">
       <div class="card-head"><span>Alongamento teórico do cabo</span></div>
@@ -475,12 +560,10 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
         <button class="btn sm" id="btnAplicarCabos">Aplicar sugestão</button>
       </div>
       <div id="resDim" class="kpis"></div>
-      <div id="memDim" class="memoria" style="margin-top:10px;max-height:340px"></div>
     </div>
     <div class="card">
       <div class="card-head"><span>Armadura passiva — Flexão × Mínimo NBR 6118</span></div>
       <div id="resPassivaNBR" class="kpis"></div>
-      <div id="memPassivaNBR" class="memoria" style="margin-top:10px;max-height:380px"></div>
     </div>
   </div>
 
@@ -488,7 +571,6 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     <div class="card">
       <div class="card-head"><span>Verificação NBR — Compressão mínima + Balanceamento</span></div>
       <div id="resVerifNBR" class="kpis"></div>
-      <div id="memVerifNBR" class="memoria" style="margin-top:10px;max-height:400px"></div>
     </div>
     <div class="card">
       <div class="card-head"><span>Carregamento balanceado — w<sub>bal</sub> = 8·P·e / L²</span></div>
@@ -521,9 +603,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
             <option value="vf">Só nas vigas-faixa (vf_ncabos)</option>
           </select>
         </label>
-        <button class="btn btn-primary" id="btnAplicarBal" style="width:100%;margin-top:8px">
-          ⚙ Aplicar nº sugerido de cabos
-        </button>
+        <button class="btn btn-primary" id="btnAplicarBal" style="width:100%;margin-top:8px">⚙ Aplicar nº sugerido de cabos</button>
         <div id="balStatus" style="font-size:11px;color:var(--mut);margin-top:6px;text-align:center">—</div>
       </div>
     </div>
@@ -531,10 +611,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
 
   <div class="view" id="v-flechas">
     <div class="card">
-      <div class="card-head">
-        <span>Deslocamentos — cargas × protensão</span>
-        <span class="legenda-sinal"><b class="baixo">+ para baixo ↓</b> · <b class="cima">− para cima ↑</b></span>
-      </div>
+      <div class="card-head"><span>Deslocamentos — cargas × protensão</span></div>
       <canvas id="cvFlecha"></canvas>
     </div>
     <div class="card">
@@ -546,9 +623,14 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <div class="view" id="v-tensoes">
     <div class="card">
       <div class="card-head">
-        <span>Diagrama de tensões</span>
+        <span>Diagramas detalhados — P, g, V, q, S <span class="vv-badge">v18.4.1</span></span>
         <span class="legenda-sinal"><b class="trac">+ tração</b> · <b class="comp">− compressão</b></span>
       </div>
+      <canvas id="cvTensaoDetalhada" class="cv-sm"></canvas>
+      <div id="resTensaoDetalhada" class="kpis" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span>Diagrama de tensões — envoltória</span></div>
       <canvas id="cvTensao"></canvas>
     </div>
     <div class="card">
@@ -564,12 +646,12 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
 
   <div class="view" id="v-vigasfaixa">
     <div class="card">
-      <div class="card-head"><span>Vigas-faixa — cálculo por tributary width + protensão</span></div>
+      <div class="card-head"><span>Vigas-faixa — tributary width + protensão</span></div>
       <div id="resVigasFaixa" class="kpis"></div>
       <div id="memVigasFaixa" class="memoria" style="margin-top:12px;max-height:520px"></div>
     </div>
     <div class="card">
-      <div class="card-head"><span>Esquema da distribuição de cargas + cabos concentrados</span></div>
+      <div class="card-head"><span>Esquema da distribuição de cargas</span></div>
       <canvas id="cvVF"></canvas>
     </div>
     <div class="card">
@@ -577,19 +659,64 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <canvas id="cvVFDef"></canvas>
     </div>
     <div class="card">
-      <div class="card-head"><span>Detalhamento por viga — ELU/ELS com protensão</span></div>
+      <div class="card-head"><span>Detalhamento por viga</span></div>
       <div id="resVigasFaixaTabela"></div>
     </div>
   </div>
 
+  <div class="view" id="v-grelha">
+    <div class="card">
+      <div class="card-head">
+        <span>Análise por grelha <span class="gr-badge">v18.4.1</span> <span class="tt-badge">tooltip</span></span>
+        <div class="chips">
+          <button class="chip active" id="grelha_w">Deslocamento w</button>
+          <button class="chip" id="grelha_Mx">Momento Mx</button>
+          <button class="chip" id="grelha_My">Momento My</button>
+          <button class="chip active" id="grelha_nos">Nós + valores</button>
+        </div>
+      </div>
+      <div class="chips" style="margin-bottom:8px">
+        <span class="escala">Espaçamento da malha (m):
+          <select id="grelha_dx" style="display:inline-block;width:auto;margin-left:6px">
+            <option value="0.20">0,20 m</option>
+            <option value="0.25" selected>0,25 m</option>
+            <option value="0.30">0,30 m</option>
+            <option value="0.50">0,50 m</option>
+          </select>
+        </span>
+        <span style="font-size:10px;color:var(--mut);margin-left:12px">💡 Passe o mouse sobre um nó para ver os valores</span>
+      </div>
+      <canvas id="cvGrelha"></canvas>
+      <div id="resGrelha" class="kpis" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <div class="card-head"><span>Comparação — tributary width × grelha</span></div>
+      <div id="resComp"></div>
+    </div>
+  </div>
+
+  <div class="view" id="v-otim">
+    <div class="card">
+      <div class="card-head"><span>Comparação de consumo — 1, 2 e 3 VFs</span></div>
+      <div id="resOtim"></div>
+      <canvas id="cvOtim" class="cv-sm"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-head"><span>Diagnóstico de simetria e conflitos</span></div>
+      <div id="resDiag" class="verif-lista"></div>
+    </div>
+  </div>
+
   <div class="view" id="v-verif">
-    <div class="card"><div class="card-head"><span>Verificações ELU / ELS da laje</span></div><div id="resVerif" class="verif-lista"></div></div>
+    <div class="card"><div class="card-head"><span>Verificações ELU / ELS</span></div><div id="resVerif" class="verif-lista"></div></div>
     <div class="card"><div class="card-head"><span>Limites de σpi (NBR 6118 item 9.6.1.2)</span></div><div id="resSigpi" class="verif-lista"></div></div>
     <div class="card"><div class="card-head"><span>Punção — NBR 6118 (contornos C e C')</span></div><div id="resPuncao" class="verif-lista"></div></div>
     <div class="card"><div class="card-head"><span>Protensão mínima — NBR 6118:2023 item 20.3.2.1</span></div><div id="resProtMin" class="verif-lista"></div></div>
-    <div class="card"><div class="card-head"><span>ELS-D — Descompressão da laje (NBR 6118 Tabela 13.4)</span></div><div id="resDescomp" class="verif-lista"></div></div>
-    <div class="card"><div class="card-head"><span>ELS-D — Descompressão das vigas-faixa <span class="vf-protn">v17.3</span></span></div><div id="resDescompVF" class="verif-lista"></div></div>
-    <div class="card"><div class="card-head"><span>Vigas-faixa — ELU/ELS <span class="vf-badge">v17.3</span></span></div><div id="resVerifVF" class="verif-lista"></div></div>
+    <div class="card"><div class="card-head"><span>ELS-D — Descompressão da laje</span></div><div id="resDescomp" class="verif-lista"></div></div>
+    <div class="card"><div class="card-head"><span>ELS-D — Descompressão das VFs</span></div><div id="resDescompVF" class="verif-lista"></div></div>
+    <div class="card"><div class="card-head"><span>Vigas-faixa — ELU/ELS</span></div><div id="resVerifVF" class="verif-lista"></div></div>
+    <div class="card"><div class="card-head"><span>Vão a vencer / VF — classificação</span></div><div id="resVaoVF" class="verif-lista"></div></div>
+    <div class="card"><div class="card-head"><span>Ancoragens Rudloff — verificação</span></div><div id="resAnc" class="verif-lista"></div></div>
   </div>
 
   <div class="view" id="v-quant">
@@ -601,7 +728,6 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
       <div id="resMemoria" class="memoria"></div>
     </div>
   </div>
-
 </div>
 
 <div class="aviso-tecnico"><strong>ATENÇÃO:</strong> Ferramenta de estudo e pré-dimensionamento. Resultados devem ser verificados por profissional habilitado antes de uso em projeto executivo.</div>
@@ -612,6 +738,141 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
 const $ = id => document.getElementById(id);
 const $n = id => parseFloat(($(id)?.value ?? '0').toString().replace(',', '.')) || 0;
 let convCompPos = false;
+
+/* ============ BASE DE DADOS RUDLOFF ============ */
+const CORDOALHAS_DB = {
+  '12.7': { area: 101, area_min: 99, peso: 0.792, fptk: 1900, fpyk: 1690, euk: 0.035, nome: 'CP-190 RB Ø12,7 mm (7 fios)' },
+  '15.2': { area: 143, area_min: 140, peso: 1.126, fptk: 1900, fpyk: 1690, euk: 0.035, nome: 'CP-190 RB Ø15,2 mm (7 fios)' }
+};
+const ANCORAGENS_DB = {
+  'AF 5-1': { tipo:'AF', cord:1, diam:12.7, A:70,  B:130, C:90,  peso:1.3, nome:'AF 5-1 (1 cord.)' },
+  'AF 6-1': { tipo:'AF', cord:1, diam:15.2, A:70,  B:130, C:90,  peso:1.3, nome:'AF 6-1 (1 cord.)' },
+  'EL 5-1': { tipo:'EL', cord:1, diam:12.7, A:100, B:125, C:80,  D:100, peso:2.0, nome:'EL 5-1 (1 cord.)' },
+  'EL 5-2': { tipo:'EL', cord:2, diam:12.7, A:100, B:128, C:140, D:80,  peso:3.0, nome:'EL 5-2 (2 cord.)' },
+  'EL 5-3': { tipo:'EL', cord:3, diam:12.7, A:100, B:290, C:200, D:110, peso:4.0, nome:'EL 5-3 (3 cord.)' },
+  'EL 5-4': { tipo:'EL', cord:4, diam:12.7, A:100, B:300, C:210, D:110, peso:6.0, nome:'EL 5-4 (4 cord.)' },
+  'EL 6-1': { tipo:'EL', cord:1, diam:15.2, A:100, B:128, C:110, D:100, peso:3.0, nome:'EL 6-1 (1 cord.)' },
+  'EL 6-2': { tipo:'EL', cord:2, diam:15.2, A:100, B:150, C:155, D:110, peso:5.0, nome:'EL 6-2 (2 cord.)' },
+  'EL 6-3': { tipo:'EL', cord:3, diam:15.2, A:100, B:300, C:200, D:120, peso:7.0, nome:'EL 6-3 (3 cord.)' },
+  'EL 6-4': { tipo:'EL', cord:4, diam:15.2, A:100, B:420, C:245, D:125, peso:8.0, nome:'EL 6-4 (4 cord.)' },
+  'E 5-8':  { tipo:'E', cord:8,  diam:12.7, A:220, B:63.5, Dint:110, Dext:75,  E:280, peso:16,  nome:'E 5-8 (8 cord.)'  },
+  'E 5-12': { tipo:'E', cord:12, diam:12.7, A:245, B:63.5, Dint:110, Dext:75,  E:280, peso:20,  nome:'E 5-12 (12 cord.)' },
+  'E 5-19': { tipo:'E', cord:19, diam:12.7, A:300, B:76.2, Dint:135, Dext:95,  E:340, peso:35,  nome:'E 5-19 (19 cord.)' },
+  'E 6-8':  { tipo:'E', cord:8,  diam:15.2, A:245, B:63.5, Dint:110, Dext:75,  E:280, peso:20,  nome:'E 6-8 (8 cord.)'  },
+  'E 6-12': { tipo:'E', cord:12, diam:15.2, A:300, B:76.2, Dint:135, Dext:95,  E:340, peso:35,  nome:'E 6-12 (12 cord.)' },
+  'E 6-19': { tipo:'E', cord:19, diam:15.2, A:370, B:101.6, Dint:150, Dext:100, E:435, peso:70,  nome:'E 6-19 (19 cord.)' }
+};
+function espacMinAncoragem(nCord, diam) {
+  if (diam < 14) {
+    if (nCord <= 7)  return { horizontal: 47.1, vertical: 33.6 };
+    if (nCord <= 12) return { horizontal: 58.0, vertical: 39.5 };
+    if (nCord <= 22) return { horizontal: 72.6, vertical: 49.7 };
+    return { horizontal: 81.3, vertical: 62.2 };
+  } else {
+    if (nCord <= 6)  return { horizontal: 47.1, vertical: 33.6 };
+    if (nCord <= 9)  return { horizontal: 58.0, vertical: 39.5 };
+    if (nCord <= 15) return { horizontal: 72.6, vertical: 49.7 };
+    return { horizontal: 81.3, vertical: 62.2 };
+  }
+}
+
+/* ============ SOLVER DE GRELHA ============ */
+function resolverGrelha(R, dx) {
+  dx = dx || 0.25;
+  const Lx = R.Lx, Ly = R.Ly, h = R.h, p = R.p, nu = R.nu;
+  const E = R.Ecm_kPa;
+  const D = E * Math.pow(h, 3) / (12 * (1 - nu * nu));
+  const D_vf = R.vf && R.vf.ativa
+    ? E * Math.pow(R.vf.hvf, 3) / (12 * (1 - nu * nu))
+    : D;
+  const nx = Math.round(Lx / dx) + 1;
+  const ny = Math.round(Ly / dx) + 1;
+  const dx2 = dx * dx;
+  const dx4 = dx2 * dx2;
+  const q_node = p * dx2;
+
+  const Dn = new Float64Array(nx * ny).fill(D);
+  if (R.vf && R.vf.ativa) {
+    R.vf.vigas.forEach(v => {
+      const bf_half = Math.max(0, Math.round((R.vf.bf / 2) / dx));
+      if (R.vf.direcao === 'x') {
+        const jy = Math.round(v.y / dx);
+        for (let i = 0; i < nx; i++)
+          for (let d = -bf_half; d <= bf_half; d++) {
+            const j = jy + d;
+            if (j >= 0 && j < ny) Dn[i * ny + j] = Math.max(Dn[i * ny + j], D_vf);
+          }
+      } else {
+        const jx = Math.round(v.y / dx);
+        for (let j = 0; j < ny; j++)
+          for (let d = -bf_half; d <= bf_half; d++) {
+            const i = jx + d;
+            if (i >= 0 && i < nx) Dn[i * ny + j] = Math.max(Dn[i * ny + j], D_vf);
+          }
+      }
+    });
+  }
+
+  const w = new Float64Array(nx * ny);
+  const omega = 1.85;
+  const maxIter = 4000;
+  const tol = 1e-8;
+  const getw = (M, i, j) => {
+    if (i < 0) i = -i;
+    if (i >= nx) i = 2 * (nx - 1) - i;
+    if (j < 0) j = -j;
+    if (j >= ny) j = 2 * (ny - 1) - j;
+    return M[i * ny + j];
+  };
+  let iter = 0;
+  for (iter = 0; iter < maxIter; iter++) {
+    let maxDiff = 0;
+    for (let i = 1; i < nx - 1; i++) {
+      for (let j = 1; j < ny - 1; j++) {
+        const idx = i * ny + j;
+        const w4 = getw(w, i-1, j) + getw(w, i+1, j) + getw(w, i, j-1) + getw(w, i, j+1);
+        const wD = getw(w, i-1, j-1) + getw(w, i-1, j+1) + getw(w, i+1, j-1) + getw(w, i+1, j+1);
+        const w2 = getw(w, i-2, j) + getw(w, i+2, j) + getw(w, i, j-2) + getw(w, i, j+2);
+        const rhs = q_node * dx4 / Dn[idx];
+        const w_new = (rhs + 8 * w4 - 2 * wD - w2) / 20;
+        const d = Math.abs(w_new - w[idx]);
+        if (d > maxDiff) maxDiff = d;
+        w[idx] = w[idx] + omega * (w_new - w[idx]);
+      }
+    }
+    if (maxDiff < tol) break;
+  }
+
+  const Mx = new Float64Array(nx * ny);
+  const My = new Float64Array(nx * ny);
+  for (let i = 1; i < nx - 1; i++) {
+    for (let j = 1; j < ny - 1; j++) {
+      const idx = i * ny + j;
+      const d2x = (w[(i-1)*ny+j] - 2*w[idx] + w[(i+1)*ny+j]) / dx2;
+      const d2y = (w[i*ny+j-1] - 2*w[idx] + w[i*ny+j+1]) / dx2;
+      Mx[idx] = -Dn[idx] * (d2x + nu * d2y);
+      My[idx] = -Dn[idx] * (d2y + nu * d2x);
+    }
+  }
+
+  let w_max = 0, w_min = 0, Mx_max = 0, Mx_min = 0, My_max = 0, My_min = 0;
+  for (let idx = 0; idx < nx * ny; idx++) {
+    if (Math.abs(w[idx]) > Math.abs(w_max)) w_max = w[idx];
+    if (w[idx] < w_min) w_min = w[idx];
+    if (Mx[idx] > Mx_max) Mx_max = Mx[idx];
+    if (Mx[idx] < Mx_min) Mx_min = Mx[idx];
+    if (My[idx] > My_max) My_max = My[idx];
+    if (My[idx] < My_min) My_min = My[idx];
+  }
+
+  return { nx, ny, dx, w, Mx, My, w_max, w_min, Mx_max, Mx_min, My_max, My_min, iter };
+}
+
+let grelhaResult = null;
+let grelhaView = 'w';
+let grelhaLayout = null;
+let tooltipNode = null;
+let mostrarNosValores = true;
 
 /* ==================== UI EVENTS ==================== */
 $('pr_bainha').addEventListener('change', () => {
@@ -648,6 +909,9 @@ $('vf_prot_ativa').addEventListener('change', () => {
   $('blocoVFProt').style.display = $('vf_prot_ativa').checked ? 'block' : 'none';
   if (window.lastR) atualizar();
 });
+$('vf_embutida').addEventListener('change', () => { if (window.lastR) atualizar(); });
+$('vf_diam').addEventListener('change', () => { if (window.lastR) atualizar(); });
+$('vf_anc_tipo').addEventListener('change', () => { if (window.lastR) atualizar(); });
 $('vf_n').addEventListener('change', () => {
   const n = Math.max(1, Math.min(5, parseInt($('vf_n').value) || 2));
   for (let i = 1; i <= 5; i++) {
@@ -663,6 +927,42 @@ $('vf_n').addEventListener('change', () => {
     if (el && el.parentElement) el.parentElement.style.display = (i <= n) ? 'block' : 'none';
   }
 })();
+['vv_vao','vv_tipo','vv_uso','vv_sis'].forEach(id => {
+  const el = $(id);
+  if (el) el.addEventListener('change', () => { if (window.lastR) atualizar(); });
+});
+$('vf_painel_max').addEventListener('change', () => { if (window.lastR) atualizar(); });
+
+/* ============ grelha — listeners ============ */
+$('grelha_dx').addEventListener('change', () => {
+  if (window.lastR) { renderGrelha(window.lastR); }
+});
+$('grelha_w').addEventListener('click', () => {
+  grelhaView = 'w';
+  document.querySelectorAll('#v-grelha .chip').forEach(c => c.classList.remove('active'));
+  $('grelha_w').classList.add('active');
+  $('grelha_nos').classList.toggle('active', mostrarNosValores);
+  if (grelhaResult && window.lastR) drawGrelha(window.lastR, grelhaResult);
+});
+$('grelha_Mx').addEventListener('click', () => {
+  grelhaView = 'Mx';
+  document.querySelectorAll('#v-grelha .chip').forEach(c => c.classList.remove('active'));
+  $('grelha_Mx').classList.add('active');
+  $('grelha_nos').classList.toggle('active', mostrarNosValores);
+  if (grelhaResult && window.lastR) drawGrelha(window.lastR, grelhaResult);
+});
+$('grelha_My').addEventListener('click', () => {
+  grelhaView = 'My';
+  document.querySelectorAll('#v-grelha .chip').forEach(c => c.classList.remove('active'));
+  $('grelha_My').classList.add('active');
+  $('grelha_nos').classList.toggle('active', mostrarNosValores);
+  if (grelhaResult && window.lastR) drawGrelha(window.lastR, grelhaResult);
+});
+$('grelha_nos').addEventListener('click', () => {
+  mostrarNosValores = !mostrarNosValores;
+  $('grelha_nos').classList.toggle('active', mostrarNosValores);
+  if (grelhaResult && window.lastR) drawGrelha(window.lastR, grelhaResult);
+});
 
 /* ==================== DATA READING ==================== */
 function lerDados() {
@@ -698,7 +998,7 @@ function lerDados() {
   const Eci_j = 5600 * Math.sqrt(fck_j);
   const Ecm_j = Eci_j;
   const Ecm_j_kPa = Ecm_j * 1000;
-  const Ep = 195000;
+  const Ep = 202000;
   const alpha_p = Ep / Ecm_j;
 
   let pp;
@@ -745,14 +1045,9 @@ function lerDados() {
   const L_maior = Math.max(Lx, Ly);
 
   let L_transv, dir_cabo;
-  if (modo_prot === 'bi_assim') {
-    dir_cabo = 'bi_assim';
-    L_transv = Ly;
-  } else if (protY && !protX) {
-    L_transv = Lx; dir_cabo = 'y';
-  } else {
-    L_transv = Ly; dir_cabo = 'x';
-  }
+  if (modo_prot === 'bi_assim') { dir_cabo = 'bi_assim'; L_transv = Ly; }
+  else if (protY && !protX) { L_transv = Lx; dir_cabo = 'y'; }
+  else { L_transv = Ly; dir_cabo = 'x'; }
   if (ehRetangular && modo_prot !== 'bi_assim') {
     if (Lx <= Ly) { dir_cabo = 'x'; L_transv = Ly; }
     else { dir_cabo = 'y'; L_transv = Lx; }
@@ -780,6 +1075,10 @@ function lerDados() {
     Vy = p * Ly * coefs.v * 0.6;
   }
 
+  const kx_g = (dir === 'bi' ? 1/(1+Math.pow(Ly/Lx,4)) : 1);
+  const Mx_g = g * Lx**2 * coefs.m * kx_g * 1.2;
+  const Mx_q = q * Lx**2 * coefs.m * kx_g * 1.2;
+
   const p_x = p * Ly;
   const p_y = p * Lx;
 
@@ -790,44 +1089,20 @@ function lerDados() {
   let P_efetiva_X = 0, P_efetiva_Y = 0, P_efetiva = 0;
   let nCabos_X = 0, nCabos_Y = 0, banda_X = 0, banda_Y = 0, e_X = 0, e_Y = 0;
   let faixas_X = [];
+  let perdas_detalhado = {};
 
   if (modo_prot === 'bi_assim') {
     const nfaixas_X = Math.max(1, Math.min(3, parseInt($('pr_nfaixas_X').value)));
-
-    faixas_X.push({
-      label: 'X1',
-      n: Math.max(0, $n('pr_ncabos_X1')),
-      banda: Math.max(0.1, $n('pr_banda_X1')),
-      e: $n('pr_e_X1'),
-      y_pos: $n('pr_y_X1')
-    });
-    if (nfaixas_X >= 2) {
-      faixas_X.push({
-        label: 'X2',
-        n: Math.max(0, $n('pr_ncabos_X2')),
-        banda: Math.max(0.1, $n('pr_banda_X2')),
-        e: $n('pr_e_X2'),
-        y_pos: $n('pr_y_X2')
-      });
-    }
-    if (nfaixas_X >= 3) {
-      faixas_X.push({
-        label: 'X3',
-        n: Math.max(0, $n('pr_ncabos_X3')),
-        banda: Math.max(0.1, $n('pr_banda_X3')),
-        e: $n('pr_e_X3'),
-        y_pos: $n('pr_y_X3')
-      });
-    }
+    faixas_X.push({label:'X1', n:Math.max(0,$n('pr_ncabos_X1')), banda:Math.max(0.1,$n('pr_banda_X1')), e:$n('pr_e_X1'), y_pos:$n('pr_y_X1')});
+    if (nfaixas_X >= 2) faixas_X.push({label:'X2', n:Math.max(0,$n('pr_ncabos_X2')), banda:Math.max(0.1,$n('pr_banda_X2')), e:$n('pr_e_X2'), y_pos:$n('pr_y_X2')});
+    if (nfaixas_X >= 3) faixas_X.push({label:'X3', n:Math.max(0,$n('pr_ncabos_X3')), banda:Math.max(0.1,$n('pr_banda_X3')), e:$n('pr_e_X3'), y_pos:$n('pr_y_X3')});
     faixas_X.forEach(fx => {
       const b = fx.banda;
       fx.y_center = Math.max(b/2, Math.min(Ly - b/2, fx.y_pos));
     });
-
     banda_Y = Math.max(0.1, $n('pr_banda_Y'));
     e_Y = $n('pr_e_Y');
     nCabos_Y = Math.max(0, $n('pr_ncabos_Y'));
-
     Ap_cabo = Ap_cord * nCord;
     let Ap_X_total = 0;
     faixas_X.forEach(fx => {
@@ -847,7 +1122,6 @@ function lerDados() {
     Pi_Y = sigma_pi * Ap_Y / 1000;
     Pi = Pi_X + Pi_Y;
     banda_X = faixas_X.reduce((s,fx) => s + fx.banda, 0);
-
     Np_X = 0;
     faixas_X.forEach(fx => { Np_X += fx.Np * fx.banda; });
     Np_X = banda_X > 0 ? Np_X / banda_X : 0;
@@ -857,12 +1131,10 @@ function lerDados() {
     Np_Y = banda_Y > 0 ? Pi_Y / banda_Y : 0;
     Mprot_Y = Np_Y * e_Y;
     Mprot = Mprot_X + Mprot_Y;
-
     const sigmas_X = faixas_X.map(fx => fx.sigma_cp).filter(v => v > 0);
     sigma_cp_X = sigmas_X.length > 0 ? Math.min(...sigmas_X) : 0;
     sigma_cp_Y = Np_Y / h / 1000;
     sigma_cp_MPa = Math.min(sigma_cp_X, sigma_cp_Y);
-
     const r = sigma_pi / fptk;
     let psi_1000_pct;
     if ($('pr_relx').value === 'RB') {
@@ -879,7 +1151,6 @@ function lerDados() {
       else psi_1000_pct = 12.0;
     }
     const psi_inf_pct = 2.5 * psi_1000_pct;
-
     let atr_X_pct = 0;
     faixas_X.forEach(fx => {
       const alpha_i = 4 * fx.e / Lx;
@@ -892,20 +1163,41 @@ function lerDados() {
       const P_atr = Pi_Y * Math.exp(-(mu * alpha + k * Ly / 2));
       return (Pi_Y - P_atr) / Math.max(1, Pi_Y) * 100;
     })();
-
-    const pct_perdas_X = Math.min(50, atr_X_pct + psi_inf_pct + 14);
-    const pct_perdas_Y = Math.min(50, atr_Y_pct + psi_inf_pct + 14);
-    P_efetiva_X = Pi_X * (1 - pct_perdas_X/100);
-    P_efetiva_Y = Pi_Y * (1 - pct_perdas_Y/100);
+    const Ap_X_total_eff = faixas_X.reduce((s,fx) => s + fx.Ap, 0);
+    const sigma_c_X_medio = Ap_X_total_eff > 0
+      ? faixas_X.reduce((s,fx) => s + fx.sigma_cp * fx.Ap, 0) / Ap_X_total_eff : 0;
+    const dP_relax_MPa = (psi_inf_pct / 100) * sigma_pi;
+    const dP_retrac_MPa = Ep * Math.abs(ecs) / 1000;
+    const dP_fluenc_X_MPa = alpha_p * sigma_c_X_medio * phi;
+    const dP_fluenc_Y_MPa = alpha_p * sigma_cp_Y * phi;
+    const dP_acom_X_MPa = (2 * slip / 1000) * Ep / (Lx * 1000);
+    const dP_acom_Y_MPa = (2 * slip / 1000) * Ep / (Ly * 1000);
+    const dP_elast_X_MPa = faixas_X.length > 0
+      ? faixas_X.reduce((s,fx) => s + alpha_p * fx.sigma_cp * Math.max(1, fx.n - 1) / (2 * Math.max(1, fx.n)), 0) / faixas_X.length : 0;
+    const dP_elast_Y_MPa = nCabos_Y > 0
+      ? alpha_p * sigma_cp_Y * (nCabos_Y - 1) / (2 * nCabos_Y) : 0;
+    const perda_X_MPa = dP_relax_MPa + dP_retrac_MPa + dP_fluenc_X_MPa + dP_acom_X_MPa + dP_elast_X_MPa + (atr_X_pct/100)*sigma_pi;
+    const perda_Y_MPa = dP_relax_MPa + dP_retrac_MPa + dP_fluenc_Y_MPa + dP_acom_Y_MPa + dP_elast_Y_MPa + (atr_Y_pct/100)*sigma_pi;
+    const perda_X_pct = Math.min(50, (perda_X_MPa / Math.max(1, sigma_pi)) * 100);
+    const perda_Y_pct = Math.min(50, (perda_Y_MPa / Math.max(1, sigma_pi)) * 100);
+    P_efetiva_X = Pi_X * (1 - perda_X_pct/100);
+    P_efetiva_Y = Pi_Y * (1 - perda_Y_pct/100);
     P_efetiva = P_efetiva_X + P_efetiva_Y;
     e_X = faixas_X[0].e;
+    perdas_detalhado = {
+      atr_X_pct, atr_Y_pct, psi_1000_pct, psi_inf_pct,
+      dP_relax_MPa, dP_retrac_MPa,
+      dP_fluenc_X_MPa, dP_fluenc_Y_MPa,
+      dP_acom_X_MPa, dP_acom_Y_MPa,
+      dP_elast_X_MPa, dP_elast_Y_MPa,
+      perda_X_MPa, perda_Y_MPa, perda_X_pct, perda_Y_pct
+    };
   } else {
     nCabos = $n('pr_ncabos');
     Ap_cabo = Ap_cord * nCord;
     Ap_total = Ap_cabo * nCabos;
     sigma_pi = ratio * fptk;
     Pi = sigma_pi * Ap_total / 1000;
-
     const Lc_uni = dir_cabo === 'x' ? Lx : Ly;
     const x_meio = Lc_uni / 2;
     const alpha_meio = 4 * e_meio / Lc_uni;
@@ -1025,6 +1317,17 @@ function lerDados() {
   const sigma_inf = sigma_p_uni + sigma_p_mom_inf + sigma_inf_carga;
   const sigma_sup = sigma_p_uni + sigma_p_mom_sup + sigma_sup_carga;
 
+  const sigma_P_sup = sigma_p_uni + sigma_p_mom_sup;
+  const sigma_P_inf = sigma_p_uni + sigma_p_mom_inf;
+  const sigma_g_sup = -Mx_g / W_sup / 1000;
+  const sigma_g_inf = +Mx_g / W_inf / 1000;
+  const sigma_V_sup = sigma_P_sup + sigma_g_sup;
+  const sigma_V_inf = sigma_P_inf + sigma_g_inf;
+  const sigma_q_sup = -Mx_q / W_sup / 1000;
+  const sigma_q_inf = +Mx_q / W_inf / 1000;
+  const sigma_S_sup = sigma_V_sup + sigma_q_sup;
+  const sigma_S_inf = sigma_V_inf + sigma_q_inf;
+
   const psi1 = $n('ap_psi1') || 0.4;
   const p_freq = g + psi1 * q;
   const fator_freq = p > 0.01 ? (p_freq / p) : 1;
@@ -1073,9 +1376,7 @@ function lerDados() {
   const N_min_por_m = (h * 100) / 12;
   const ok_N_min = N_por_m >= N_min_por_m;
 
-  const sigma_c_prot_Pi = modo_prot === 'bi_assim'
-    ? Math.max(sigma_cp_X, sigma_cp_Y)
-    : sigma_c_prot;
+  const sigma_c_prot_Pi = modo_prot === 'bi_assim' ? Math.max(sigma_cp_X, sigma_cp_Y) : sigma_c_prot;
   const sigma_c_prot_lim = 0.7 * fck;
   const ok_sigma_c_prot = sigma_c_prot_Pi <= sigma_c_prot_lim;
 
@@ -1091,8 +1392,8 @@ function lerDados() {
   const n_sugerido_cp = P_cabo_efetivo_kN > 0 ? Math.ceil(P_ef_alvo_kN / P_cabo_efetivo_kN) : 0;
 
   const m_massa = (g + 0.3*q) * 1000 / 9.81;
-  const D = Ecm_kPa * h**3 / (12*(1 - nu**2));
-  const f1 = (Math.PI/2) * Math.sqrt(D / (m_massa * L_ef**4)) * 1000;
+  const D_placa = Ecm_kPa * h**3 / (12*(1 - nu**2));
+  const f1 = (Math.PI/2) * Math.sqrt(D_placa / (m_massa * L_ef**4)) * 1000;
 
   const d = h - cob - 0.005;
   const Msd_kNm = 1.4 * Mx;
@@ -1111,7 +1412,6 @@ function lerDados() {
   const VRd1_cort = (tau_Rd_cort * k_cort * (1.2 + 40 * rho_L) + 0.15 * sigma_cp_cort) * 1000 * d_util;
   const Vsd_cort = 1.4 * Vx;
 
-  /* ========== VIGAS-FAIXA + PROTENSÃO CONCENTRADA ========== */
   let vf_resultados = { ativa: false };
   if ($('vf_ativa').checked) {
     const nvf = Math.max(1, Math.min(5, parseInt($('vf_n').value) || 2));
@@ -1121,10 +1421,8 @@ function lerDados() {
     const pos = [];
     for (let i = 1; i <= nvf; i++) pos.push($n('vf_y' + i));
     pos.sort((a, b) => a - b);
-
     const Lvao   = vf_dir === 'x' ? Lx : Ly;
     const Ltrans = vf_dir === 'x' ? Ly : Lx;
-
     const suportes = [0, ...pos, Ltrans];
     const tribs = [];
     for (let i = 1; i <= nvf; i++) {
@@ -1133,32 +1431,75 @@ function lerDados() {
     }
     const trib_edge_1 = suportes[1] / 2;
     const trib_edge_2 = (Ltrans - suportes[nvf]) / 2;
-
     const extraPP = hvf > h ? gc * (hvf - h) * bf : 0;
+    const pp_VF_por_m = bf * hvf * gc;
+    const pp_VF_total = pp_VF_por_m * Lvao;
+    const pp_VF_por_m2 = hvf * gc;
+    const vol_VF = bf * hvf * Lvao;
 
     const prot_vf_ativa = $('vf_prot_ativa').checked;
     let vf_prot = null;
     if (prot_vf_ativa) {
       const nCabos_vf = Math.max(0, $n('vf_ncabos'));
       const nCord_vf = Math.max(1, $n('vf_ncord'));
-      const e_vf = $n('vf_e');
-      const d_vf_cabo = $n('vf_d');
       const ratio_vf = $n('vf_ratio');
       const perda_pct_vf = Math.max(0, Math.min(50, $n('vf_perda')));
-      const Ap_cabo_vf = Ap_cord * nCord_vf;
+      const vf_diam = $n('vf_diam');
+      const anc_tipo_pref = $('vf_anc_tipo').value;
+      const d_inf_vf = Math.max(0.02, Math.min(hvf - 0.02, $n('vf_d_inf')));
+      const d_sup_vf = Math.max(0.02, Math.min(hvf - 0.02, $n('vf_d_sup')));
+      const e_meio_vf  = hvf/2 - d_inf_vf;
+      const e_apoio_vf = d_sup_vf - hvf/2;
+      if ($('vf_e')) $('vf_e').value = e_meio_vf.toFixed(4);
+      if ($('vf_d')) $('vf_d').value = d_inf_vf.toFixed(4);
+      if ($('vf_e_meio_txt'))  $('vf_e_meio_txt').textContent  = e_meio_vf.toFixed(4);
+      if ($('vf_e_apoio_txt')) $('vf_e_apoio_txt').textContent = e_apoio_vf.toFixed(4);
+      const cordDB = CORDOALHAS_DB[vf_diam.toFixed(1)] || CORDOALHAS_DB['12.7'];
+      let anc_sel = null;
+      let candidatos = Object.entries(ANCORAGENS_DB).filter(([k, v]) =>
+        Math.abs(v.diam - vf_diam) < 0.1 && v.cord === nCord_vf
+      );
+      if (anc_tipo_pref !== 'auto') {
+        const filtro = candidatos.filter(([k, v]) => v.tipo === anc_tipo_pref);
+        if (filtro.length > 0) candidatos = filtro;
+      }
+      if (candidatos.length > 0) {
+        const ordem = { 'EL':1, 'AF':2, 'E':3 };
+        candidatos.sort((a, b) => (ordem[a[1].tipo]||9) - (ordem[b[1].tipo]||9));
+        anc_sel = { codigo: candidatos[0][0], ...candidatos[0][1] };
+      } else {
+        const compativeis = Object.entries(ANCORAGENS_DB).filter(([k, v]) =>
+          Math.abs(v.diam - vf_diam) < 0.1 && v.cord >= nCord_vf
+        ).sort((a, b) => a[1].cord - b[1].cord);
+        if (compativeis.length > 0) {
+          anc_sel = { codigo: compativeis[0][0], ...compativeis[0][1], aviso: 'Nº cabos > cord./cabo' };
+        }
+      }
+      let espac_ok = true, espac_necessario = 0, espac_disponivel = bf * 1000;
+      if (anc_sel) {
+        const largura_placa = anc_sel.tipo === 'AF' ? anc_sel.A :
+                              anc_sel.tipo === 'EL' ? anc_sel.C : anc_sel.A;
+        const espac_min = espacMinAncoragem(nCord_vf, vf_diam);
+        const centro_min = Math.max(largura_placa + 20, espac_min.horizontal);
+        espac_necessario = nCabos_vf * largura_placa + (nCabos_vf - 1) * (centro_min - largura_placa) + 2 * cob * 1000;
+        espac_ok = espac_necessario <= espac_disponivel;
+      }
+      const Ap_cordoalha = cordDB.area;
+      const Ap_cabo_vf = Ap_cordoalha * nCord_vf;
       const Ap_total_vf = Ap_cabo_vf * nCabos_vf;
       const sigma_pi_vf = ratio_vf * fptk;
       const Pi_vf = sigma_pi_vf * Ap_total_vf / 1000;
       const P_ef_vf = Pi_vf * (1 - perda_pct_vf/100);
-      const w_bal_vf = 8 * P_ef_vf * e_vf / (Lvao * Lvao);
+      const w_bal_vf = 8 * P_ef_vf * e_meio_vf / (Lvao * Lvao);
       vf_prot = {
         ativa: true, nCabos: nCabos_vf, nCord: nCord_vf,
-        Ap_cabo: Ap_cabo_vf, Ap_total: Ap_total_vf,
-        sigma_pi: sigma_pi_vf, Pi: Pi_vf, P_ef: P_ef_vf,
-        perda_pct: perda_pct_vf, e: e_vf, d: d_vf_cabo, w_bal: w_bal_vf
+        diam: vf_diam, cordDB, Ap_cordoalha, Ap_cabo: Ap_cabo_vf, Ap_total: Ap_total_vf,
+        sigma_pi: sigma_pi_vf, Pi: Pi_vf, P_ef: P_ef_vf, perda_pct: perda_pct_vf,
+        e: e_meio_vf, e_meio: e_meio_vf, e_apoio: e_apoio_vf,
+        d_inf: d_inf_vf, d_sup: d_sup_vf, d: d_inf_vf, w_bal: w_bal_vf,
+        anc_sel, espac_ok, espac_necessario, espac_disponivel
       };
     }
-
     const fydCA = 500 / 1.15;
     const vigas = pos.map((y, i) => {
       const w_carga = p * tribs[i] + extraPP;
@@ -1182,17 +1523,13 @@ function lerDados() {
       const ok_cort = tau_wd < tau_Rd2_vf;
       const delta_lim = Lvao / 350;
       const ok_flecha = Math.abs(delta_tot) < delta_lim;
-
-      let sigma_inf_vf = 0, sigma_sup_vf = 0;
-      let sigma_inf_vf_freq = 0, sigma_sup_vf_freq = 0;
+      let sigma_inf_vf = 0, sigma_sup_vf = 0, sigma_inf_vf_freq = 0, sigma_sup_vf_freq = 0;
       let ok_descomp_vf = true;
       let A_vf = 0, W_inf_vf = 0, W_sup_vf = 0;
       if (vf_prot) {
         A_vf = bf * hvf;
-        const y_inf_vf = hvf / 2;
-        const y_sup_vf = hvf / 2;
-        W_inf_vf = I_vf / y_inf_vf;
-        W_sup_vf = I_vf / y_sup_vf;
+        W_inf_vf = I_vf / (hvf / 2);
+        W_sup_vf = I_vf / (hvf / 2);
         const P = vf_prot.P_ef;
         sigma_inf_vf = -P / (A_vf * 1000) - P * vf_prot.e / (W_inf_vf * 1000) + M_carga / (W_inf_vf * 1000);
         sigma_sup_vf = -P / (A_vf * 1000) + P * vf_prot.e / (W_sup_vf * 1000) - M_carga / (W_sup_vf * 1000);
@@ -1201,30 +1538,13 @@ function lerDados() {
         sigma_sup_vf_freq = -P / (A_vf * 1000) + P * vf_prot.e / (W_sup_vf * 1000) - M_carga_freq / (W_sup_vf * 1000);
         ok_descomp_vf = (sigma_inf_vf_freq >= 0) && (sigma_sup_vf_freq >= 0);
       }
-
-      return {
-        index: i + 1, y: y, trib: tribs[i],
-        w: w_carga, w_carga: w_carga, w_bal: w_bal, w_liq: w_liq,
-        M: M_carga, M_carga: M_carga, M_net: M_net, V: V,
-        I_vf: I_vf, EI_vf: EI_vf,
-        delta_imd: delta_imd, delta_tot: delta_tot, delta_lim: delta_lim, ok_flecha: ok_flecha,
-        d_vf: d_vf, Md_vf: Md_vf,
-        As_vf_cm2: As_vf_cm2, As_min_vf_cm2: As_min_vf_cm2, As_req_vf_cm2: As_req_vf_cm2,
-        tau_wd: tau_wd, tau_Rd2_vf: tau_Rd2_vf, ok_cort: ok_cort,
-        A_vf: A_vf, W_inf_vf: W_inf_vf, W_sup_vf: W_sup_vf,
-        sigma_inf_vf: sigma_inf_vf, sigma_sup_vf: sigma_sup_vf,
-        sigma_inf_vf_freq: sigma_inf_vf_freq, sigma_sup_vf_freq: sigma_sup_vf_freq,
-        ok_descomp_vf: ok_descomp_vf
-      };
+      return { index:i+1, y, trib:tribs[i], w:w_carga, w_carga, w_bal, w_liq, M:M_carga, M_carga, M_net, V, I_vf, EI_vf, delta_imd, delta_tot, delta_lim, ok_flecha, d_vf, Md_vf, As_vf_cm2, As_min_vf_cm2, As_req_vf_cm2, tau_wd, tau_Rd2_vf, ok_cort, A_vf, W_inf_vf, W_sup_vf, sigma_inf_vf, sigma_sup_vf, sigma_inf_vf_freq, sigma_sup_vf_freq, ok_descomp_vf };
     });
-
     const reacao_total_vigas = vigas.reduce((s, v) => s + v.V, 0);
-
     vf_resultados = {
-      ativa: true, n: nvf, bf: bf, hvf: hvf, direcao: vf_dir,
-      Lvao: Lvao, Ltrans: Ltrans, pos: pos, suportes: suportes, tribs: tribs,
-      trib_edge_1: trib_edge_1, trib_edge_2: trib_edge_2, extraPP: extraPP,
-      vigas: vigas, reacao_total: reacao_total_vigas, prot: vf_prot
+      ativa:true, n:nvf, bf, hvf, direcao:vf_dir, Lvao, Ltrans, pos, suportes, tribs,
+      trib_edge_1, trib_edge_2, extraPP, vigas, reacao_total:reacao_total_vigas, prot:vf_prot,
+      pp_VF_por_m, pp_VF_total, pp_VF_por_m2, vol_VF
     };
   }
 
@@ -1237,34 +1557,71 @@ function lerDados() {
   const nAncor = nCabos * 2;
   const Vforma = 2*(Lx+Ly)*h;
 
+  const vv_vao  = Math.max(1, $n('vv_vao'));
+  const vv_tipo = $('vv_tipo').value;
+  const vv_uso  = $('vv_uso').value;
+  const vv_sis  = $('vv_sis').value;
+  let divisor_base;
+  switch (vv_sis) {
+    case 'maciça_prot':    divisor_base = 45; break;
+    case 'maciça_ca':      divisor_base = 35; break;
+    case 'nervurada_prot': divisor_base = 30; break;
+    case 'nervurada_ca':   divisor_base = 25; break;
+    default:               divisor_base = 40;
+  }
+  let fator_apoio = 1.0;
+  if (vv_tipo === 'continua') fator_apoio = 0.85;
+  if (vv_tipo === 'balanco')  fator_apoio = 2.5;
+  if (vv_tipo === 'cogumelo') fator_apoio = 0.80;
+  const fator_uso = vv_uso === 'cobertura' ? 1.08 : 1.0;
+  const h_sugerido = vv_vao / divisor_base / fator_apoio * fator_uso;
+  const h_sugerido_arred = Math.ceil(h_sugerido * 20) / 20;
+  const h_min_norma = vv_tipo === 'balanco' ? 0.10 : 0.08;
+  const h_final = Math.max(h_sugerido_arred, h_min_norma);
+  const h_atual = h;
+  const razao_h = h_atual / h_final;
+  let status_h;
+  if (razao_h >= 0.98 && razao_h <= 1.25) status_h = 'ok';
+  else if (razao_h >= 0.90 && razao_h < 0.98) status_h = 'wn';
+  else if (razao_h > 1.25) status_h = 'ok';
+  else status_h = 'er';
+  let vf_classificacao = '—';
+  if ($('vf_ativa').checked) {
+    const Lvao_vf = ($('vf_dir').value === 'x') ? Lx : Ly;
+    const hvf_vf = $n('vf_h');
+    const rel = Lvao_vf / Math.max(0.01, hvf_vf);
+    if (rel > 3)      vf_classificacao = 'Viga normal (Bernoulli)';
+    else if (rel > 2) vf_classificacao = 'Viga normal (cuidado com aberturas)';
+    else              vf_classificacao = 'VIGA-PAREDE (NBR 22.2)';
+  }
+
   return {
     fck, tipo, dir, sis, uso, modo_prot,
-    Lx, Ly, h, cob, hf, bw, s, gc, cord: Ap_cord, nCord, nCabos,
-    ratio, mu, k, slip, dinf: $n('pr_dinf'), dsup: $n('pr_dsup'), protX, protY, nu, phi, ecs,
-    fptk, fpyk, euk, Ep,
-    fcd, fctm, fctk_inf, fctk_sup, Ecm, Ecm_kPa, alpha_p,
+    Lx, Ly, h, cob, hf, bw, s, gc, cord:Ap_cord, nCord, nCabos,
+    ratio, mu, k, slip, dinf:$n('pr_dinf'), dsup:$n('pr_dsup'), protX, protY, nu, phi, ecs,
+    fptk, fpyk, euk, Ep, fcd, fctm, fctk_inf, fctk_sup, Ecm, Ecm_kPa, alpha_p,
     idade, s_cim, beta1, fck_j, Eci_j, Ecm_j, Ecm_j_kPa,
-    pp, g, q, p, p_x, p_y,
-    A, I, y_inf, y_sup, W_inf, W_sup, Ac,
-    e_meio, e_apoio,
+    pp, g, q, p, p_x, p_y, A, I, y_inf, y_sup, W_inf, W_sup, Ac, e_meio, e_apoio,
     Ap_cord, Ap_cabo, Ap_total, sigma_pi, Pi,
     Pi_X, Pi_Y, Np_X, Np_Y, Mprot_X, Mprot_Y,
     sigma_cp_X, sigma_cp_Y, P_efetiva_X, P_efetiva_Y,
     nCabos_X, nCabos_Y, banda_X, banda_Y, e_X, e_Y, faixas_X,
     Lc, x_meio, alpha_meio, Patrito_meio, Patrito_ponta,
     perda_atrito: modo_prot === 'bi_assim' ? 0 : (Pi - Patrito_meio)/Pi*100,
-    x_inf, dP_acom, Ppos_acom,
-    sigma_c_prot, dP_elast_MPa, dP_elast,
+    x_inf, dP_acom, Ppos_acom, sigma_c_prot, dP_elast_MPa, dP_elast,
     psi_1000_pct, psi_inf_pct, dP_relax_MPa, dP_relax,
     dP_retrac_MPa, dP_retrac, dP_fluenc_MPa, dP_fluenc,
     P_imd, P_efetiva, perda_total_pct,
     sigma_cp_MPa, ok_sigma_cp, sigma_c_prot_Pi, sigma_c_prot_lim, ok_sigma_c_prot,
     ehRetangular, razao, L_menor, L_maior, L_transv, dir_cabo, dir_efetiva,
     Mx, My, Vx, Vy, Mprot, L_ef, coefs,
-    Np: Np_m, sigma_inf, sigma_sup, sigma_p_uni, sigma_p_mom,
-    sigma_inf_carga, sigma_sup_carga,
-    psi1, p_freq, Mx_freq, My_freq,
-    sigma_inf_freq, sigma_sup_freq,
+    Mx_g, Mx_q,
+    Np:Np_m, sigma_inf, sigma_sup, sigma_p_uni, sigma_p_mom, sigma_inf_carga, sigma_sup_carga,
+    sigma_P_sup, sigma_P_inf, sigma_g_sup, sigma_g_inf,
+    sigma_V_sup, sigma_V_inf, sigma_q_sup, sigma_q_inf,
+    sigma_S_sup, sigma_S_inf,
+    perdas_detalhado,
+    psi1, p_freq, Mx_freq, My_freq, sigma_inf_freq, sigma_sup_freq,
     ok_descomp_inf, ok_descomp_sup, ok_descompressao, sigma_descomp_min,
     del_carga, del_prot, del_imd, del_dif, del_total, del_lim,
     u_C, u_Cp, d_util, d_mm, Vs, Fsd,
@@ -1279,198 +1636,176 @@ function lerDados() {
     area, Vc, peso_aco_pos, peso_aco_neg, peso_cord, comp_cabos, nAncor, Vforma,
     P_inicio_along, P_meio_along, P_fim_along, P_medio_along,
     deltaL_cabo_mm, deltaL_mm_m, deltaL_min, deltaL_max,
-    vf: vf_resultados
+    vf: vf_resultados,
+    vv_vao, vv_tipo, vv_uso, vv_sis,
+    h_sugerido, h_sugerido_arred, h_final, h_min_norma,
+    h_atual, razao_h, status_h, vf_classificacao
   };
 }
 
 /* ==================== VERIFICATIONS ==================== */
 function verificar(R) {
   const V = [];
-  V.push({nome:'σc no ato ≤ 0,7·fck',
-    detalhe:`σc = ${R.sigma_c_prot_Pi.toFixed(2)} MPa · limite = ${R.sigma_c_prot_lim.toFixed(2)}`,
-    status: R.ok_sigma_c_prot ? 'ok' : 'er'});
-  V.push({nome:'σc em serviço ≤ 0,6·fck',
-    detalhe:`σc,max = ${R.sc_max_serv.toFixed(2)} MPa · limite = ${R.sigma_c_serv_lim.toFixed(2)}`,
-    status: R.ok_sigma_c_serv ? 'ok' : R.sc_max_serv < 0.8*R.fck ? 'wn' : 'er'});
+  V.push({nome:'σc no ato ≤ 0,7·fck', detalhe:`σc = ${R.sigma_c_prot_Pi.toFixed(2)} MPa · limite = ${R.sigma_c_prot_lim.toFixed(2)}`, status: R.ok_sigma_c_prot ? 'ok' : 'er'});
+  V.push({nome:'σc em serviço ≤ 0,6·fck', detalhe:`σc,max = ${R.sc_max_serv.toFixed(2)} MPa · limite = ${R.sigma_c_serv_lim.toFixed(2)}`, status: R.ok_sigma_c_serv ? 'ok' : R.sc_max_serv < 0.8*R.fck ? 'wn' : 'er'});
   const s_min = Math.min(R.sigma_inf, R.sigma_sup);
-  V.push({nome:'Tração ELS-F',
-    detalhe:`σt = ${Math.abs(s_min).toFixed(2)} MPa · fct,inf = ${R.fctk_inf.toFixed(2)}`,
-    status: Math.abs(s_min) < R.fctk_inf ? 'ok' : Math.abs(s_min) < 2*R.fctk_inf ? 'wn' : 'er'});
+  V.push({nome:'Tração ELS-F', detalhe:`σt = ${Math.abs(s_min).toFixed(2)} MPa · fct,inf = ${R.fctk_inf.toFixed(2)}`, status: Math.abs(s_min) < R.fctk_inf ? 'ok' : Math.abs(s_min) < 2*R.fctk_inf ? 'wn' : 'er'});
   const rel = Math.abs(R.del_total) / R.del_lim;
-  V.push({nome:'Flecha total (laje)',
-    detalhe:`δ = ${(R.del_total*1000).toFixed(2)} mm · δlim = ${(R.del_lim*1000).toFixed(2)}`,
-    status: rel < 1.0 ? 'ok' : rel < 1.1 ? 'wn' : 'er'});
-  const MRd = 0.9 * R.d * 1000 * (R.fck/1.4) * 0.8 * R.As_adot_pos/1000;
-  const Msd = 1.4 * R.Mx;
-  V.push({nome:'Flexão ELU (laje)',
-    detalhe:`Msd = ${Msd.toFixed(2)} · MRd = ${MRd.toFixed(2)}`,
-    status: Msd < MRd ? 'ok' : Msd < 1.1*MRd ? 'wn' : 'er'});
-  V.push({nome:'Cortante ELU (laje)',
-    detalhe:`Vsd = ${R.Vsd_cort.toFixed(2)} · VRd1 = ${R.VRd1_cort.toFixed(2)}`,
-    status: R.Vsd_cort < R.VRd1_cort ? 'ok' : R.Vsd_cort < 1.15*R.VRd1_cort ? 'wn' : 'er'});
-  V.push({nome:'Perdas',
-    detalhe:`Perda = ${R.perda_total_pct.toFixed(1)}%`,
-    status: R.perda_total_pct < 20 ? 'ok' : R.perda_total_pct < 25 ? 'wn' : 'er'});
-  V.push({nome:'Frequência natural',
-    detalhe:`f1 = ${R.f1.toFixed(2)} Hz`,
-    status: R.f1 >= 4.5 ? 'ok' : R.f1 >= 3.0 ? 'wn' : 'er'});
+  V.push({nome:'Flecha total', detalhe:`δ = ${(R.del_total*1000).toFixed(2)} mm · δlim = ${(R.del_lim*1000).toFixed(2)}`, status: rel < 1.0 ? 'ok' : rel < 1.1 ? 'wn' : 'er'});
+  V.push({nome:'Perdas totais', detalhe:`Perda = ${R.perda_total_pct.toFixed(1)}%`, status: R.perda_total_pct < 25 ? 'ok' : R.perda_total_pct < 32 ? 'wn' : 'er'});
+  V.push({nome:'Frequência natural', detalhe:`f1 = ${R.f1.toFixed(2)} Hz`, status: R.f1 >= 4.5 ? 'ok' : R.f1 >= 3.0 ? 'wn' : 'er'});
   const lh_lim = R.uso === 'cobertura' ? 48 : 40;
   const L_h = R.L_ef / R.h;
-  V.push({nome:'Esbeltez L/h',
-    detalhe:`L/h = ${L_h.toFixed(1)} · limite = ${lh_lim}`,
-    status: L_h <= lh_lim ? 'ok' : L_h <= lh_lim*1.15 ? 'wn' : 'er'});
-  if (R.sis !== 'pre') {
-    V.push({nome:'h mínima protendida lisa',
-      detalhe:`h = ${(R.h*1000).toFixed(0)} mm · mínimo = 160 mm`,
-      status: R.h >= 0.16 ? 'ok' : R.h >= 0.15 ? 'wn' : 'er'});
-  }
-  if (R.ehRetangular) {
-    V.push({nome:'⚠️ Laje retangular',
-      detalhe:`Ly/Lx = ${R.razao.toFixed(3)} < 0,5 → unidirecional`,
-      status: 'wn'});
-  }
+  V.push({nome:'Esbeltez L/h', detalhe:`L/h = ${L_h.toFixed(1)} · limite = ${lh_lim}`, status: L_h <= lh_lim ? 'ok' : L_h <= lh_lim*1.15 ? 'wn' : 'er'});
+  if (R.sis !== 'pre') V.push({nome:'h mínima', detalhe:`h = ${(R.h*1000).toFixed(0)} mm`, status: R.h >= 0.16 ? 'ok' : R.h >= 0.15 ? 'wn' : 'er'});
+  if (R.ehRetangular) V.push({nome:'Laje retangular', detalhe:`Ly/Lx = ${R.razao.toFixed(3)} < 0,5`, status: 'wn'});
   return V;
 }
-
 function verificarSigpi(R) {
   const V = [];
   const drel = $('pr_relx').value;
   const lim_fptk = R.sis === 'pre' ? 0.77 : 0.74;
   const lim_fpyk = R.sis === 'pre' ? (drel === 'RB' ? 0.85 : 0.90) : (drel === 'RB' ? 0.82 : 0.87);
-  const lim_abs_fptk = lim_fptk * R.fptk;
-  const lim_abs_fpyk = lim_fpyk * R.fpyk;
-  V.push({nome:`σpi ≤ ${lim_fptk}·fptk`,
-    detalhe:`σpi = ${R.sigma_pi.toFixed(0)} · limite = ${lim_abs_fptk.toFixed(0)} MPa`,
-    status: R.sigma_pi <= lim_abs_fptk ? 'ok' : R.sigma_pi <= lim_abs_fptk*1.05 ? 'wn' : 'er'});
-  V.push({nome:`σpi ≤ ${lim_fpyk}·fpyk`,
-    detalhe:`σpi = ${R.sigma_pi.toFixed(0)} · limite = ${lim_abs_fpyk.toFixed(0)} MPa`,
-    status: R.sigma_pi <= lim_abs_fpyk ? 'ok' : R.sigma_pi <= lim_abs_fpyk*1.05 ? 'wn' : 'er'});
+  V.push({nome:`σpi ≤ ${lim_fptk}·fptk`, detalhe:`σpi = ${R.sigma_pi.toFixed(0)} · lim = ${(lim_fptk*R.fptk).toFixed(0)} MPa`, status: R.sigma_pi <= lim_fptk*R.fptk ? 'ok' : 'er'});
+  V.push({nome:`σpi ≤ ${lim_fpyk}·fpyk`, detalhe:`σpi = ${R.sigma_pi.toFixed(0)} · lim = ${(lim_fpyk*R.fpyk).toFixed(0)} MPa`, status: R.sigma_pi <= lim_fpyk*R.fpyk ? 'ok' : 'er'});
   return V;
 }
-
 function verificarPuncao(R) {
   const V = [];
-  if (!$('ap_pilar').checked) {
-    V.push({nome:'Punção', detalhe:'Não aplicável', status:'ok'});
-    return V;
-  }
-  V.push({nome:'Contorno C',
-    detalhe:`τSd = ${R.tau_Sd_C.toFixed(3)} · τRd2 = ${R.tau_Rd2.toFixed(3)} MPa`,
-    status: R.ok_puncao_C ? 'ok' : 'er'});
-  V.push({nome:"Contorno C'",
-    detalhe:`τSd = ${R.tau_Sd_Cp.toFixed(3)} · τRd1 = ${R.tau_Rd1.toFixed(3)} MPa`,
-    status: R.ok_puncao_Cp ? 'ok' : R.tau_Sd_Cp < 1.2*R.tau_Rd1 ? 'wn' : 'er'});
+  if (!$('ap_pilar').checked) { V.push({nome:'Punção', detalhe:'N/A', status:'ok'}); return V; }
+  V.push({nome:'Contorno C', detalhe:`τSd=${R.tau_Sd_C.toFixed(3)} · τRd2=${R.tau_Rd2.toFixed(3)}`, status: R.ok_puncao_C ? 'ok' : 'er'});
+  V.push({nome:"Contorno C'", detalhe:`τSd=${R.tau_Sd_Cp.toFixed(3)} · τRd1=${R.tau_Rd1.toFixed(3)}`, status: R.ok_puncao_Cp ? 'ok' : 'er'});
   return V;
 }
-
 function verificarProtensaoMinima(R) {
   const V = [];
   if (R.modo_prot === 'bi_assim') {
-    V.push({nome:'σcp X ≥ 1,0 MPa (pior faixa)',
-      detalhe:`σcp_X = ${R.sigma_cp_X.toFixed(2)} MPa`,
-      status: R.sigma_cp_X >= 1.0 ? 'ok' : R.sigma_cp_X >= 0.8 ? 'wn' : 'er'});
-    V.push({nome:'σcp Y ≥ 1,0 MPa',
-      detalhe:`σcp_Y = ${R.sigma_cp_Y.toFixed(2)} MPa`,
-      status: R.sigma_cp_Y >= 1.0 ? 'ok' : R.sigma_cp_Y >= 0.8 ? 'wn' : 'er'});
-    R.faixas_X.forEach((fx, i) => {
-      const esp = fx.banda / Math.max(1, fx.n);
-      V.push({nome:`Espaç. X${i+1} ≤ min(6h; 120 cm)`,
-        detalhe:`e = ${(esp*100).toFixed(1)} cm · limite = ${(R.lim_esp*100).toFixed(0)} cm`,
-        status: esp <= R.lim_esp ? 'ok' : 'wn'});
-    });
+    V.push({nome:'σcp X ≥ 1,0', detalhe:`σcp_X = ${R.sigma_cp_X.toFixed(2)}`, status: R.sigma_cp_X >= 1.0 ? 'ok' : 'wn'});
+    V.push({nome:'σcp Y ≥ 1,0', detalhe:`σcp_Y = ${R.sigma_cp_Y.toFixed(2)}`, status: R.sigma_cp_Y >= 1.0 ? 'ok' : 'wn'});
     return V;
   }
-  V.push({nome:'Espaç. cabos ≤ min(6h; 120 cm)',
-    detalhe:`e = ${(R.e_cabos_m*100).toFixed(1)} cm · limite = ${(R.lim_esp*100).toFixed(0)} cm`,
-    status: R.ok_esp_cabos ? 'ok' : (R.e_cabos_m <= R.lim_esp*1.15 ? 'wn' : 'er')});
-  V.push({nome:'σcp ≥ 1,0 MPa',
-    detalhe:`σcp = ${R.sigma_cp_MPa.toFixed(2)} MPa`,
-    status: R.ok_sigma_cp ? 'ok' : (R.sigma_cp_MPa >= 0.8 ? 'wn' : 'er')});
-  V.push({nome:'Densidade ≥ h/12',
-    detalhe:`N = ${R.N_por_m.toFixed(2)} cabos/m`,
-    status: R.ok_N_min ? 'ok' : 'wn'});
+  V.push({nome:'Espaç. cabos', detalhe:`e = ${(R.e_cabos_m*100).toFixed(1)} cm`, status: R.ok_esp_cabos ? 'ok' : 'wn'});
+  V.push({nome:'σcp ≥ 1,0', detalhe:`${R.sigma_cp_MPa.toFixed(2)} MPa`, status: R.ok_sigma_cp ? 'ok' : 'wn'});
+  V.push({nome:'Densidade', detalhe:`N=${R.N_por_m.toFixed(2)} cabos/m`, status: R.ok_N_min ? 'ok' : 'wn'});
   return V;
 }
-
 function verificarDescompressao(R) {
   const V = [];
-  V.push({
-    nome: 'Combinação frequente: p_freq = g + ψ₁·q',
-    detalhe: `ψ₁ = ${R.psi1.toFixed(2)} · g = ${R.g.toFixed(2)} · q = ${R.q.toFixed(2)} → p_freq = ${R.p_freq.toFixed(2)} kN/m²`,
-    status: 'ok'
-  });
-  V.push({
-    nome: 'σ_inf_freq ≥ 0 (fibra inferior)',
-    detalhe: `σ_inf = ${R.sigma_inf_freq.toFixed(3)} MPa · Mx_freq = ${R.Mx_freq.toFixed(2)} kN·m/m`,
-    status: R.ok_descomp_inf ? 'ok' : (R.sigma_inf_freq > -0.5*R.fctk_inf ? 'wn' : 'er')
-  });
-  V.push({
-    nome: 'σ_sup_freq ≥ 0 (fibra superior)',
-    detalhe: `σ_sup = ${R.sigma_sup_freq.toFixed(3)} MPa`,
-    status: R.ok_descomp_sup ? 'ok' : (R.sigma_sup_freq > -0.5*R.fctk_inf ? 'wn' : 'er')
-  });
-  V.push({
-    nome: 'ELS-D global — descompressão parcial (laje)',
-    detalhe: R.ok_descompressao
-      ? 'Atende: nenhuma fibra em tração sob combinação frequente.'
-      : `NÃO atende: σ_min = ${R.sigma_descomp_min.toFixed(3)} MPa (tração residual).`,
-    status: R.ok_descompressao ? 'ok' : 'er'
-  });
+  V.push({nome:'p_freq', detalhe:`${R.p_freq.toFixed(2)} kN/m²`, status:'ok'});
+  V.push({nome:'σ_inf_freq ≥ 0', detalhe:`${R.sigma_inf_freq.toFixed(3)} MPa`, status: R.ok_descomp_inf ? 'ok' : 'er'});
+  V.push({nome:'σ_sup_freq ≥ 0', detalhe:`${R.sigma_sup_freq.toFixed(3)} MPa`, status: R.ok_descomp_sup ? 'ok' : 'er'});
   return V;
 }
-
 function verificarDescompressaoVF(R) {
   const V = [];
-  if (!R.vf || !R.vf.ativa || !R.vf.prot || !R.vf.prot.ativa) {
-    V.push({nome:'Vigas-faixa protendidas', detalhe:'Não aplicável (sem protensão concentrada)', status:'ok'});
-    return V;
-  }
+  if (!R.vf || !R.vf.ativa || !R.vf.prot || !R.vf.prot.ativa) { V.push({nome:'VFs', detalhe:'N/A', status:'ok'}); return V; }
   const prot = R.vf.prot;
-  V.push({
-    nome: 'Protensão concentrada nas VFs',
-    detalhe: `${prot.nCabos} cabos × ${prot.nCord} cord. → Ap_total = ${prot.Ap_total.toFixed(0)} mm² · Pi = ${prot.Pi.toFixed(0)} kN · P_ef = ${prot.P_ef.toFixed(0)} kN`,
-    status: 'ok'
-  });
-  V.push({
-    nome: 'e_vf ≥ 0,05 m',
-    detalhe: `e = ${(prot.e*100).toFixed(1)} cm`,
-    status: prot.e >= 0.05 ? 'ok' : 'wn'
-  });
-  V.push({
-    nome: 'w_bal / w_carga (grau de balanceamento)',
-    detalhe: `w_bal = ${prot.w_bal.toFixed(2)} kN/m · w_carga,vf ≈ ${R.vf.vigas[0].w.toFixed(2)} kN/m → ${(100*prot.w_bal/Math.max(0.01,R.vf.vigas[0].w)).toFixed(0)}%`,
-    status: (prot.w_bal / Math.max(0.01,R.vf.vigas[0].w)) >= 0.6 ? 'ok' : 'wn'
-  });
+  V.push({nome:'Protensão nas VFs', detalhe:`${prot.nCabos} cabos · P_ef=${prot.P_ef.toFixed(0)} kN`, status:'ok'});
+  V.push({nome:'e_vf ≥ 0,05m', detalhe:`${(prot.e_meio*100).toFixed(1)} cm`, status: prot.e_meio >= 0.05 ? 'ok' : 'wn'});
+  R.vf.vigas.forEach(v => V.push({nome:`VF${v.index} σ_inf,freq`, detalhe:`${v.sigma_inf_vf_freq.toFixed(3)} MPa`, status: v.ok_descomp_vf ? 'ok' : 'er'}));
+  return V;
+}
+function verificarVF(R) {
+  const V = [];
+  if (!R.vf || !R.vf.ativa) { V.push({nome:'VFs', detalhe:'Off', status:'ok'}); return V; }
   R.vf.vigas.forEach(v => {
-    V.push({
-      nome: `VF${v.index} — σ_inf,freq ≥ 0`,
-      detalhe: `σ_inf,freq = ${v.sigma_inf_vf_freq.toFixed(3)} MPa · σ_sup,freq = ${v.sigma_sup_vf_freq.toFixed(3)} MPa`,
-      status: v.ok_descomp_vf ? 'ok' : 'er'
-    });
+    V.push({nome:`VF${v.index} flecha`, detalhe:`δ=${(v.delta_tot*1000).toFixed(2)}mm`, status: v.ok_flecha ? 'ok' : 'er'});
+    V.push({nome:`VF${v.index} cortante`, detalhe:`τ=${v.tau_wd.toFixed(3)}`, status: v.ok_cort ? 'ok' : 'er'});
   });
   return V;
 }
-
-function verificarVF(R) {
+function verificarVaoVF(R) {
   const V = [];
-  if (!R.vf || !R.vf.ativa) {
-    V.push({nome:'Vigas-faixa', detalhe:'Módulo não ativado', status:'ok'});
-    return V;
-  }
-  R.vf.vigas.forEach(v => {
-    const statusFlecha = v.ok_flecha ? 'ok' : (Math.abs(v.delta_tot) < 1.1*v.delta_lim ? 'wn' : 'er');
-    V.push({
-      nome: `VF${v.index} (y=${v.y.toFixed(2)}m) — flecha L/350`,
-      detalhe: `δ = ${(v.delta_tot*1000).toFixed(2)} mm · δlim = ${(v.delta_lim*1000).toFixed(2)} mm${v.w_bal > 0 ? ' (c/ protensão)' : ''}`,
-      status: statusFlecha
-    });
-    V.push({
-      nome: `VF${v.index} — cortante ELU`,
-      detalhe: `τ_wd = ${v.tau_wd.toFixed(3)} · τ_Rd2 = ${v.tau_Rd2_vf.toFixed(3)} MPa`,
-      status: v.ok_cort ? 'ok' : 'er'
-    });
-  });
+  V.push({nome:'Classificação', detalhe:R.vf_classificacao, status: R.vf_classificacao.includes('PAREDE') ? 'wn' : 'ok'});
+  V.push({nome:'h vs sugerido', detalhe:`h=${(R.h*100).toFixed(1)} / sug=${(R.h_final*100).toFixed(1)} cm`, status: R.status_h});
   return V;
+}
+function verificarAncoragens(R) {
+  const V = [];
+  if (!R.vf || !R.vf.ativa || !R.vf.prot || !R.vf.prot.ativa) { V.push({nome:'Ancoragens', detalhe:'N/A', status:'ok'}); return V; }
+  const p = R.vf.prot;
+  if (!p.anc_sel) { V.push({nome:'Seleção', detalhe:'Sem ancoragem', status:'er'}); return V; }
+  V.push({nome:`${p.anc_sel.codigo}`, detalhe:`${p.anc_sel.tipo} · ${p.anc_sel.peso} kg`, status:'ok'});
+  V.push({nome:'Espaçamento', detalhe:`${p.espac_necessario.toFixed(0)}/${p.espac_disponivel.toFixed(0)} mm`, status: p.espac_ok ? 'ok' : 'er'});
+  return V;
+}
+
+function sugerirPosicoesVF(R) {
+  if (!R.vf || !R.vf.ativa) return { aplicavel: false, msg: 'Ative VFs.' };
+  const Ltrans = R.vf.Ltrans;
+  const painel_max = Math.max(2.0, $n('vf_painel_max'));
+  const n_paineis = Math.ceil(Ltrans / painel_max);
+  const n_vf_ideal = Math.max(0, n_paineis - 1);
+  const esp = Ltrans / n_paineis;
+  const posicoes = [];
+  for (let i = 1; i <= n_vf_ideal; i++) posicoes.push(i * esp);
+  const n_vf_atual = Math.max(1, Math.min(5, parseInt($('vf_n').value) || 2));
+  const pos_atual = [];
+  for (let i = 1; i <= n_vf_atual; i++) pos_atual.push($n('vf_y' + i));
+  pos_atual.sort((a, b) => a - b);
+  const suportes_atual = [0, ...pos_atual, Ltrans];
+  const paineis_atual = [];
+  for (let i = 0; i < suportes_atual.length - 1; i++) paineis_atual.push(suportes_atual[i+1] - suportes_atual[i]);
+  const painel_max_atual = Math.max(...paineis_atual);
+  let status, msg;
+  if (n_vf_ideal === 0) { status='ok'; msg = 'Vão pequeno.'; }
+  else if (n_vf_atual === n_vf_ideal && painel_max_atual <= painel_max * 1.05) { status='ok'; msg = 'OK.'; }
+  else if (n_vf_atual === n_vf_ideal) { status='wn'; msg = 'Simetrizar.'; }
+  else { status = (n_vf_atual < n_vf_ideal) ? 'er' : 'wn'; msg = `Sugerido: ${n_vf_ideal}.`; }
+  return { aplicavel:true, Ltrans, painel_max, n_paineis, n_vf_ideal, esp, posicoes, n_vf_atual, painel_max_atual, status, msg };
+}
+function compararConfigVF(R) {
+  if (!R.vf || !R.vf.ativa) return null;
+  const Ly_trans = R.vf.Ltrans, Lvao = R.vf.Lvao, bf = R.vf.bf, hvf = R.vf.hvf;
+  const gc = R.gc, Ecm = R.Ecm_kPa, p = R.p, phi = R.phi;
+  const fydCA = 500/1.15;
+  const painel_max = Math.max(2.0, $n('vf_painel_max'));
+  const configs = [];
+  for (let nVF = 0; nVF <= 4; nVF++) {
+    const n_paineis = nVF + 1;
+    if (n_paineis * painel_max < Ly_trans * 0.99) continue;
+    const esp = Ly_trans / n_paineis;
+    const posicoes = [];
+    for (let i = 1; i <= nVF; i++) posicoes.push(i * esp);
+    const suportes = [0, ...posicoes, Ly_trans];
+    const tribs = [];
+    for (let i = 1; i <= nVF; i++) tribs.push((suportes[i+1] - suportes[i-1]) / 2);
+    const extraPP = hvf > R.h ? gc * (hvf - R.h) * bf : 0;
+    const vigas = posicoes.map((y, i) => {
+      const w_carga = p * tribs[i] + extraPP;
+      const w_bal = R.vf.prot && R.vf.prot.ativa ? R.vf.prot.w_bal : 0;
+      const w_liq = w_carga - w_bal;
+      const M_net = w_liq * Lvao * Lvao / 8;
+      const V = w_liq * Lvao / 2;
+      const I_vf = bf * Math.pow(hvf, 3) / 12;
+      const EI_vf = Ecm * I_vf;
+      const delta_imd = 5 * w_liq * Math.pow(Lvao, 4) / (384 * EI_vf);
+      const delta_tot = delta_imd * (1 + phi);
+      const d_vf = hvf - R.cob - 0.012;
+      const Md_vf = 1.4 * M_net;
+      const As_vf_cm2 = (Md_vf / (0.9 * d_vf * fydCA * 1000)) * 1e4;
+      const As_min_vf_cm2 = 0.0015 * bf * hvf * 1e4;
+      const As_req = Math.max(As_vf_cm2, As_min_vf_cm2);
+      return { w_carga, M_net, V, delta_tot, As_req };
+    });
+    const vc = nVF * bf * hvf * Lvao;
+    const va = vigas.reduce((s, v) => s + v.As_req, 0) / 1e4 * Lvao * 7850;
+    const vcp = (R.vf.prot && R.vf.prot.ativa) ? R.vf.prot.Ap_total / 1e6 * Lvao * 7850 * nVF : 0;
+    const vf_area = nVF * bf * Lvao * 2;
+    const pc = $n('opt_pc'), pa = $n('opt_pa'), pcp = $n('opt_pcp'), pf = $n('opt_pf');
+    const custo = vc*pc + va*pa + vcp*pcp + vf_area*pf;
+    const delta_max = Math.max(...vigas.map(v => Math.abs(v.delta_tot)), 0);
+    const atende = delta_max < Lvao/350;
+    configs.push({ nVF, esp, posicoes, vigas, vc, va, vcp, vf_area, custo, delta_max, atende });
+  }
+  return configs;
+}
+function otimizarPorCusto(R) {
+  const configs = compararConfigVF(R);
+  if (!configs) return null;
+  const viaveis = configs.filter(c => c.atende);
+  if (viaveis.length === 0) return null;
+  return viaveis.reduce((best, c) => c.custo < best.custo ? c : best, viaveis[0]);
 }
 
 /* ==================== HELPERS ==================== */
@@ -1491,14 +1826,328 @@ function setupCanvas(cv) {
   return { ctx, w, h };
 }
 
+/* ==================== GRELHA ==================== */
+function renderGrelha(R) {
+  grelhaResult = resolverGrelha(R, parseFloat($('grelha_dx').value) || 0.25);
+  const G = grelhaResult;
+  $('resGrelha').innerHTML =
+    kpi('Malha', `${G.nx} × ${G.ny} nós`) +
+    kpi('Espaçamento', G.dx.toFixed(2) + ' m') +
+    kpi('Iterações', G.iter) +
+    kpi('δ_max', (G.w_max*1000).toFixed(2) + ' mm',
+        Math.abs(G.w_max) < R.del_lim ? 'ok' : 'er') +
+    kpi('δ_min', (G.w_min*1000).toFixed(2) + ' mm') +
+    kpi('Mx_max', G.Mx_max.toFixed(2) + ' kN·m/m') +
+    kpi('Mx_min', G.Mx_min.toFixed(2) + ' kN·m/m') +
+    kpi('My_max', G.My_max.toFixed(2) + ' kN·m/m') +
+    kpi('My_min', G.My_min.toFixed(2) + ' kN·m/m') +
+    kpi('δ_lim', (R.del_lim*1000).toFixed(2) + ' mm');
+  renderComparacao(R, G);
+  drawGrelha(R, G);
+}
+
+function renderComparacao(R, G) {
+  let M_trib = R.Mx, delta_trib = Math.abs(R.del_total);
+  if (R.vf && R.vf.ativa) {
+    const vmax = R.vf.vigas.reduce((a,b) => Math.abs(a.delta_tot) > Math.abs(b.delta_tot) ? a : b, R.vf.vigas[0]);
+    M_trib = Math.max(R.Mx, vmax.M_carga);
+    delta_trib = Math.max(Math.abs(R.del_total), Math.abs(vmax.delta_tot));
+  }
+  const M_grelha = Math.max(Math.abs(G.Mx_max), Math.abs(G.Mx_min));
+  const delta_grelha = Math.abs(G.w_max);
+  const redM = M_trib > 0 ? (1 - M_grelha/M_trib) * 100 : 0;
+  const redD = delta_trib > 0 ? (1 - delta_grelha/delta_trib) * 100 : 0;
+  $('resComp').innerHTML = `
+    <table>
+      <tr><th>Grandeza</th><th style="text-align:right">Tributary</th><th style="text-align:right">Grelha</th><th style="text-align:right">Δ</th></tr>
+      <tr><td>M máx</td><td style="text-align:right">${M_trib.toFixed(2)}</td><td style="text-align:right"><b>${M_grelha.toFixed(2)}</b></td>
+        <td style="text-align:right;color:${redM > 0 ? 'var(--ok)' : 'var(--wn)'}">${redM > 0 ? '−' : '+'}${Math.abs(redM).toFixed(1)} %</td></tr>
+      <tr><td>δ máx</td><td style="text-align:right">${(delta_trib*1000).toFixed(2)} mm</td><td style="text-align:right"><b>${(delta_grelha*1000).toFixed(2)} mm</b></td>
+        <td style="text-align:right;color:${redD > 0 ? 'var(--ok)' : 'var(--wn)'}">${redD > 0 ? '−' : '+'}${Math.abs(redD).toFixed(1)} %</td></tr>
+    </table>
+    <div style="margin-top:8px;font-size:11px;color:var(--mut);line-height:1.5">
+      A grelha captura a interação laje × VFs (resultados geralmente menores).
+    </div>`;
+}
+
+function drawGrelha(R, G) {
+  const cv = $('cvGrelha'); if (!cv) return;
+  cv.dataset.h = '480';
+  const { ctx, w, h } = setupCanvas(cv);
+  ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
+  const padL = 30, padR = 90, padT = 30, padB = 40;
+  const mapW = w - padL - padR;
+  const mapH = h - padT - padB;
+  const cw = mapW / (G.nx - 1);
+  const ch = mapH / (G.ny - 1);
+
+  let mat, vmin, vmax, unit;
+  if (grelhaView === 'w') { mat = G.w; vmin = G.w_min; vmax = G.w_max; unit = 'mm'; }
+  else if (grelhaView === 'Mx') { mat = G.Mx; vmin = G.Mx_min; vmax = G.Mx_max; unit = 'kN·m/m'; }
+  else { mat = G.My; vmin = G.My_min; vmax = G.My_max; unit = 'kN·m/m'; }
+  const absmax = Math.max(Math.abs(vmin), Math.abs(vmax)) || 1;
+
+  /* 1. Heatmap */
+  for (let i = 0; i < G.nx - 1; i++) {
+    for (let j = 0; j < G.ny - 1; j++) {
+      const v = mat[i * G.ny + j];
+      const t = 0.5 + 0.5 * (v / absmax);
+      const r = Math.round(255 * t);
+      const b = Math.round(255 * (1 - t));
+      ctx.fillStyle = `rgb(${r},${Math.round(80 + 60*(1-Math.abs(2*t-1)))},${b})`;
+      ctx.fillRect(padL + i * cw, padT + (G.ny - 1 - j) * ch, cw + 0.6, ch + 0.6);
+    }
+  }
+
+  /* 2. Malha */
+  ctx.strokeStyle = 'rgba(255,255,255,0.10)';
+  ctx.lineWidth = 0.5;
+  for (let i = 0; i < G.nx; i++) {
+    const x = padL + i * cw;
+    ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + mapH); ctx.stroke();
+  }
+  for (let j = 0; j < G.ny; j++) {
+    const y = padT + j * ch;
+    ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + mapW, y); ctx.stroke();
+  }
+
+  /* 3. Nós + valores */
+  const espaco_px = Math.min(cw, ch);
+  const mostrar_nos = espaco_px >= 5;
+  const mostrar_val = mostrarNosValores && espaco_px >= 22;
+
+  let step = 1;
+  if (espaco_px < 90) step = 2;
+  if (espaco_px < 55) step = 3;
+  if (espaco_px < 40) step = 4;
+  if (espaco_px < 30) step = 5;
+  if (espaco_px < 22) step = 6;
+
+  const raio_no = espaco_px >= 20 ? 2.5 : (espaco_px >= 10 ? 1.5 : 1.0);
+
+  for (let i = 0; i < G.nx; i++) {
+    for (let j = 0; j < G.ny; j++) {
+      const idx = i * G.ny + j;
+      const v = mat[idx];
+      const x = padL + i * cw;
+      const y = padT + (G.ny - 1 - j) * ch;
+
+      if (mostrar_nos) {
+        const t = 0.5 + 0.5 * (v / absmax);
+        ctx.fillStyle = t > 0.5 ? '#fff' : '#000';
+        ctx.strokeStyle = t > 0.5 ? '#000' : '#fff';
+        ctx.lineWidth = 0.7;
+        ctx.beginPath();
+        ctx.arc(x, y, raio_no, 0, 2 * Math.PI);
+        ctx.fill();
+        ctx.stroke();
+      }
+
+      if (mostrar_val && (i % step === 0) && (j % step === 0)) {
+        const val = (unit === 'mm') ? (v * 1000).toFixed(2) : v.toFixed(1);
+        const txt_larg = val.length * 5 + 8;
+        ctx.fillStyle = 'rgba(0,0,0,0.72)';
+        ctx.fillRect(x - txt_larg/2, y - 7, txt_larg, 12);
+        ctx.strokeStyle = v >= 0 ? 'rgba(34,197,94,0.5)' : 'rgba(239,68,68,0.5)';
+        ctx.lineWidth = 0.8;
+        ctx.strokeRect(x - txt_larg/2, y - 7, txt_larg, 12);
+        ctx.fillStyle = v >= 0 ? '#86efac' : '#fca5a5';
+        ctx.font = 'bold 9px ui-monospace,Consolas,monospace';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(val, x, y + 0.5);
+        ctx.textAlign = 'left';
+        ctx.textBaseline = 'alphabetic';
+      }
+    }
+  }
+
+  /* 4. Contorno */
+  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
+  ctx.strokeRect(padL, padT, mapW, mapH);
+
+  /* 5. VFs */
+  if (R.vf && R.vf.ativa) {
+    ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2; ctx.setLineDash([5,3]);
+    R.vf.vigas.forEach(v => {
+      if (R.vf.direcao === 'x') {
+        const y = padT + (G.ny - 1 - Math.round(v.y / G.dx)) * ch;
+        ctx.beginPath(); ctx.moveTo(padL, y); ctx.lineTo(padL + mapW, y); ctx.stroke();
+      } else {
+        const x = padL + Math.round(v.y / G.dx) * cw;
+        ctx.beginPath(); ctx.moveTo(x, padT); ctx.lineTo(x, padT + mapH); ctx.stroke();
+      }
+    });
+    ctx.setLineDash([]);
+  }
+
+  /* 6. Escala de cores */
+  const legX = padL + mapW + 20;
+  const legW = 24, legH = mapH;
+  const grad = ctx.createLinearGradient(0, padT + legH, 0, padT);
+  grad.addColorStop(0, 'rgb(0,80,255)');
+  grad.addColorStop(0.5, 'rgb(127,120,127)');
+  grad.addColorStop(1, 'rgb(255,80,0)');
+  ctx.fillStyle = grad;
+  ctx.fillRect(legX, padT, legW, legH);
+  ctx.strokeStyle = '#243352'; ctx.strokeRect(legX, padT, legW, legH);
+  ctx.fillStyle = '#e8eefc'; ctx.font = '10px system-ui';
+  const esc = (unit === 'mm') ? 1000 : 1;
+  ctx.fillText((vmax * esc).toFixed(2) + ' ' + unit, legX + legW + 4, padT + 10);
+  ctx.fillText('0', legX + legW + 4, padT + legH / 2);
+  ctx.fillText((vmin * esc).toFixed(2), legX + legW + 4, padT + legH - 2);
+
+  /* 7. Título */
+  ctx.fillStyle = '#3d7dff'; ctx.font = 'bold 12px system-ui';
+  const titulo = { w:'Deslocamento w (mm)', Mx:'Momento Mx (kN·m/m)', My:'Momento My (kN·m/m)' }[grelhaView];
+  ctx.fillText(titulo + ' · Malha ' + G.dx.toFixed(2) + ' m  (' + G.nx + '×' + G.ny + ' = ' + (G.nx * G.ny) + ' nós)', padL, 18);
+  ctx.fillStyle = '#8fa3c4'; ctx.font = '10px system-ui';
+  ctx.fillText('Lx=' + R.Lx.toFixed(2) + 'm · Ly=' + R.Ly.toFixed(2) + 'm · ' + G.iter + ' iter SOR · ' +
+    (mostrar_val ? 'valores 1/' + step : 'valores ocultos'), padL + 420, 18);
+
+  /* 8. Salva layout para o tooltip */
+  grelhaLayout = {
+    padL, padT, mapW, mapH, cw, ch,
+    nx: G.nx, ny: G.ny, mat, vmin, vmax, unit, G, R
+  };
+
+  /* 9. Redesenha tooltip se ativo */
+  if (tooltipNode) desenharTooltip(ctx);
+}
+
+/* ==================== TOOLTIP ==================== */
+function desenharTooltip(ctx) {
+  if (!tooltipNode || !grelhaLayout) return;
+  const { i, j, x, y, val, x_m, y_m } = tooltipNode;
+  const { unit } = grelhaLayout;
+
+  const cor_borda = val >= 0 ? '#22c55e' : '#ef4444';
+  const cor_fundo = val >= 0 ? 'rgba(34,197,94,0.15)' : 'rgba(239,68,68,0.15)';
+
+  const linhas = [
+    { t: `Nó (${i}, ${j})`, c: '#3d7dff', bold: true },
+    { t: `x = ${x_m.toFixed(2)} m`, c: '#8fa3c4' },
+    { t: `y = ${y_m.toFixed(2)} m`, c: '#8fa3c4' },
+    { t: `w = ${(tooltipNode.w * 1000).toFixed(3)} mm`, c: '#86efac' },
+    { t: `Mx = ${tooltipNode.Mx.toFixed(2)} kN·m/m`, c: '#fbbf24' },
+    { t: `My = ${tooltipNode.My.toFixed(2)} kN·m/m`, c: '#a78bfa' },
+    { t: `σ_x ≈ ${tooltipNode.sigma_x.toFixed(3)} MPa`, c: tooltipNode.sigma_x >= 0 ? '#86efac' : '#fca5a5' }
+  ];
+
+  ctx.font = 'bold 11px ui-monospace,Consolas,monospace';
+  let largura = 0;
+  linhas.forEach(L => {
+    const lw = ctx.measureText(L.t).width;
+    if (lw > largura) largura = lw;
+  });
+  const altura = linhas.length * 14 + 12;
+  const padX = 8, padY = 6;
+
+  let tx = x + 12;
+  let ty = y - altura / 2;
+  const cv = $('cvGrelha');
+  const cvW = cv.width / (window.devicePixelRatio || 1);
+  const cvH = cv.height / (window.devicePixelRatio || 1);
+  if (tx + largura + padX * 2 > cvW - 4) tx = x - largura - padX * 2 - 12;
+  if (ty < 4) ty = 4;
+  if (ty + altura > cvH - 4) ty = cvH - altura - 4;
+
+  /* Fundo */
+  ctx.fillStyle = 'rgba(10,15,28,0.96)';
+  ctx.strokeStyle = cor_borda;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  if (ctx.roundRect) {
+    ctx.roundRect(tx, ty, largura + padX * 2, altura, 6);
+  } else {
+    ctx.rect(tx, ty, largura + padX * 2, altura);
+  }
+  ctx.fill();
+  ctx.stroke();
+
+  /* Barra superior */
+  ctx.fillStyle = cor_borda;
+  ctx.fillRect(tx, ty, largura + padX * 2, 3);
+
+  /* Marca no nó */
+  ctx.strokeStyle = cor_borda;
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(x, y, 6, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.fillStyle = cor_fundo;
+  ctx.beginPath();
+  ctx.arc(x, y, 6, 0, 2 * Math.PI);
+  ctx.fill();
+
+  /* Linhas */
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  linhas.forEach((L, k) => {
+    ctx.font = L.bold ? 'bold 11px ui-monospace,Consolas,monospace' : '11px ui-monospace,Consolas,monospace';
+    ctx.fillStyle = L.c;
+    ctx.fillText(L.t, tx + padX, ty + padY + 8 + k * 14);
+  });
+  ctx.textBaseline = 'alphabetic';
+}
+
+function onGrelhaMouseMove(ev) {
+  if (!grelhaLayout) return;
+  const cv = $('cvGrelha');
+  const rect = cv.getBoundingClientRect();
+  const mx = ev.clientX - rect.left;
+  const my = ev.clientY - rect.top;
+  const { padL, padT, cw, ch, nx, ny, G, R, mat } = grelhaLayout;
+
+  const i = Math.round((mx - padL) / cw);
+  const j = (ny - 1) - Math.round((my - padT) / ch);
+
+  if (i < 0 || i >= nx || j < 0 || j >= ny) {
+    if (tooltipNode) { tooltipNode = null; if (window.lastR) drawGrelha(window.lastR, grelhaResult); }
+    return;
+  }
+
+  const x = padL + i * cw;
+  const y = padT + (ny - 1 - j) * ch;
+  const dist = Math.hypot(mx - x, my - y);
+  const raio_ativacao = Math.max(8, Math.min(cw, ch) * 0.8);
+  if (dist > raio_ativacao) {
+    if (tooltipNode) { tooltipNode = null; if (window.lastR) drawGrelha(window.lastR, grelhaResult); }
+    return;
+  }
+
+  const idx = i * ny + j;
+  const val = mat[idx];
+  const w_val = G.w[idx];
+  const Mx_val = G.Mx[idx];
+  const My_val = G.My[idx];
+  const sigma_x = (6 * Mx_val) / (R.h * R.h) / 1000;
+
+  tooltipNode = {
+    i, j, x, y, val,
+    w: w_val, Mx: Mx_val, My: My_val,
+    sigma_x,
+    x_m: i * G.dx,
+    y_m: j * G.dx
+  };
+  if (window.lastR) drawGrelha(window.lastR, grelhaResult);
+}
+
+function onGrelhaMouseLeave() {
+  if (tooltipNode) {
+    tooltipNode = null;
+    if (window.lastR) drawGrelha(window.lastR, grelhaResult);
+  }
+}
+
+/* ==================== DEMAIS CANVAS ==================== */
 function drawCaboGenerico(cv, R, dir, e_dir, label, corForcada) {
   if (!cv) return;
   cv.dataset.h = '240';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
   const pad = 30;
-  const x0 = pad, x1 = w - pad;
-  const yTop = pad, yBot = h - pad;
+  const x0 = pad, x1 = w - pad, yTop = pad, yBot = h - pad;
   ctx.strokeStyle = '#243352'; ctx.lineWidth = 1;
   ctx.strokeRect(x0, yTop, x1 - x0, yBot - yTop);
   const yCG = yBot - (R.y_inf / R.h) * (yBot - yTop);
@@ -1514,33 +2163,34 @@ function drawCaboGenerico(cv, R, dir, e_dir, label, corForcada) {
   const y_apoio = yTop + (dsup_dir / R.h) * (yBot - yTop);
   const L_dir = dir === 'x' ? R.Lx : R.Ly;
   const dx50 = (x1 - x0) * (0.50 / Math.max(0.1, L_dir));
-  const xA = x0 + dx50;
-  const xB = x1 - dx50;
+  const xA = x0 + dx50, xB = x1 - dx50;
   ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5;
   ctx.beginPath();
-  const N = 60;
-  for (let i = 0; i <= N; i++) {
-    const u = i / N;
+  for (let i = 0; i <= 60; i++) {
+    const u = i / 60;
     const xx = xA + (xB - xA) * u;
     const yy = y_meio + (y_apoio - y_meio) * Math.pow(2 * u - 1, 2);
     if (i === 0) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy);
   }
   ctx.stroke();
-  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2.5;
-  ctx.beginPath(); ctx.moveTo(x0, y_apoio); ctx.lineTo(xA, y_apoio); ctx.stroke();
+  // PASSIVA verde
   ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(x0, y_apoio); ctx.lineTo(xA, y_apoio); ctx.stroke();
+  ctx.fillStyle = '#22c55e';
+  ctx.fillRect(x0, y_apoio - 6, 8, 12);
+  ctx.strokeStyle = '#22c55e'; ctx.strokeRect(x0, y_apoio - 6, 8, 12);
+  // ATIVA azul + seta
+  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2.5;
   ctx.beginPath(); ctx.moveTo(xB, y_apoio); ctx.lineTo(x1, y_apoio); ctx.stroke();
   ctx.fillStyle = '#3d7dff';
-  ctx.beginPath(); ctx.moveTo(x0, y_apoio);
-  ctx.lineTo(x0 + 8, y_apoio - 6); ctx.lineTo(x0 + 8, y_apoio + 6);
+  ctx.beginPath();
+  ctx.moveTo(x1, y_apoio);
+  ctx.lineTo(x1 - 12, y_apoio - 7);
+  ctx.lineTo(x1 - 12, y_apoio + 7);
   ctx.closePath(); ctx.fill();
-  ctx.fillStyle = '#22c55e';
-  ctx.fillRect(x1 - 8, y_apoio - 6, 8, 12);
-  ctx.strokeStyle = '#22c55e'; ctx.strokeRect(x1 - 8, y_apoio - 6, 8, 12);
-  ctx.fillStyle = '#3d7dff'; ctx.font = 'bold 10px system-ui';
-  ctx.fillText('PASSIVA', x0 + 10, yTop + 12);
-  ctx.fillStyle = '#22c55e';
-  ctx.fillText('ATIVA', x1 - 46, yTop + 12);
+  ctx.font = 'bold 10px system-ui';
+  ctx.fillStyle = '#22c55e'; ctx.fillText('PASSIVA', x0 + 12, yTop + 12);
+  ctx.fillStyle = '#3d7dff'; ctx.fillText('ATIVA →', x1 - 52, yTop + 12);
   ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1;
   ctx.setLineDash([2, 2]);
   ctx.beginPath(); ctx.moveTo(x0 + 4, y_meio); ctx.lineTo(x1 - 4, y_meio); ctx.stroke();
@@ -1549,124 +2199,110 @@ function drawCaboGenerico(cv, R, dir, e_dir, label, corForcada) {
   ctx.fillText(`e = ${(e_dir * 1000).toFixed(0)} mm`, (x0 + x1) / 2 - 40, y_meio - 6);
   ctx.fillStyle = '#8fa3c4'; ctx.font = '10px system-ui';
   ctx.fillText('meio', (x0 + x1) / 2 - 14, y_meio + 14);
-  ctx.font = '9px system-ui';
-  ctx.setLineDash([2, 2]); ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 0.8;
-  ctx.beginPath(); ctx.moveTo(x0, y_apoio - 12); ctx.lineTo(x0, y_apoio - 22); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(xA, y_apoio - 12); ctx.lineTo(xA, y_apoio - 22); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.beginPath(); ctx.moveTo(x0, y_apoio - 18); ctx.lineTo(xA, y_apoio - 18); ctx.stroke();
-  ctx.fillStyle = '#3d7dff';
-  ctx.fillText('50 cm', x0 + dx50/2 - 14, y_apoio - 24);
-  ctx.setLineDash([2, 2]); ctx.strokeStyle = '#22c55e';
-  ctx.beginPath(); ctx.moveTo(xB, y_apoio - 12); ctx.lineTo(xB, y_apoio - 22); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(x1, y_apoio - 12); ctx.lineTo(x1, y_apoio - 22); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.beginPath(); ctx.moveTo(xB, y_apoio - 18); ctx.lineTo(x1, y_apoio - 18); ctx.stroke();
-  ctx.fillStyle = '#22c55e';
-  ctx.fillText('50 cm', xB + dx50/2 - 14, y_apoio - 24);
-  ctx.fillStyle = '#8fa3c4'; ctx.font = '8px system-ui';
-  ctx.fillText('fretagem', x0 + dx50/2 - 16, y_apoio + 14);
-  ctx.fillText('fretagem', xB + dx50/2 - 16, y_apoio + 14);
   ctx.fillStyle = label.color || corForcada || '#3d7dff';
   ctx.font = 'bold 10px system-ui';
   ctx.fillText(label.text, x0 + 4, yBot - 6);
 }
 
 function drawCaboX(R) {
-  const cv = $('cvCaboX');
-  if (!cv) return;
+  const cv = $('cvCaboX'); if (!cv) return;
   if (R.modo_prot !== 'bi_assim') {
-    drawCaboGenerico(cv, R, 'x', R.e_meio, {
-      text: `X — ${R.nCabos} cabos · vão ${R.Lx.toFixed(2)} m · e=${(R.e_meio*1000).toFixed(0)} mm`,
-      color: '#3d7dff'
-    });
+    drawCaboGenerico(cv, R, 'x', R.e_meio, {text:`X — ${R.nCabos} cabos · vão ${R.Lx.toFixed(2)} m`, color:'#3d7dff'});
     return;
   }
-  cv.dataset.h = '260';
-  const { ctx, w, h } = setupCanvas(cv);
-  ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
-  const pad = 30;
-  const x0 = pad, x1 = w - pad;
-  const yTop = pad, yBot = h - pad;
-  ctx.strokeStyle = '#243352'; ctx.lineWidth = 1;
-  ctx.strokeRect(x0, yTop, x1 - x0, yBot - yTop);
-  const yCG = yBot - (R.y_inf / R.h) * (yBot - yTop);
-  ctx.setLineDash([4, 4]); ctx.strokeStyle = '#3d7dff';
-  ctx.beginPath(); ctx.moveTo(x0, yCG); ctx.lineTo(x1, yCG); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle = '#3d7dff'; ctx.font = '10px system-ui';
-  ctx.fillText('CG', x0 + 4, yCG - 4);
-  const cores = ['#f59e0b', '#ef4444', '#8b5cf6'];
-  R.faixas_X.forEach((fx, idx) => {
-    const cor = cores[idx % cores.length];
-    const e_dir = fx.e;
-    const dinf_dir = Math.max(0.025, Math.min(R.h/2, R.y_inf - e_dir));
-    const dsup_dir = Math.max(0.025, Math.min(R.h/2, R.dsup || 0.06));
-    const y_meio  = yBot - (dinf_dir / R.h) * (yBot - yTop);
-    const y_apoio = yTop + (dsup_dir / R.h) * (yBot - yTop);
-    const dx50 = (x1 - x0) * (0.50 / Math.max(0.1, R.Lx));
-    const xA = x0 + dx50;
-    const xB = x1 - dx50;
-    ctx.strokeStyle = cor; ctx.lineWidth = 2.5;
-    ctx.beginPath();
-    const N = 60;
-    for (let i = 0; i <= N; i++) {
-      const u = i / N;
-      const xx = xA + (xB - xA) * u;
-      const yy = y_meio + (y_apoio - y_meio) * Math.pow(2 * u - 1, 2);
-      if (i === 0) ctx.moveTo(xx, yy); else ctx.lineTo(xx, yy);
-    }
-    ctx.stroke();
-    ctx.strokeStyle = cor; ctx.lineWidth = 2;
-    ctx.beginPath(); ctx.moveTo(x0, y_apoio); ctx.lineTo(xA, y_apoio); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(xB, y_apoio); ctx.lineTo(x1, y_apoio); ctx.stroke();
-    ctx.fillStyle = cor;
-    ctx.beginPath(); ctx.moveTo(x0, y_apoio);
-    ctx.lineTo(x0 + 8, y_apoio - 5); ctx.lineTo(x0 + 8, y_apoio + 5);
-    ctx.closePath(); ctx.fill();
-    ctx.fillRect(x1 - 6, y_apoio - 5, 6, 10);
-    ctx.fillStyle = cor; ctx.font = 'bold 10px system-ui';
-    ctx.fillText(fx.label, x0 + 10, yTop + 12 + idx * 12);
-    ctx.fillStyle = '#8fa3c4'; ctx.font = '9px system-ui';
-    ctx.fillText(`e=${(e_dir*1000).toFixed(0)}mm y=${fx.y_center.toFixed(2)}m`, x0 + 40, yTop + 12 + idx * 12);
-  });
-  ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 10px system-ui';
-  ctx.fillText(`X — ${R.faixas_X.length} faixa(s) · ${R.nCabos_X} cabos · banda ${R.banda_X.toFixed(2)} m`, x0 + 4, yBot - 4);
+  drawCaboGenerico(cv, R, 'x', R.e_X, {text:`X — ${R.nCabos_X} cabos`, color:'#3d7dff'});
 }
-
 function drawCaboY(R) {
-  const cv = $('cvCaboY');
-  if (!cv) return;
+  const cv = $('cvCaboY'); if (!cv) return;
   if (R.modo_prot !== 'bi_assim') {
     cv.dataset.h = '240';
     const { ctx, w, h } = setupCanvas(cv);
     ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
-    ctx.fillStyle = '#8fa3c4'; ctx.font = '12px system-ui';
-    ctx.textAlign = 'center';
-    ctx.fillText('Modo unidirecional — cabos apenas em X', w/2, h/2);
-    ctx.textAlign = 'left';
+    ctx.fillStyle = '#8fa3c4'; ctx.font = '12px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('Modo unidirecional — cabos apenas em X', w/2, h/2); ctx.textAlign = 'left';
     return;
   }
-  drawCaboGenerico(cv, R, 'y', R.e_Y, {
-    text: `Y — ${R.nCabos_Y} cabos distribuídos · banda ${R.banda_Y.toFixed(2)} m`,
-    color: '#8b5cf6'
-  });
+  drawCaboGenerico(cv, R, 'y', R.e_Y, {text:`Y — ${R.nCabos_Y} cabos`, color:'#8b5cf6'});
 }
-
+function drawCaboVF(R) {
+  const cv = $('cvCaboVF'); if (!cv) return;
+  cv.dataset.h = '240';
+  const { ctx, w, h } = setupCanvas(cv);
+  ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
+  if (!R.vf || !R.vf.ativa || !R.vf.prot || !R.vf.prot.ativa) {
+    ctx.fillStyle = '#8fa3c4'; ctx.font = '12px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('Protensão nas VFs desativada.', w/2, h/2); ctx.textAlign = 'left';
+    return;
+  }
+  const pad = 30;
+  const x0 = pad, x1 = w - pad, yTop = pad, yBot = h - pad;
+  const hvf = R.vf.hvf;
+  const Lvao = R.vf.Lvao;
+  ctx.strokeStyle = '#243352'; ctx.lineWidth = 1;
+  ctx.strokeRect(x0, yTop, x1 - x0, yBot - yTop);
+  ctx.fillStyle = 'rgba(61,125,255,0.1)';
+  ctx.fillRect(x0, yTop, x1 - x0, yBot - yTop);
+  const yCG = (yTop + yBot) / 2;
+  ctx.setLineDash([4,3]); ctx.strokeStyle = '#3d7dff';
+  ctx.beginPath(); ctx.moveTo(x0, yCG); ctx.lineTo(x1, yCG); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#3d7dff'; ctx.font = '10px system-ui';
+  ctx.fillText('CG', x0 + 4, yCG - 4);
+  const d_inf = R.vf.prot.d_inf;
+  const d_sup = R.vf.prot.d_sup;
+  const escalaV = (yBot - yTop) / hvf;
+  const y_meio  = yBot - d_inf * escalaV;
+  const y_apoio = yTop + d_sup * escalaV;
+  const dx50 = (x1 - x0) * (0.50 / Math.max(0.1, Lvao));
+  const xA = x0 + dx50, xB = x1 - dx50;
+  ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 2.5;
+  ctx.beginPath();
+  for (let i = 0; i <= 60; i++) {
+    const u = i/60;
+    const xx = xA + (xB - xA) * u;
+    const yy = y_meio + (y_apoio - y_meio) * Math.pow(2*u-1, 2);
+    if (i===0) ctx.moveTo(xx,yy); else ctx.lineTo(xx,yy);
+  }
+  ctx.stroke();
+  ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(x0, y_apoio); ctx.lineTo(xA, y_apoio); ctx.stroke();
+  ctx.fillStyle = '#22c55e';
+  ctx.fillRect(x0, y_apoio - 6, 8, 12);
+  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2.5;
+  ctx.beginPath(); ctx.moveTo(xB, y_apoio); ctx.lineTo(x1, y_apoio); ctx.stroke();
+  ctx.fillStyle = '#3d7dff';
+  ctx.beginPath();
+  ctx.moveTo(x1, y_apoio);
+  ctx.lineTo(x1 - 12, y_apoio - 7);
+  ctx.lineTo(x1 - 12, y_apoio + 7);
+  ctx.closePath(); ctx.fill();
+  ctx.font = 'bold 10px system-ui';
+  ctx.fillStyle = '#22c55e'; ctx.fillText('PASSIVA', x0 + 12, yTop + 12);
+  ctx.fillStyle = '#3d7dff'; ctx.fillText('ATIVA →', x1 - 52, yTop + 12);
+  ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b'; ctx.lineWidth = 1;
+  ctx.setLineDash([2,2]);
+  ctx.beginPath(); ctx.moveTo(x0, y_meio); ctx.lineTo(x1, y_meio); ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.font = 'bold 10px system-ui';
+  ctx.fillText(`d_inf = ${(d_inf*100).toFixed(1)} cm`, (x0+x1)/2 - 30, y_meio + 14);
+  ctx.fillText(`d_sup = ${(d_sup*100).toFixed(1)} cm`, (x0+x1)/2 - 30, y_apoio - 6);
+  ctx.font = '10px system-ui'; ctx.fillStyle = '#8fa3c4';
+  ctx.fillText(`e_meio=${(R.vf.prot.e_meio*1000).toFixed(0)}mm · e_apoio=${(R.vf.prot.e_apoio*1000).toFixed(0)}mm`, (x0+x1)/2 - 90, yBot + 18);
+  ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 10px system-ui';
+  ctx.fillText(`VF — ${R.vf.prot.nCabos} cabos · ${R.vf.prot.nCord} cord. · Lvao=${Lvao.toFixed(2)} m`, x0 + 4, yBot + 4);
+}
 function drawEsf(R, tipo) {
   const cv = $('cvEsf'); cv.dataset.h = '280';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
   const pad = 40, x0 = pad, y0 = h/2, x1 = w-pad;
-  ctx.strokeStyle = '#243352'; ctx.beginPath();
-  ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
+  ctx.strokeStyle = '#243352'; ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.stroke();
   let amax = tipo === 'Mx' ? R.Mx : tipo === 'My' ? R.My : tipo === 'Vx' ? R.Vx : R.Vy;
   amax = Math.max(amax, 0.01);
   ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2; ctx.beginPath();
-  const N = 60;
-  for (let i=0; i<=N; i++) {
-    const xi = x0 + (x1-x0)*i/N;
-    const yv = tipo.startsWith('M') ? -amax*4*(i/N)*(1-i/N) : amax*(1-2*i/N);
+  for (let i=0; i<=60; i++) {
+    const xi = x0 + (x1-x0)*i/60;
+    const yv = tipo.startsWith('M') ? -amax*4*(i/60)*(1-i/60) : amax*(1-2*i/60);
     const yi = y0 + yv * (h/2 - pad) / Math.max(1, Math.abs(amax));
     if (i===0) ctx.moveTo(xi,yi); else ctx.lineTo(xi,yi);
   }
@@ -1675,13 +2311,11 @@ function drawEsf(R, tipo) {
   const unit = tipo.startsWith('M') ? 'kN·m/m' : 'kN/m';
   ctx.fillText(`${tipo},max = ${amax.toFixed(2)} ${unit}`, 12, 20);
 }
-
 function colorRamp(t, warm=false) {
   t = Math.max(0, Math.min(1, t));
   if (warm) return `rgb(${Math.round(30+225*Math.sin(t*Math.PI/2))},${Math.round(60+80*t)},${Math.round(180-160*t)})`;
   return `rgb(${Math.round(20+235*t)},${Math.round(80+100*(1-t))},${Math.round(200-180*t)})`;
 }
-
 function drawMapa(R, campo) {
   const cv = $('cvMapa'); cv.dataset.h = '260';
   const { ctx, w, h } = setupCanvas(cv);
@@ -1691,22 +2325,21 @@ function drawMapa(R, campo) {
   const nx = 30, ny = 20, cw = mapW / nx, ch = mapH / ny;
   let vmax, vmin, warm;
   switch (campo) {
-    case 'Mx':  vmax = Math.max(R.Mx, 0.01); vmin = 0; warm = true; break;
-    case 'My':  vmax = Math.max(R.My, 0.01); vmin = 0; warm = true; break;
+    case 'Mx': vmax = Math.max(R.Mx, 0.01); vmin = 0; warm = true; break;
+    case 'My': vmax = Math.max(R.My, 0.01); vmin = 0; warm = true; break;
     case 'Mxy': vmax = 0.1 * R.Mx; vmin = -vmax; warm = false; break;
-    case 'W':   vmax = Math.abs(R.del_total) * 1000; vmin = 0; warm = true; break;
-    default:    vmax = Math.max(Math.abs(R.sigma_inf), Math.abs(R.sigma_sup), 0.01);
-                vmin = -vmax; warm = false; break;
+    case 'W': vmax = Math.abs(R.del_total) * 1000; vmin = 0; warm = true; break;
+    default: vmax = Math.max(Math.abs(R.sigma_inf), Math.abs(R.sigma_sup), 0.01); vmin = -vmax; warm = false; break;
   }
   if (vmax <= 0) vmax = 1;
   for (let i = 0; i < nx; i++) for (let j = 0; j < ny; j++) {
     const u = i / (nx - 1), v = j / (ny - 1);
     let val;
-    if (campo === 'Mx')       val = R.Mx * 4 * u * (1 - u);
-    else if (campo === 'My')  val = R.My * 4 * v * (1 - v);
+    if (campo === 'Mx') val = R.Mx * 4 * u * (1 - u);
+    else if (campo === 'My') val = R.My * 4 * v * (1 - v);
     else if (campo === 'Mxy') val = 0.1 * R.Mx * Math.sin(Math.PI * u) * Math.sin(Math.PI * v);
-    else if (campo === 'W')   val = Math.abs(R.del_total * 1000) * Math.sin(Math.PI * u) * Math.sin(Math.PI * v);
-    else                      val = R.sigma_inf * (1 - 0.5 * u);
+    else if (campo === 'W') val = Math.abs(R.del_total * 1000) * Math.sin(Math.PI * u) * Math.sin(Math.PI * v);
+    else val = R.sigma_inf * (1 - 0.5 * u);
     const t = (val - vmin) / Math.max(0.001, vmax - vmin);
     ctx.fillStyle = colorRamp(t, warm);
     ctx.fillRect(ox + i * cw, oy + j * ch, cw + 0.5, ch + 0.5);
@@ -1715,20 +2348,17 @@ function drawMapa(R, campo) {
   ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 11px system-ui';
   ctx.fillText(campo, ox, 14);
 }
-
 function drawPerdas(R) {
   const cv = $('cvPerdas'); cv.dataset.h = '260';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
   const pad = 44, x0 = pad, y0 = h-pad, x1 = w-pad, y1 = pad;
   ctx.strokeStyle = '#243352';
-  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0);
-  ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x0, y0); ctx.lineTo(x1, y0); ctx.moveTo(x0, y0); ctx.lineTo(x0, y1); ctx.stroke();
   const Pmax = R.Pi, Pmin = R.P_efetiva;
   ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2; ctx.beginPath();
-  const N = 80;
-  for (let i=0; i<=N; i++) {
-    const u = i/N;
+  for (let i=0; i<=80; i++) {
+    const u = i/80;
     const Px = R.Pi * Math.exp(-(R.mu * 4 * R.e_meio / R.Lc + R.k * R.Lc) * u);
     const xi = x0 + (x1-x0)*u;
     const yi = y0 - (Px - Pmin*0.9)/(Pmax*1.1 - Pmin*0.9) * (y0-y1);
@@ -1738,12 +2368,11 @@ function drawPerdas(R) {
   ctx.fillStyle = '#3d7dff'; ctx.font = 'bold 11px system-ui';
   ctx.fillText(`Pi = ${R.Pi.toFixed(0)} kN`, x0+6, y1+12);
   ctx.fillStyle = '#f59e0b';
-  ctx.fillText(`P efetiva = ${R.P_efetiva.toFixed(0)} kN`, x0+6, y1+26);
+  ctx.fillText(`P efetiva = ${R.P_efetiva.toFixed(0)} kN (perda ${R.perda_total_pct.toFixed(1)}%)`, x0+6, y1+26);
 }
-
 function drawBal(R) {
-  const cv = $('cvBal'); cv.dataset.h = '340';
-  if (!cv) return;
+  const cv = $('cvBal'); if (!cv) return;
+  cv.dataset.h = '340';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
   const bal_frac = parseFloat($('bal_frac').value) || 0.8;
@@ -1751,11 +2380,11 @@ function drawBal(R) {
   const psi2 = 0.30;
   let carga_base, carga_nome;
   switch (bal_tipo) {
-    case 'pp':       carga_base = R.pp;              carga_nome = 'pp';        break;
-    case 'g':        carga_base = R.g;               carga_nome = 'g';         break;
-    case 'g+psi2q':  carga_base = R.g + psi2 * R.q; carga_nome = 'g + ψ₂·q';  break;
-    case 'g+q':      carga_base = R.g + R.q;        carga_nome = 'g + q';     break;
-    default:         carga_base = R.pp;              carga_nome = 'pp';
+    case 'pp': carga_base = R.pp; carga_nome = 'pp'; break;
+    case 'g': carga_base = R.g; carga_nome = 'g'; break;
+    case 'g+psi2q': carga_base = R.g + psi2 * R.q; carga_nome = 'g + ψ₂·q'; break;
+    case 'g+q': carga_base = R.g + R.q; carga_nome = 'g + q'; break;
+    default: carga_base = R.pp; carga_nome = 'pp';
   }
   const w_target = bal_frac * carga_base;
   const Np_m = R.modo_prot === 'bi_assim' ? R.Np_X : R.P_efetiva / R.L_transv;
@@ -1768,13 +2397,12 @@ function drawBal(R) {
   const P_cabo_inicial = R.sigma_pi * R.Ap_cabo / 1000;
   const n_cabos_req = P_cabo_inicial > 0 ? Math.ceil(Pi_req_total / P_cabo_inicial) : 0;
   const n_cabos_atual = R.nCabos;
-
   const pad = 50, x0 = pad, x1 = w - pad, y0 = h - pad, y1 = pad + 14;
   const maxW = Math.max(R.p, w_target, w_bal_atual, 1) * 1.15;
   const bars = [
-    {label:'p (total)',    val:R.p,          cor:'#3d7dff'},
-    {label:'w_alvo',       val:w_target,     cor:'#f59e0b'},
-    {label:'w_bal atual',  val:w_bal_atual,  cor:'#22c55e'}
+    {label:'p (total)', val:R.p, cor:'#3d7dff'},
+    {label:'w_alvo', val:w_target, cor:'#f59e0b'},
+    {label:'w_bal atual', val:w_bal_atual, cor:'#22c55e'}
   ];
   const bw = (x1 - x0) / bars.length - 20;
   bars.forEach((b, i) => {
@@ -1792,54 +2420,37 @@ function drawBal(R) {
   ctx.textAlign = 'left';
   ctx.fillStyle = '#f59e0b'; ctx.font = 'bold 11px system-ui';
   ctx.fillText(`Alvo: ${(bal_frac*100).toFixed(0)}% de ${carga_nome} = ${w_target.toFixed(2)} kN/m²`, 10, 14);
-  ctx.fillStyle = '#8fa3c4'; ctx.font = '10px system-ui';
-  ctx.fillText(`e = ${(e_uso*1000).toFixed(0)} mm · L = ${R.L_ef.toFixed(2)} m · perdas ≈ ${(perda_est*100).toFixed(0)}%`, 10, 28);
-
   const pct_atual = R.p > 0 ? 100 * w_bal_atual / R.p : 0;
   const pct_target = w_target > 0 ? 100 * w_bal_atual / w_target : 0;
   const atende = w_bal_atual >= w_target * 0.98;
-
   $('resBal').innerHTML =
-    kpi('Carga base', carga_base.toFixed(2) + ' kN/m²') +
-    kpi('Fração alvo', (bal_frac*100).toFixed(0) + ' %') +
-    kpi('w_alvo', w_target.toFixed(2) + ' kN/m²', atende ? 'ok' : 'wn') +
-    kpi('w_bal atual', w_bal_atual.toFixed(2) + ' kN/m²', atende ? 'ok' : 'wn') +
-    kpi('Alvo atingido', pct_target.toFixed(0) + ' %', atende ? 'ok' : 'er') +
-    kpi('Balanceamento (p)', pct_atual.toFixed(1) + ' %',
-        pct_atual >= 70 && pct_atual <= 110 ? 'ok' : pct_atual >= 50 ? 'wn' : 'er') +
-    kpi('P_ef requerida', P_ef_req_total.toFixed(1) + ' kN') +
-    kpi('P_ef atual', R.P_efetiva.toFixed(1) + ' kN',
-        R.P_efetiva >= P_ef_req_total * 0.98 ? 'ok' : 'wn') +
-    kpi('Pi requerida', Pi_req_total.toFixed(1) + ' kN') +
-    kpi('Pi atual', R.Pi.toFixed(1) + ' kN') +
-    kpi('Nº cabos requerido', n_cabos_req + ' cabos', n_cabos_atual >= n_cabos_req ? 'ok' : 'er') +
-    kpi('Nº cabos atual', n_cabos_atual + ' cabos', n_cabos_atual >= n_cabos_req ? 'ok' : 'er');
-
-  window.lastBal = {
-    n_cabos_req, P_ef_req: P_ef_req_total, Pi_req: Pi_req_total,
-    w_target, carga_nome, bal_frac, bal_tipo
-  };
+    kpi('w_alvo', w_target.toFixed(2), atende ? 'ok' : 'wn') +
+    kpi('w_bal', w_bal_atual.toFixed(2), atende ? 'ok' : 'wn') +
+    kpi('Alvo', pct_target.toFixed(0) + ' %', atende ? 'ok' : 'er') +
+    kpi('Balanceamento', pct_atual.toFixed(1) + ' %', pct_atual >= 70 && pct_atual <= 110 ? 'ok' : 'wn') +
+    kpi('P_ef req', P_ef_req_total.toFixed(1) + ' kN') +
+    kpi('P_ef', R.P_efetiva.toFixed(1) + ' kN', R.P_efetiva >= P_ef_req_total * 0.98 ? 'ok' : 'wn') +
+    kpi('Nº cabos req', n_cabos_req, n_cabos_atual >= n_cabos_req ? 'ok' : 'er') +
+    kpi('Nº cabos', n_cabos_atual, n_cabos_atual >= n_cabos_req ? 'ok' : 'er');
+  window.lastBal = { n_cabos_req, P_ef_req: P_ef_req_total, Pi_req: Pi_req_total, w_target, carga_nome, bal_frac, bal_tipo };
 }
-
 function drawFlecha(R) {
   const cv = $('cvFlecha'); cv.dataset.h = '280';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
   const pad = 40, x0 = pad, x1 = w-pad, yBase = h/2 + 20;
-  ctx.strokeStyle = '#243352'; ctx.beginPath();
-  ctx.moveTo(x0, yBase); ctx.lineTo(x1, yBase); ctx.stroke();
+  ctx.strokeStyle = '#243352'; ctx.beginPath(); ctx.moveTo(x0, yBase); ctx.lineTo(x1, yBase); ctx.stroke();
   const dmax = Math.max(Math.abs(R.del_carga), Math.abs(R.del_prot), Math.abs(R.del_total), 1e-6);
   const esc = (h/2 - 60) / dmax;
   const curves = [
-    {d: R.del_carga, c: '#ef4444', l:'Carga'},
-    {d: R.del_prot,  c: '#22c55e', l:'Protensão'},
-    {d: R.del_total, c: '#3d7dff', l:'Resultante'}
+    {d: R.del_carga, c:'#ef4444', l:'Carga'},
+    {d: R.del_prot, c:'#22c55e', l:'Protensão'},
+    {d: R.del_total, c:'#3d7dff', l:'Resultante'}
   ];
   curves.forEach((c, idx) => {
     ctx.strokeStyle = c.c; ctx.lineWidth = 2; ctx.beginPath();
-    const N = 60;
-    for (let i=0; i<=N; i++) {
-      const u = i/N;
+    for (let i=0; i<=60; i++) {
+      const u = i/60;
       const d = c.d * Math.sin(Math.PI*u);
       const xx = x0 + (x1-x0)*u;
       const yy = yBase + d*esc;
@@ -1853,7 +2464,6 @@ function drawFlecha(R) {
   ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 11px system-ui';
   ctx.fillText(`δ total = ${(R.del_total*1000).toFixed(2)} mm${arrow(R.del_total)}`, 12, h-12);
 }
-
 function drawTensao(R) {
   const cv = $('cvTensao'); cv.dataset.h = '300';
   const { ctx, w, h } = setupCanvas(cv);
@@ -1873,322 +2483,201 @@ function drawTensao(R) {
   ctx.fillStyle = '#e8eefc'; ctx.font = '11px system-ui';
   ctx.fillText(`σsup = ${sgnT(R.sigma_sup).toFixed(2)} MPa`, 12, yTop+12);
   ctx.fillText(`σinf = ${sgnT(R.sigma_inf).toFixed(2)} MPa`, 12, yBot-4);
-  const s2max = Math.max(Math.abs(R.sigma_inf_freq), Math.abs(R.sigma_sup_freq), 0.1);
-  const sc2 = (w/2 - 60) / s2max;
-  ctx.strokeStyle = 'rgba(245,158,11,0.8)'; ctx.lineWidth = 1.5; ctx.setLineDash([4,3]);
-  ctx.beginPath();
-  ctx.moveTo(cx+30, yTop); ctx.lineTo(cx + 30 + R.sigma_sup_freq * sc2, yTop);
-  ctx.lineTo(cx + 30 + R.sigma_inf_freq * sc2, yBot); ctx.lineTo(cx+30, yBot);
-  ctx.stroke(); ctx.setLineDash([]);
-  ctx.fillStyle = '#f59e0b'; ctx.font = '10px system-ui';
-  ctx.fillText(`σfreq: inf=${R.sigma_inf_freq.toFixed(2)} · sup=${R.sigma_sup_freq.toFixed(2)} MPa`, 12, yBot+14);
-  ctx.fillStyle = '#8fa3c4';
-  ctx.fillText(convCompPos ? '+ comp / − tração' : '+ tração / − comp', 12, yBot + 30);
 }
-
-/* ==================== v17.3: CORTE TRANSVERSAL COM COTAS E ÁREAS ==================== */
+function drawTensaoDetalhada(R) {
+  const cv = $('cvTensaoDetalhada'); if (!cv) return;
+  cv.dataset.h = '380';
+  const { ctx, w, h } = setupCanvas(cv);
+  ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
+  const dados = [
+    { label:'P', cor:'#ef4444', sup: R.sigma_P_sup, inf: R.sigma_P_inf },
+    { label:'g', cor:'#f59e0b', sup: R.sigma_g_sup, inf: R.sigma_g_inf },
+    { label:'V = P+g', cor:'#22c55e', sup: R.sigma_V_sup, inf: R.sigma_V_inf },
+    { label:'q', cor:'#f59e0b', sup: R.sigma_q_sup, inf: R.sigma_q_inf },
+    { label:'S = P+g+q', cor:'#3d7dff', sup: R.sigma_S_sup, inf: R.sigma_S_inf }
+  ];
+  const ncols = 5, gap = 6;
+  const bloco_w = (w - gap * (ncols - 1) - 20) / ncols;
+  const bloco_h = 200;
+  const max_sigma = Math.max(0.1, ...dados.flatMap(d => [Math.abs(d.sup), Math.abs(d.inf)]));
+  ctx.fillStyle = '#8fa3c4'; ctx.font = 'bold 11px system-ui'; ctx.textAlign = 'center';
+  ctx.fillText('Estado em vazio → P + g = V', w/2 - bloco_w, 18);
+  ctx.fillText('Em serviço → V + q = S', w/2 + bloco_w * 1.5 + gap * 1.5, 18);
+  ctx.textAlign = 'left';
+  dados.forEach((d, i) => {
+    const x0 = 10 + i * (bloco_w + gap);
+    const y0 = 30;
+    const scale = (bloco_h / 2) / max_sigma;
+    ctx.strokeStyle = '#243352'; ctx.lineWidth = 1;
+    ctx.strokeRect(x0 + bloco_w * 0.2, y0, bloco_w * 0.6, bloco_h);
+    ctx.setLineDash([3,3]); ctx.strokeStyle = '#8fa3c4';
+    ctx.beginPath(); ctx.moveTo(x0 + bloco_w * 0.2, y0 + bloco_h/2); ctx.lineTo(x0 + bloco_w * 0.8, y0 + bloco_h/2); ctx.stroke();
+    ctx.setLineDash([]);
+    const x_ref = x0 + bloco_w * 0.8;
+    const x_sup = x_ref + d.sup * scale;
+    const x_inf = x_ref + d.inf * scale;
+    ctx.fillStyle = d.cor + '40';
+    ctx.strokeStyle = d.cor; ctx.lineWidth = 2;
+    ctx.beginPath();
+    ctx.moveTo(x_ref, y0);
+    ctx.lineTo(x_sup, y0);
+    ctx.lineTo(x_inf, y0 + bloco_h);
+    ctx.lineTo(x_ref, y0 + bloco_h);
+    ctx.closePath();
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = d.cor; ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText(d.label, x0 + bloco_w/2, y0 + bloco_h + 16);
+    ctx.font = '10px system-ui';
+    ctx.fillText(`sup: ${d.sup.toFixed(2)}`, x0 + bloco_w/2, y0 - 6);
+    ctx.fillText(`inf: ${d.inf.toFixed(2)}`, x0 + bloco_w/2, y0 + bloco_h + 30);
+    ctx.textAlign = 'left';
+    if (i < dados.length - 1) {
+      const x_meio = x0 + bloco_w + gap/2;
+      ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 20px system-ui'; ctx.textAlign = 'center';
+      if (i === 0) ctx.fillText('+', x_meio, y0 + bloco_h/2 + 7);
+      else if (i === 1) ctx.fillText('=', x_meio, y0 + bloco_h/2 + 7);
+      else if (i === 3) ctx.fillText('=', x_meio, y0 + bloco_h/2 + 7);
+      ctx.textAlign = 'left';
+    }
+  });
+  ctx.fillStyle = '#8fa3c4'; ctx.font = '10px system-ui'; ctx.textAlign = 'center';
+  ctx.fillText(`(+ tração · − compressão) · MPa · escala σmax = ${max_sigma.toFixed(2)} MPa`, w/2, h - 6);
+  ctx.textAlign = 'left';
+}
 function drawCorte(R) {
-  const cv = $('cvCorte');
+  const cv = $('cvCorte'); if (!cv) return;
   cv.dataset.h = '320';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
-
   const padL = 70, padR = 90, padT = 45, padB = 70;
   const secX0 = padL, secX1 = w - padR;
   const secY0 = h - padB, secY1 = padT;
-  const secW = secX1 - secX0;
-  const secH = secY0 - secY1;
-
+  const secW = secX1 - secX0, secH = secY0 - secY1;
   const dirCabo = R.dir_cabo === 'y' ? 'y' : 'x';
   const largura_corte = dirCabo === 'x' ? R.Ly : R.Lx;
   const largura_label = dirCabo === 'x' ? 'Ly' : 'Lx';
-
-  const hvfAtiva = R.vf && R.vf.ativa && R.vf.hvf > R.h;
-  const hvf = hvfAtiva ? R.vf.hvf : R.h;
-  const hMax = Math.max(R.h, hvf) * 1.30;
-
-  const escalaV = secH / hMax;
-  const escalaH = secW / largura_corte;
+  const vfEmbutida = R.vf && R.vf.ativa && $('vf_embutida') && $('vf_embutida').checked;
+  const hvf_desenho = R.vf && R.vf.ativa && !vfEmbutida && R.vf.hvf > R.h ? R.vf.hvf : R.h;
+  const hMax = Math.max(R.h, hvf_desenho) * 1.30;
+  const escalaV = secH / hMax, escalaH = secW / largura_corte;
   const Hpx = R.h * escalaV;
-  const Hvfpx = hvfAtiva ? R.vf.hvf * escalaV : 0;
-
+  const Hvfpx = (hvf_desenho > R.h) ? R.vf.hvf * escalaV : Hpx;
   const yTopLaje = secY1 + 8;
   const yBotLaje = yTopLaje + Hpx;
-  const yBotVF   = hvfAtiva ? yTopLaje + Hvfpx : yBotLaje;
 
-  if (hvfAtiva) {
-    const vf = R.vf;
-    vf.vigas.forEach((v) => {
-      const y_rel = (vf.direcao === 'x') ? v.y / vf.Ltrans : v.y / vf.Lvao;
+  if (R.vf && R.vf.ativa) {
+    R.vf.vigas.forEach((v) => {
+      const y_rel = (R.vf.direcao === 'x') ? v.y / R.vf.Ltrans : v.y / R.vf.Lvao;
       const xc = secX0 + y_rel * secW;
-      const bf_px = vf.bf * escalaH;
-      const vf_y0 = yTopLaje + Hpx;
-      const vf_y1 = yTopLaje + Hvfpx;
-      ctx.fillStyle = 'rgba(61,125,255,0.55)';
-      ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 1.5;
-      ctx.fillRect(xc - bf_px/2, vf_y0, bf_px, vf_y1 - vf_y0);
-      ctx.strokeRect(xc - bf_px/2, vf_y0, bf_px, vf_y1 - vf_y0);
-      if (vf.prot && vf.prot.ativa && vf.prot.nCabos > 0) {
-        const y_cabo = vf_y1 - vf.prot.d * escalaV;
-        const nShowVF = Math.min(vf.prot.nCabos, 5);
+      const bf_px = R.vf.bf * escalaH;
+      ctx.fillStyle = 'rgba(61,125,255,0.55)'; ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 1.5;
+      ctx.fillRect(xc - bf_px/2, yTopLaje, bf_px, Hpx);
+      ctx.strokeRect(xc - bf_px/2, yTopLaje, bf_px, Hpx);
+      if (R.vf.prot && R.vf.prot.ativa && R.vf.prot.nCabos > 0) {
+        const d_inf_vf = Math.min(R.vf.prot.d_inf, R.h - 0.02);
+        const d_sup_vf = Math.min(R.vf.prot.d_sup, R.h - 0.02);
+        const y_cabo_meio  = yBotLaje - d_inf_vf * escalaV;
+        const y_cabo_apoio = yTopLaje + d_sup_vf * escalaV;
+        const nShowVF = Math.min(R.vf.prot.nCabos, 5);
         for (let k = 0; k < nShowVF; k++) {
           const xk = xc - bf_px/2 + bf_px * ((k + 0.5) / nShowVF);
+          ctx.fillStyle = '#86efac'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8;
+          ctx.beginPath(); ctx.arc(xk, y_cabo_apoio, 2.5, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
           ctx.fillStyle = '#22c55e';
-          ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8;
-          ctx.beginPath(); ctx.arc(xk, y_cabo, 3, 0, 2*Math.PI);
-          ctx.fill(); ctx.stroke();
+          ctx.beginPath(); ctx.arc(xk, y_cabo_meio, 3, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
         }
       }
-      ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 9px system-ui';
-      ctx.textAlign = 'center';
-      ctx.fillText(`VF${v.index}`, xc, vf_y1 + 12);
-      ctx.textAlign = 'left';
+      ctx.fillStyle = '#3d7dff'; ctx.font = 'bold 9px system-ui'; ctx.textAlign = 'center';
+      ctx.fillText(`VF${v.index}`, xc, yTopLaje - 4); ctx.textAlign = 'left';
     });
   }
-
-  ctx.fillStyle = 'rgba(80,120,200,0.35)';
-  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
-  ctx.fillRect(secX0, yTopLaje, secW, Hpx);
-  ctx.strokeRect(secX0, yTopLaje, secW, Hpx);
-
-  const yCG = yTopLaje + Hpx / 2;
-  ctx.setLineDash([4, 3]); ctx.strokeStyle = '#8fa3c4'; ctx.lineWidth = 1;
-  ctx.beginPath(); ctx.moveTo(secX0, yCG); ctx.lineTo(secX1, yCG); ctx.stroke();
-  ctx.setLineDash([]);
-  ctx.fillStyle = '#8fa3c4'; ctx.font = '9px system-ui'; ctx.textAlign = 'right';
-  ctx.fillText('CG', secX0 - 6, yCG + 3);
-  ctx.textAlign = 'left';
-
+  ctx.fillStyle = 'rgba(80,120,200,0.35)'; ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
+  ctx.fillRect(secX0, yTopLaje, secW, Hpx); ctx.strokeRect(secX0, yTopLaje, secW, Hpx);
   const y_cabo = yBotLaje - R.dinf * escalaV;
   const nShow = Math.min(R.nCabos, 14);
   const corCabo = R.modo_prot === 'bi_assim' ? '#f59e0b' : '#ef4444';
   for (let i = 0; i < nShow; i++) {
     const xc = secX0 + ((i + 0.5) / nShow) * secW;
-    ctx.fillStyle = corCabo;
-    ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8;
-    ctx.beginPath(); ctx.arc(xc, y_cabo, 3, 0, 2*Math.PI);
-    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = corCabo; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8;
+    ctx.beginPath(); ctx.arc(xc, y_cabo, 3, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
   }
-
-  ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b';
-  ctx.lineWidth = 1; ctx.font = 'bold 10px system-ui';
-
   const xDimH = secX1 + 22;
+  ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b'; ctx.lineWidth = 1; ctx.font = 'bold 10px system-ui';
   ctx.beginPath(); ctx.moveTo(xDimH, yTopLaje); ctx.lineTo(xDimH, yBotLaje); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(xDimH, yTopLaje); ctx.lineTo(xDimH - 4, yTopLaje + 8);
-  ctx.lineTo(xDimH + 4, yTopLaje + 8); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(xDimH, yBotLaje); ctx.lineTo(xDimH - 4, yBotLaje - 8);
-  ctx.lineTo(xDimH + 4, yBotLaje - 8); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(secX1, yTopLaje); ctx.lineTo(xDimH + 6, yTopLaje); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(secX1, yBotLaje); ctx.lineTo(xDimH + 6, yBotLaje); ctx.stroke();
-  ctx.save();
-  ctx.translate(xDimH + 18, (yTopLaje + yBotLaje) / 2);
-  ctx.rotate(-Math.PI/2); ctx.textAlign = 'center';
-  ctx.fillText(`h = ${(R.h*100).toFixed(1)} cm`, 0, 0);
-  ctx.restore();
+  ctx.save(); ctx.translate(xDimH + 18, (yTopLaje + yBotLaje) / 2); ctx.rotate(-Math.PI/2); ctx.textAlign = 'center';
+  ctx.fillText(`h = ${(R.h*100).toFixed(1)} cm`, 0, 0); ctx.restore();
+  ctx.textAlign = 'left'; ctx.font = '9px system-ui'; ctx.fillStyle = '#8fa3c4';
+  ctx.fillText(`Cobrimento=${(R.cob*1000).toFixed(0)}mm · ${largura_corte.toFixed(2)}m (${largura_label})`, 10, h - 6);
 
-  if (hvfAtiva) {
-    const xDimHvf = secX1 + 60;
-    ctx.strokeStyle = '#22c55e'; ctx.fillStyle = '#22c55e';
-    ctx.beginPath(); ctx.moveTo(xDimHvf, yTopLaje); ctx.lineTo(xDimHvf, yBotVF); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(xDimHvf, yTopLaje); ctx.lineTo(xDimHvf - 4, yTopLaje + 8);
-    ctx.lineTo(xDimHvf + 4, yTopLaje + 8); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(xDimHvf, yBotVF); ctx.lineTo(xDimHvf - 4, yBotVF - 8);
-    ctx.lineTo(xDimHvf + 4, yBotVF - 8); ctx.closePath(); ctx.fill();
-    ctx.beginPath(); ctx.moveTo(secX1, yTopLaje); ctx.lineTo(xDimHvf + 6, yTopLaje); ctx.stroke();
-    ctx.beginPath(); ctx.moveTo(secX1, yBotVF); ctx.lineTo(xDimHvf + 6, yBotVF); ctx.stroke();
-    ctx.save();
-    ctx.translate(xDimHvf + 18, (yTopLaje + yBotVF) / 2);
-    ctx.rotate(-Math.PI/2); ctx.textAlign = 'center';
-    ctx.fillText(`hvf = ${(R.vf.hvf*100).toFixed(1)} cm`, 0, 0);
-    ctx.restore();
-  }
-
-  ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b';
-  const yDimW = yBotVF + 34;
-  ctx.beginPath(); ctx.moveTo(secX0, yDimW); ctx.lineTo(secX1, yDimW); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(secX0, yDimW); ctx.lineTo(secX0 + 8, yDimW - 4);
-  ctx.lineTo(secX0 + 8, yDimW + 4); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(secX1, yDimW); ctx.lineTo(secX1 - 8, yDimW - 4);
-  ctx.lineTo(secX1 - 8, yDimW + 4); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(secX0, yBotVF); ctx.lineTo(secX0, yDimW + 8); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(secX1, yBotVF); ctx.lineTo(secX1, yDimW + 8); ctx.stroke();
-  ctx.textAlign = 'center';
-  ctx.fillText(`${largura_corte.toFixed(2)} m (${largura_label})`, (secX0 + secX1) / 2, yDimW + 16);
-
-  const xDimD = secX0 - 38;
-  ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b'; ctx.lineWidth = 0.8;
-  ctx.beginPath(); ctx.moveTo(xDimD, y_cabo); ctx.lineTo(xDimD, yBotLaje); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(xDimD, y_cabo); ctx.lineTo(xDimD - 3, y_cabo + 6);
-  ctx.lineTo(xDimD + 3, y_cabo + 6); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(xDimD, yBotLaje); ctx.lineTo(xDimD - 3, yBotLaje - 6);
-  ctx.lineTo(xDimD + 3, yBotLaje - 6); ctx.closePath(); ctx.fill();
-  ctx.beginPath(); ctx.moveTo(xDimD - 5, y_cabo); ctx.lineTo(secX0, y_cabo); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(xDimD - 5, yBotLaje); ctx.lineTo(secX0, yBotLaje); ctx.stroke();
-  ctx.textAlign = 'right'; ctx.font = '9px system-ui';
-  ctx.fillText(`d=${(R.dinf*100).toFixed(1)} cm`, xDimD - 5, (y_cabo + yBotLaje) / 2 + 3);
-
-  ctx.textAlign = 'left'; ctx.font = '9px system-ui';
-  ctx.fillStyle = '#8fa3c4';
-  ctx.fillText(`Cobrimento = ${(R.cob*1000).toFixed(0)} mm · Corte ⊥ ${dirCabo.toUpperCase()} · ${nShow}/${R.nCabos} cabos visíveis`, 10, h - 6);
-
-  // INFO HTML
   const Ap_X_mm2 = R.modo_prot === 'bi_assim' ? R.faixas_X.reduce((s,fx)=>s+fx.Ap,0) : R.Ap_total;
-  const Ap_Y_mm2 = R.modo_prot === 'bi_assim' ? R.nCabos_Y * R.Ap_cabo : 0;
   const nX = R.modo_prot === 'bi_assim' ? R.nCabos_X : R.nCabos;
-  const nY = R.modo_prot === 'bi_assim' ? R.nCabos_Y : 0;
-
-  const vfInfo = (R.vf && R.vf.ativa && R.vf.prot && R.vf.prot.ativa)
-    ? `<div style="margin-top:8px;padding:8px;background:rgba(34,197,94,.1);border-left:3px solid #22c55e;border-radius:4px;font-size:11px">
-        <b style="color:#22c55e">Vigas-faixa protendidas</b><br>
-        Nº cabos por VF: <b>${R.vf.prot.nCabos}</b> · Nº VFs: <b>${R.vf.n}</b><br>
-        Ap total VF: <b>${(R.vf.prot.Ap_total * R.vf.n).toFixed(0)} mm²</b> = <b>${(R.vf.prot.Ap_total * R.vf.n / 100).toFixed(2)} cm²</b><br>
-        P_ef total VF: <b>${(R.vf.prot.P_ef * R.vf.n).toFixed(0)} kN</b> · e_vf = <b>${(R.vf.prot.e*1000).toFixed(0)} mm</b>
-      </div>`
-    : '';
-
   const infoHTML = `
     <table style="font-size:11px;width:100%;border-collapse:collapse">
-      <tr style="background:var(--bg3)">
-        <th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--bd)">Direção</th>
-        <th style="padding:5px 8px;text-align:right;border-bottom:1px solid var(--bd)">Nº cabos</th>
-        <th style="padding:5px 8px;text-align:right;border-bottom:1px solid var(--bd)">Ap (mm²)</th>
-        <th style="padding:5px 8px;text-align:right;border-bottom:1px solid var(--bd)">Ap (cm²)</th>
-      </tr>
-      <tr>
-        <td style="padding:5px 8px;color:#3d7dff;font-weight:700">X</td>
-        <td style="padding:5px 8px;text-align:right">${nX}</td>
-        <td style="padding:5px 8px;text-align:right">${Ap_X_mm2.toFixed(0)}</td>
-        <td style="padding:5px 8px;text-align:right"><b>${(Ap_X_mm2/100).toFixed(2)}</b></td>
-      </tr>
-      <tr>
-        <td style="padding:5px 8px;color:#8b5cf6;font-weight:700">Y</td>
-        <td style="padding:5px 8px;text-align:right">${nY}</td>
-        <td style="padding:5px 8px;text-align:right">${Ap_Y_mm2.toFixed(0)}</td>
-        <td style="padding:5px 8px;text-align:right"><b>${(Ap_Y_mm2/100).toFixed(2)}</b></td>
-      </tr>
-      <tr style="background:var(--bg3)">
-        <td style="padding:5px 8px;font-weight:700">TOTAL</td>
-        <td style="padding:5px 8px;text-align:right;font-weight:700">${R.nCabos}</td>
-        <td style="padding:5px 8px;text-align:right;font-weight:700">${R.Ap_total.toFixed(0)}</td>
-        <td style="padding:5px 8px;text-align:right;font-weight:700;color:var(--ac)">${(R.Ap_total/100).toFixed(2)}</td>
-      </tr>
-    </table>
-    ${vfInfo}
-  `;
-
+      <tr><th>Direção</th><th style="text-align:right">Cabos</th><th style="text-align:right">Ap (cm²)</th></tr>
+      <tr><td>X</td><td style="text-align:right">${nX}</td><td style="text-align:right"><b>${(Ap_X_mm2/100).toFixed(2)}</b></td></tr>
+      <tr><td>TOTAL</td><td style="text-align:right">${R.nCabos}</td><td style="text-align:right">${(R.Ap_total/100).toFixed(2)}</td></tr>
+    </table>`;
   const infoDiv = $('infoCorte');
   if (infoDiv) infoDiv.innerHTML = infoHTML;
 }
-
 function drawVF(R) {
   const cv = $('cvVF'); if (!cv) return;
   cv.dataset.h = '280';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
   if (!R.vf || !R.vf.ativa) {
-    ctx.fillStyle = '#8fa3c4'; ctx.font = '12px system-ui';
-    ctx.textAlign = 'center';
-    ctx.fillText('Vigas-faixa não estão ativas.', w/2, h/2);
-    ctx.textAlign = 'left';
-    return;
+    ctx.fillStyle = '#8fa3c4'; ctx.font = '12px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('VFs desativadas.', w/2, h/2); ctx.textAlign = 'left'; return;
   }
   const vf = R.vf;
   const padX = 50, padY = 40;
-  const Lvao = vf.Lvao, Ltrans = vf.Ltrans;
-  const escalaX = (w - 2*padX) / Lvao;
-  const escalaY = (h - 2*padY) / Ltrans;
-  ctx.fillStyle = 'rgba(80,120,200,0.10)';
-  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 1.5;
-  ctx.fillRect(padX, padY, Lvao*escalaX, Ltrans*escalaY);
-  ctx.strokeRect(padX, padY, Lvao*escalaX, Ltrans*escalaY);
+  const escalaX = (w - 2*padX) / vf.Lvao;
+  const escalaY = (h - 2*padY) / vf.Ltrans;
+  ctx.fillStyle = 'rgba(80,120,200,0.10)'; ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 1.5;
+  ctx.fillRect(padX, padY, vf.Lvao*escalaX, vf.Ltrans*escalaY);
+  ctx.strokeRect(padX, padY, vf.Lvao*escalaX, vf.Ltrans*escalaY);
   vf.vigas.forEach((v, i) => {
     const bfPx = vf.bf * (vf.direcao === 'x' ? escalaY : escalaX);
     let x, y, ww, hh;
-    if (vf.direcao === 'x') {
-      x = padX; y = padY + v.y * escalaY - bfPx/2;
-      ww = Lvao * escalaX; hh = bfPx;
-    } else {
-      x = padX + v.y * escalaX - bfPx/2;
-      y = padY; ww = bfPx; hh = Ltrans * escalaY;
-    }
-    ctx.fillStyle = 'rgba(61,125,255,0.35)';
-    ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
-    ctx.fillRect(x, y, ww, hh);
-    ctx.strokeRect(x, y, ww, hh);
-    if (vf.prot && vf.prot.ativa && vf.prot.nCabos > 0) {
-      ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 1.8;
-      const nC = Math.min(6, vf.prot.nCabos);
-      for (let k = 0; k < nC; k++) {
-        const frac = (k + 0.5) / nC;
-        if (vf.direcao === 'x') {
-          const yy = y + hh * frac;
-          ctx.beginPath(); ctx.moveTo(x + 4, yy); ctx.lineTo(x + ww - 4, yy); ctx.stroke();
-        } else {
-          const xx = x + ww * frac;
-          ctx.beginPath(); ctx.moveTo(xx, y + 4); ctx.lineTo(xx, y + hh - 4); ctx.stroke();
-        }
-      }
-    }
+    if (vf.direcao === 'x') { x = padX; y = padY + v.y * escalaY - bfPx/2; ww = vf.Lvao * escalaX; hh = bfPx; }
+    else { x = padX + v.y * escalaX - bfPx/2; y = padY; ww = bfPx; hh = vf.Ltrans * escalaY; }
+    ctx.fillStyle = 'rgba(61,125,255,0.35)'; ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
+    ctx.fillRect(x, y, ww, hh); ctx.strokeRect(x, y, ww, hh);
     ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 10px system-ui';
-    const cx = x + ww/2, cy = y + hh/2;
-    ctx.textAlign = 'center';
-    ctx.fillText(`VF${i+1}`, cx, cy + 4);
-    ctx.textAlign = 'left';
+    const cx = x + ww/2, cy = y + hh/2; ctx.textAlign = 'center';
+    ctx.fillText(`VF${i+1}`, cx, cy + 4); ctx.textAlign = 'left';
   });
-  ctx.fillStyle = '#8fa3c4';
-  if (vf.direcao === 'x') {
-    ctx.fillRect(padX, padY - 8, Lvao * escalaX, 6);
-    ctx.fillRect(padX, padY + Ltrans*escalaY + 2, Lvao * escalaX, 6);
-  } else {
-    ctx.fillRect(padX - 8, padY, 6, Ltrans * escalaY);
-    ctx.fillRect(padX + Lvao*escalaX + 2, padY, 6, Ltrans * escalaY);
-  }
   ctx.fillStyle = '#8fa3c4'; ctx.font = '10px system-ui';
-  ctx.fillText(`Vigas-faixa: ${vf.n} × ${vf.bf.toFixed(2)} m · h=${vf.hvf.toFixed(2)} m · vão = ${Lvao.toFixed(2)} m`, 12, 16);
-  if (vf.prot && vf.prot.ativa) {
-    ctx.fillStyle = '#22c55e';
-    ctx.fillText(`● Cabos VF: ${vf.prot.nCabos}/viga · e=${(vf.prot.e*1000).toFixed(0)}mm · w_bal=${vf.prot.w_bal.toFixed(2)} kN/m`, 12, h - 8);
-  }
+  ctx.fillText(`VFs: ${vf.n} × ${vf.bf.toFixed(2)} m · vão = ${vf.Lvao.toFixed(2)} m`, 12, 16);
 }
-
 function drawVFDef(R) {
   const cv = $('cvVFDef'); if (!cv) return;
   cv.dataset.h = '260';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
   if (!R.vf || !R.vf.ativa) {
-    ctx.fillStyle = '#8fa3c4'; ctx.font = '12px system-ui';
-    ctx.textAlign = 'center';
-    ctx.fillText('Vigas-faixa não ativas.', w/2, h/2);
-    ctx.textAlign = 'left'; return;
+    ctx.fillStyle = '#8fa3c4'; ctx.font = '12px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('VFs desativadas.', w/2, h/2); ctx.textAlign = 'left'; return;
   }
   const pad = 50, x0 = pad, x1 = w-pad;
   const yBase = h/2 + 20;
-  ctx.strokeStyle = '#243352'; ctx.beginPath();
-  ctx.moveTo(x0, yBase); ctx.lineTo(x1, yBase); ctx.stroke();
+  ctx.strokeStyle = '#243352'; ctx.beginPath(); ctx.moveTo(x0, yBase); ctx.lineTo(x1, yBase); ctx.stroke();
   const vmax = R.vf.vigas.reduce((a, b) => Math.abs(a.delta_tot) > Math.abs(b.delta_tot) ? a : b, R.vf.vigas[0]);
   const dmax = Math.max(Math.abs(vmax.delta_tot), 1e-6);
   const esc = (h/2 - 60) / dmax;
-  const w_carga = vmax.w;
-  const w_bal = vmax.w_bal || 0;
-  const I_vf = vmax.I_vf;
-  const EI_vf = vmax.EI_vf;
-  const delta_carga_imd = 5 * w_carga * Math.pow(R.vf.Lvao, 4) / (384 * EI_vf);
+  const delta_carga_imd = 5 * vmax.w * Math.pow(R.vf.Lvao, 4) / (384 * vmax.EI_vf);
   const delta_carga_tot = delta_carga_imd * (1 + R.phi);
-  const delta_bal_tot = -5 * w_bal * Math.pow(R.vf.Lvao, 4) / (384 * EI_vf) * (1 + R.phi);
+  const delta_bal_tot = -5 * (vmax.w_bal || 0) * Math.pow(R.vf.Lvao, 4) / (384 * vmax.EI_vf) * (1 + R.phi);
   const curves = [
-    {d: delta_carga_tot, c: '#ef4444', l: 'Carga', dash: [5,4]},
-    {d: delta_bal_tot,  c: '#22c55e', l: 'Protensão VF'},
-    {d: vmax.delta_tot, c: '#3d7dff', l: 'Resultante VF', bold: true}
+    {d: delta_carga_tot, c:'#ef4444', l:'Carga', dash:[5,4]},
+    {d: delta_bal_tot, c:'#22c55e', l:'Protensão VF'},
+    {d: vmax.delta_tot, c:'#3d7dff', l:'Resultante VF', bold:true}
   ];
   curves.forEach((c, idx) => {
-    ctx.strokeStyle = c.c; ctx.lineWidth = c.bold ? 2.5 : 1.8;
-    ctx.setLineDash(c.dash || []);
+    ctx.strokeStyle = c.c; ctx.lineWidth = c.bold ? 2.5 : 1.8; ctx.setLineDash(c.dash || []);
     ctx.beginPath();
-    const N = 60;
-    for (let i=0; i<=N; i++) {
-      const u = i/N;
+    for (let i=0; i<=60; i++) {
+      const u = i/60;
       const d = c.d * Math.sin(Math.PI*u);
       const xx = x0 + (x1-x0)*u;
       const yy = yBase + d*esc;
@@ -2199,15 +2688,40 @@ function drawVFDef(R) {
     ctx.fillStyle = '#e8eefc'; ctx.font = '10px system-ui';
     ctx.fillText(c.l, x0+idx*180+20, 18);
   });
-  ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 11px system-ui';
-  ctx.fillText(`VF${vmax.index}: δ_total = ${(vmax.delta_tot*1000).toFixed(2)} mm · δlim = ${(vmax.delta_lim*1000).toFixed(2)} mm · w_bal = ${w_bal.toFixed(2)} kN/m`, 12, h-12);
 }
-
+function drawOtim(R) {
+  const cv = $('cvOtim'); if (!cv) return;
+  cv.dataset.h = '280';
+  const { ctx, w, h } = setupCanvas(cv);
+  ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
+  const configs = compararConfigVF(R);
+  if (!configs || configs.length === 0) {
+    ctx.fillStyle = '#8fa3c4'; ctx.font = '12px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText('Configure VFs.', w/2, h/2); ctx.textAlign = 'left'; return;
+  }
+  const pad = 50, x0 = pad, x1 = w - pad, y0 = h - 40, y1 = 40;
+  const n = configs.length;
+  const bw = (x1 - x0) / n - 20;
+  const maxCusto = Math.max(...configs.map(c => c.custo)) * 1.15;
+  const otimo = otimizarPorCusto(R);
+  configs.forEach((c, i) => {
+    const bx = x0 + i * ((x1 - x0) / n) + 10;
+    const bh = (c.custo / maxCusto) * (y0 - y1);
+    const by = y0 - bh;
+    const isOtimo = otimo && c.nVF === otimo.nVF;
+    ctx.fillStyle = isOtimo ? '#22c55e' : (c.atende ? '#3d7dff' : '#ef4444');
+    ctx.fillRect(bx, by, bw, Math.max(2, bh));
+    ctx.fillStyle = '#e8eefc'; ctx.font = 'bold 10px system-ui'; ctx.textAlign = 'center';
+    ctx.fillText(`${(c.custo/1000).toFixed(1)}k`, bx + bw/2, by - 4);
+    ctx.fillStyle = '#8fa3c4'; ctx.font = '10px system-ui';
+    ctx.fillText(`${c.nVF} VF${c.nVF !== 1 ? 's' : ''}`, bx + bw/2, y0 + 14);
+  });
+  ctx.textAlign = 'left';
+}
 const cam = { yaw: -0.6, pitch: 0.9, zoom: 1.0, autoScale: 1 };
 let layers = { concreto:true, cabos:true, cargas:true, apoios:true, vigasfaixa:true, cabosvf:true, deformada:true };
 let simRunning = false, simPhase = 0, simSpeed = 1;
 let lastR = null;
-
 function project(x, y, z, w, h) {
   const R = lastR || { Lx: 1, Ly: 1 };
   const cxL = R.Lx / 2, cyL = R.Ly / 2;
@@ -2222,7 +2736,6 @@ function project(x, y, z, w, h) {
   const s = cam.autoScale;
   return { x: w / 2 + x1 * s, y: h / 2 - z2 * s };
 }
-
 function draw3D(R) {
   const cv = $('cv3d');
   const r = cv.getBoundingClientRect();
@@ -2249,9 +2762,7 @@ function draw3D(R) {
   }
   const nx = 14, ny = 10;
   if (layers.concreto) {
-    ctx.fillStyle = 'rgba(80,120,200,0.15)';
-    ctx.strokeStyle = 'rgba(120,160,220,0.5)';
-    ctx.lineWidth = 0.8;
+    ctx.fillStyle = 'rgba(80,120,200,0.15)'; ctx.strokeStyle = 'rgba(120,160,220,0.5)'; ctx.lineWidth = 0.8;
     for (let i=0; i<nx; i++) for (let j=0; j<ny; j++) {
       const x0 = (i/nx)*Lx, y0 = (j/ny)*Ly;
       const x1 = ((i+1)/nx)*Lx, y1 = ((j+1)/ny)*Ly;
@@ -2259,34 +2770,23 @@ function draw3D(R) {
       const p10 = project(x1, y0, H/2 + defZ(x1,y0), w, h);
       const p11 = project(x1, y1, H/2 + defZ(x1,y1), w, h);
       const p01 = project(x0, y1, H/2 + defZ(x0,y1), w, h);
-      ctx.beginPath();
-      ctx.moveTo(p00.x, p00.y); ctx.lineTo(p10.x, p10.y);
+      ctx.beginPath(); ctx.moveTo(p00.x, p00.y); ctx.lineTo(p10.x, p10.y);
       ctx.lineTo(p11.x, p11.y); ctx.lineTo(p01.x, p01.y); ctx.closePath();
       ctx.fill(); ctx.stroke();
     }
   }
   if (layers.vigasfaixa && R.vf && R.vf.ativa) {
-    const vf = R.vf;
-    vf.vigas.forEach((v) => {
-      const bf = vf.bf;
+    R.vf.vigas.forEach((v) => {
+      const bf = R.vf.bf;
       let x0, x1, y0, y1;
-      if (vf.direcao === 'x') {
-        x0 = 0; x1 = Lx;
-        y0 = Math.max(0, v.y - bf/2);
-        y1 = Math.min(Ly, v.y + bf/2);
-      } else {
-        x0 = Math.max(0, v.y - bf/2);
-        x1 = Math.min(Lx, v.y + bf/2);
-        y0 = 0; y1 = Ly;
-      }
+      if (R.vf.direcao === 'x') { x0 = 0; x1 = Lx; y0 = Math.max(0, v.y - bf/2); y1 = Math.min(Ly, v.y + bf/2); }
+      else { x0 = Math.max(0, v.y - bf/2); x1 = Math.min(Lx, v.y + bf/2); y0 = 0; y1 = Ly; }
       const p00 = project(x0, y0, H/2 + defZ(x0,y0) + 0.002, w, h);
       const p10 = project(x1, y0, H/2 + defZ(x1,y0) + 0.002, w, h);
       const p11 = project(x1, y1, H/2 + defZ(x1,y1) + 0.002, w, h);
       const p01 = project(x0, y1, H/2 + defZ(x0,y1) + 0.002, w, h);
-      ctx.fillStyle = 'rgba(61,125,255,0.28)';
-      ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(p00.x, p00.y); ctx.lineTo(p10.x, p10.y);
+      ctx.fillStyle = 'rgba(61,125,255,0.28)'; ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.moveTo(p00.x, p00.y); ctx.lineTo(p10.x, p10.y);
       ctx.lineTo(p11.x, p11.y); ctx.lineTo(p01.x, p01.y); ctx.closePath();
       ctx.fill(); ctx.stroke();
     });
@@ -2302,9 +2802,8 @@ function draw3D(R) {
           const yc = fx.y_center + (k - (nVis-1)/2) * (fx.banda / (nVis+1));
           if (yc < 0 || yc > Ly) continue;
           ctx.beginPath();
-          const N = 40;
-          for (let i=0; i<=N; i++) {
-            const u = i/N;
+          for (let i=0; i<=40; i++) {
+            const u = i/40;
             const x = u * Lx;
             const zCabo = -H/2 + R.dinf + (R.dsup - R.dinf) * Math.pow(2*u - 1, 2);
             const p = project(x, yc, zCabo + defZ(x, yc), w, h);
@@ -2319,9 +2818,8 @@ function draw3D(R) {
       for (let c=0; c<nC; c++) {
         const transversal = (c+0.5)/nC * (R.dir_cabo === 'x' ? Ly : Lx);
         ctx.beginPath();
-        const N = 40;
-        for (let i=0; i<=N; i++) {
-          const u = i/N;
+        for (let i=0; i<=40; i++) {
+          const u = i/40;
           const x = (R.dir_cabo === 'x') ? u * Lx : transversal;
           const y = (R.dir_cabo === 'x') ? transversal : u * Ly;
           const zCabo = -H/2 + R.dinf + (R.dsup - R.dinf) * Math.pow(2*u - 1, 2);
@@ -2334,7 +2832,8 @@ function draw3D(R) {
   }
   if (layers.cabosvf && R.vf && R.vf.ativa && R.vf.prot && R.vf.prot.ativa) {
     const vf = R.vf;
-    const e = vf.prot.e;
+    const d_inf = vf.prot.d_inf;
+    const d_sup = vf.prot.d_sup;
     ctx.strokeStyle = '#22c55e'; ctx.lineWidth = 2.5;
     vf.vigas.forEach(v => {
       const bf = vf.bf;
@@ -2346,25 +2845,13 @@ function draw3D(R) {
           yc = Math.max(0, v.y - bf/2) + bf * frac;
           if (yc < 0 || yc > Ly) continue;
           ctx.beginPath();
-          const N = 40;
-          for (let i=0; i<=N; i++) {
-            const u = i/N;
+          for (let i=0; i<=40; i++) {
+            const u = i/40;
             const x = u * Lx;
-            const zCabo = -H/2 + (vf.prot.d) + (H - vf.prot.d - (H/2 - e)) * Math.pow(2*u-1, 2) * 0.5;
+            const z_apoio =  H/2 - d_sup;
+            const z_meio  = -H/2 + d_inf;
+            const zCabo   = z_meio + (z_apoio - z_meio) * Math.pow(2*u-1, 2);
             const p = project(x, yc, zCabo + defZ(x, yc), w, h);
-            if (i===0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
-          }
-          ctx.stroke();
-        } else {
-          yc = Math.max(0, v.y - bf/2) + bf * frac;
-          if (yc < 0 || yc > Lx) continue;
-          ctx.beginPath();
-          const N = 40;
-          for (let i=0; i<=N; i++) {
-            const u = i/N;
-            const y = u * Ly;
-            const zCabo = -H/2 + (vf.prot.d) + (H - vf.prot.d - (H/2 - e)) * Math.pow(2*u-1, 2) * 0.5;
-            const p = project(yc, y, zCabo + defZ(yc, y), w, h);
             if (i===0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y);
           }
           ctx.stroke();
@@ -2379,27 +2866,55 @@ function draw3D(R) {
       const p0 = project(x, y, H/2 + 0.6, w, h);
       const p1 = project(x, y, H/2 + 0.1, w, h);
       ctx.beginPath(); ctx.moveTo(p0.x, p0.y); ctx.lineTo(p1.x, p1.y); ctx.stroke();
-      ctx.beginPath();
-      ctx.moveTo(p1.x, p1.y);
-      ctx.lineTo(p1.x-4, p1.y-8); ctx.lineTo(p1.x+4, p1.y-8);
-      ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(p1.x, p1.y); ctx.lineTo(p1.x-4, p1.y-8); ctx.lineTo(p1.x+4, p1.y-8); ctx.closePath(); ctx.fill();
     }
   }
   if (layers.apoios) {
     ctx.fillStyle = '#8fa3c4';
     [[0,0],[Lx,0],[Lx,Ly],[0,Ly]].forEach(([x,y]) => {
       const p = project(x, y, -H/2 - 0.05, w, h);
-      ctx.beginPath();
-      ctx.moveTo(p.x, p.y);
-      ctx.lineTo(p.x-8, p.y+14); ctx.lineTo(p.x+8, p.y+14);
-      ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(p.x-8, p.y+14); ctx.lineTo(p.x+8, p.y+14); ctx.closePath(); ctx.fill();
     });
   }
   ctx.fillStyle = '#8fa3c4'; ctx.font = '10px system-ui';
-  ctx.fillText(`Lx=${Lx} Ly=${Ly} h=${H} · ${R.modo_prot} · escala ${escala}x`, 10, 16);
+  ctx.fillText(`Lx=${Lx} Ly=${Ly} h=${H} · Ep=${(R.Ep/1000).toFixed(0)} GPa · escala ${escala}x`, 10, 16);
 }
 
 /* ==================== RENDER ==================== */
+function renderVerifItem(v) {
+  const ic = v.status === 'ok' ? '🟢 OK' : v.status === 'wn' ? '🟡 ATENÇÃO' : '🔴 NÃO ATENDE';
+  return `<div class="verif ${v.status}"><div class="st ${v.status}">${ic}</div>
+    <div><div class="nm">${v.nome}</div><div class="dt">${v.detalhe}</div></div></div>`;
+}
+function renderAncoragem(R) {
+  const box = $('vf_anc_info'); if (!box) return;
+  if (!R.vf || !R.vf.ativa || !R.vf.prot || !R.vf.prot.ativa) {
+    box.innerHTML = '<div style="color:var(--mut)">Protensão desativada.</div>';
+    return;
+  }
+  const p = R.vf.prot;
+  const a = p.anc_sel;
+  if (!a) { box.innerHTML = `<div style="color:var(--er)">⚠️ Sem ancoragem.</div>`; return; }
+  const corEspac = p.espac_ok ? 'var(--ok)' : 'var(--er)';
+  box.innerHTML = `
+    <div><b style="color:var(--ac)">🔧 ${a.codigo}</b> <span style="font-size:10px;color:var(--mut)">${a.nome}</span></div>
+    <div style="color:var(--mut);font-size:10px;line-height:1.7;margin-top:4px">
+      Tipo: ${a.tipo} · Peso: ${a.peso} kg · ${p.diam} mm · Ap=${p.Ap_total.toFixed(0)} mm²<br>
+      Espaç: <b style="color:${corEspac}">${p.espac_necessario.toFixed(0)}/${p.espac_disponivel.toFixed(0)} mm</b>
+    </div>`;
+}
+function renderPPVF(R) {
+  const box = $('vf_pp_info'); if (!box) return;
+  if (!R.vf || !R.vf.ativa) { box.innerHTML = '<div style="color:var(--mut)">VFs desativadas.</div>'; return; }
+  box.innerHTML = `
+    <div style="color:#22c55e;font-weight:700;margin-bottom:4px">⚖️ PP da VF <span class="pp-badge">NOVO</span></div>
+    <div style="color:var(--mut);font-size:10px;line-height:1.6">
+      <b>PP/m linear</b> = ${R.vf.pp_VF_por_m.toFixed(2)} kN/m<br>
+      <b>PP total (1 VF)</b> = ${R.vf.pp_VF_total.toFixed(1)} kN<br>
+      <b>PP/m²</b> = ${R.vf.pp_VF_por_m2.toFixed(2)} kN/m²<br>
+      <b>Volume/VF</b> = ${R.vf.vol_VF.toFixed(3)} m³
+    </div>`;
+}
 function renderResumo(R) {
   $('resumoGlobal').innerHTML =
     kpi('Peso próprio', R.pp.toFixed(2)+' kN/m²') +
@@ -2407,9 +2922,8 @@ function renderResumo(R) {
     kpi('Momento Mx', R.Mx.toFixed(1)+' kN·m/m') +
     kpi('σc protensão', R.sigma_c_prot_Pi.toFixed(2)+' MPa', R.ok_sigma_c_prot ? 'ok' : 'er') +
     kpi('P efetiva', R.P_efetiva.toFixed(0)+' kN') +
-    kpi('Flecha total', (R.del_total*1000).toFixed(1)+' mm'+arrow(R.del_total),
-        Math.abs(R.del_total) < R.del_lim ? 'ok' : 'er');
-
+    kpi('Perda', R.perda_total_pct.toFixed(1) + ' %',
+        R.perda_total_pct < 25 ? 'ok' : R.perda_total_pct < 32 ? 'wn' : 'er');
   if (R.vf && R.vf.ativa) {
     const vfs = R.vf.vigas;
     const Mmax = Math.max(...vfs.map(v => v.M));
@@ -2417,45 +2931,54 @@ function renderResumo(R) {
     const AsMax = Math.max(...vfs.map(v => v.As_req_vf_cm2));
     const w_bal = R.vf.prot && R.vf.prot.ativa ? R.vf.prot.w_bal : 0;
     $('resVigasFaixaQuick').innerHTML =
-      kpi('Nº vigas-faixa', R.vf.n) +
-      kpi('bf × hvf', `${R.vf.bf.toFixed(2)} × ${R.vf.hvf.toFixed(2)} m`) +
-      kpi('Vão', R.vf.Lvao.toFixed(2) + ' m') +
-      kpi('M máx (viga)', Mmax.toFixed(2) + ' kN·m') +
-      kpi('δ máx (viga)', (dmax*1000).toFixed(2) + ' mm') +
-      kpi('As máx', AsMax.toFixed(2) + ' cm²') +
-      kpi('w_bal (prot.)', w_bal.toFixed(2) + ' kN/m', w_bal > 0 ? 'ok' : 'wn') +
-      kpi('P_ef VF', R.vf.prot && R.vf.prot.ativa ? R.vf.prot.P_ef.toFixed(0) + ' kN' : '—');
-  } else {
-    $('resVigasFaixaQuick').innerHTML = kpi('Vigas-faixa', 'Desativadas');
-  }
-
+      kpi('Nº VFs', R.vf.n) + kpi('bf × hvf', `${R.vf.bf.toFixed(2)} × ${R.vf.hvf.toFixed(2)} m`) +
+      kpi('Vão', R.vf.Lvao.toFixed(2) + ' m') + kpi('M máx', Mmax.toFixed(2) + ' kN·m') +
+      kpi('δ máx', (dmax*1000).toFixed(2) + ' mm') + kpi('As máx', AsMax.toFixed(2) + ' cm²') +
+      kpi('w_bal', w_bal.toFixed(2) + ' kN/m', w_bal > 0 ? 'ok' : 'wn') +
+      kpi('P_ef VF', R.vf.prot && R.vf.prot.ativa ? R.vf.prot.P_ef.toFixed(0) + ' kN' : '—') +
+      kpi('Ancoragem', R.vf.prot && R.vf.prot.anc_sel ? R.vf.prot.anc_sel.codigo : '—') +
+      kpi('PP VF/m', R.vf.pp_VF_por_m.toFixed(2) + ' kN/m');
+  } else $('resVigasFaixaQuick').innerHTML = kpi('VFs', 'Desativadas');
   $('resEsforcos').innerHTML =
-    kpi('Vão governante', R.L_ef.toFixed(2) + ' m') +
-    kpi('Mx', R.Mx.toFixed(2)+' kN·m/m') +
-    kpi('My', R.My.toFixed(2)+' kN·m/m') +
-    kpi('Vx', R.Vx.toFixed(2)+' kN/m') +
-    kpi('Vy', R.Vy.toFixed(2)+' kN/m') +
-    kpi('Mprot', R.Mprot.toFixed(2)+' kN·m/m') +
-    kpi('p_x', R.p_x.toFixed(2)+' kN/m') +
-    kpi('p_y', R.p_y.toFixed(2)+' kN/m');
-
+    kpi('Vão', R.L_ef.toFixed(2) + ' m') + kpi('Mx', R.Mx.toFixed(2)) +
+    kpi('My', R.My.toFixed(2)) + kpi('Vx', R.Vx.toFixed(2)) + kpi('Vy', R.Vy.toFixed(2)) +
+    kpi('Mprot', R.Mprot.toFixed(2)) + kpi('p_x', R.p_x.toFixed(2)) + kpi('p_y', R.p_y.toFixed(2));
   if (R.modo_prot === 'bi_assim') {
     $('resProtensao').innerHTML =
-      kpi('Pi_X (total)', R.Pi_X.toFixed(1)+' kN') +
-      kpi('Pi_Y (distr.)', R.Pi_Y.toFixed(1)+' kN') +
-      kpi('Pi total', R.Pi.toFixed(1)+' kN') +
+      kpi('Pi_X', R.Pi_X.toFixed(1)+' kN') + kpi('Pi_Y', R.Pi_Y.toFixed(1)+' kN') + kpi('Pi total', R.Pi.toFixed(1)+' kN') +
       kpi('P efetiva', R.P_efetiva.toFixed(1)+' kN') +
-      kpi('σcp_X (pior)', R.sigma_cp_X.toFixed(2)+' MPa', R.sigma_cp_X >= 1.0 ? 'ok' : 'wn') +
-      kpi('σcp_Y', R.sigma_cp_Y.toFixed(2)+' MPa', R.sigma_cp_Y >= 1.0 ? 'ok' : 'wn');
+      kpi('Perda X', (R.perdas_detalhado?.perda_X_pct || 0).toFixed(1) + ' %',
+          (R.perdas_detalhado?.perda_X_pct || 0) < 25 ? 'ok' : 'wn') +
+      kpi('Perda Y', (R.perdas_detalhado?.perda_Y_pct || 0).toFixed(1) + ' %',
+          (R.perdas_detalhado?.perda_Y_pct || 0) < 25 ? 'ok' : 'wn');
   } else {
     $('resProtensao').innerHTML =
-      kpi('Pi (inicial)', R.Pi.toFixed(1)+' kN') +
-      kpi('Pós-atrito', (R.Patrito_meio||0).toFixed(1)+' kN') +
-      kpi('Pós-imediatas', (R.P_imd||0).toFixed(1)+' kN') +
-      kpi('P efetiva', R.P_efetiva.toFixed(1)+' kN') +
-      kpi('Perda total', R.perda_total_pct.toFixed(1)+' %', R.perda_total_pct < 20 ? 'ok' : 'wn');
+      kpi('Pi', R.Pi.toFixed(1)+' kN') + kpi('Pós-atrito', (R.Patrito_meio||0).toFixed(1)+' kN') +
+      kpi('Pós-imediatas', (R.P_imd||0).toFixed(1)+' kN') + kpi('P efetiva', R.P_efetiva.toFixed(1)+' kN') +
+      kpi('Perda', R.perda_total_pct.toFixed(1)+' %');
   }
-
+  if (R.modo_prot === 'bi_assim' && R.perdas_detalhado) {
+    const pd = R.perdas_detalhado;
+    $('memPerdasDetalhado').textContent =
+      `PERDAS DETALHADAS — modo bi_assim (v18.4.1)\n` +
+      `==========================================\n\n` +
+      `Atrito X: ${pd.atr_X_pct.toFixed(2)} %\n` +
+      `Atrito Y: ${pd.atr_Y_pct.toFixed(2)} %\n` +
+      `Relaxação: ${pd.psi_inf_pct.toFixed(2)} %\n` +
+      `dP_relax: ${pd.dP_relax_MPa.toFixed(2)} MPa\n` +
+      `Retração: ${pd.dP_retrac_MPa.toFixed(2)} MPa\n` +
+      `Fluência X: ${pd.dP_fluenc_X_MPa.toFixed(2)} MPa\n` +
+      `Fluência Y: ${pd.dP_fluenc_Y_MPa.toFixed(2)} MPa\n` +
+      `Acomodação X: ${pd.dP_acom_X_MPa.toFixed(2)} MPa\n` +
+      `Acomodação Y: ${pd.dP_acom_Y_MPa.toFixed(2)} MPa\n` +
+      `Encurt. elást. X: ${pd.dP_elast_X_MPa.toFixed(2)} MPa\n` +
+      `Encurt. elást. Y: ${pd.dP_elast_Y_MPa.toFixed(2)} MPa\n\n` +
+      `PERDA TOTAL X: ${pd.perda_X_pct.toFixed(2)} %\n` +
+      `PERDA TOTAL Y: ${pd.perda_Y_pct.toFixed(2)} %\n` +
+      `(Típico NBR 6118: 15% a 30%)`;
+  } else {
+    $('memPerdasDetalhado').textContent = 'Modo unidirecional — ver valores acima.';
+  }
   $('resFlechas').innerHTML =
     kpi('δ cargas', (R.del_carga*1000).toFixed(2)+' mm'+arrow(R.del_carga)) +
     kpi('δ protensão', (R.del_prot*1000).toFixed(2)+' mm'+arrow(R.del_prot)) +
@@ -2464,236 +2987,166 @@ function renderResumo(R) {
     kpi('δ total', (R.del_total*1000).toFixed(2)+' mm'+arrow(R.del_total),
         Math.abs(R.del_total) < R.del_lim ? 'ok' : 'er') +
     kpi('δ limite', (R.del_lim*1000).toFixed(2)+' mm');
-
   $('resTensoes').innerHTML =
-    kpi('σ sup', sgnT(R.sigma_sup).toFixed(2)+' MPa') +
-    kpi('σ inf', sgnT(R.sigma_inf).toFixed(2)+' MPa') +
+    kpi('σ sup', sgnT(R.sigma_sup).toFixed(2)+' MPa') + kpi('σ inf', sgnT(R.sigma_inf).toFixed(2)+' MPa') +
     kpi('σ sup freq', sgnT(R.sigma_sup_freq).toFixed(2)+' MPa', R.ok_descomp_sup ? 'ok' : 'er') +
     kpi('σ inf freq', sgnT(R.sigma_inf_freq).toFixed(2)+' MPa', R.ok_descomp_inf ? 'ok' : 'er') +
-    kpi('σ P (unif.)', sgnT(R.sigma_p_uni).toFixed(2)+' MPa') +
-    kpi('σ P (flexão)', sgnT(R.sigma_p_mom).toFixed(2)+' MPa') +
-    kpi('fct,m', R.fctm.toFixed(2)+' MPa') +
-    kpi('fct,inf', R.fctk_inf.toFixed(2)+' MPa');
-
-  const V = verificar(R);
-  $('resVerif').innerHTML = V.map(v => {
-    const ic = v.status === 'ok' ? '🟢 OK' : v.status === 'wn' ? '🟡 ATENÇÃO' : '🔴 NÃO ATENDE';
-    return `<div class="verif ${v.status}"><div class="st ${v.status}">${ic}</div>
-      <div><div class="nm">${v.nome}</div><div class="dt">${v.detalhe}</div></div></div>`;
-  }).join('');
-
-  const Vs = verificarSigpi(R);
-  $('resSigpi').innerHTML = Vs.map(v => {
-    const ic = v.status === 'ok' ? '🟢 OK' : v.status === 'wn' ? '🟡 ATENÇÃO' : '🔴 NÃO ATENDE';
-    return `<div class="verif ${v.status}"><div class="st ${v.status}">${ic}</div>
-      <div><div class="nm">${v.nome}</div><div class="dt">${v.detalhe}</div></div></div>`;
-  }).join('');
-
-  const Vp = verificarPuncao(R);
-  $('resPuncao').innerHTML = Vp.map(v => {
-    const ic = v.status === 'ok' ? '🟢 OK' : v.status === 'wn' ? '🟡 ATENÇÃO' : '🔴 NÃO ATENDE';
-    return `<div class="verif ${v.status}"><div class="st ${v.status}">${ic}</div>
-      <div><div class="nm">${v.nome}</div><div class="dt">${v.detalhe}</div></div></div>`;
-  }).join('');
-
-  const Vpm = verificarProtensaoMinima(R);
-  $('resProtMin').innerHTML = Vpm.map(v => {
-    const ic = v.status === 'ok' ? '🟢 OK' : v.status === 'wn' ? '🟡 ATENÇÃO' : '🔴 NÃO ATENDE';
-    return `<div class="verif ${v.status}"><div class="st ${v.status}">${ic}</div>
-      <div><div class="nm">${v.nome}</div><div class="dt">${v.detalhe}</div></div></div>`;
-  }).join('');
-
-  const Vd = verificarDescompressao(R);
-  $('resDescomp').innerHTML = Vd.map(v => {
-    const ic = v.status === 'ok' ? '🟢 OK' : v.status === 'wn' ? '🟡 ATENÇÃO' : '🔴 NÃO ATENDE';
-    return `<div class="verif ${v.status}"><div class="st ${v.status}">${ic}</div>
-      <div><div class="nm">${v.nome}</div><div class="dt">${v.detalhe}</div></div></div>`;
-  }).join('');
-
-  const VdVF = verificarDescompressaoVF(R);
-  $('resDescompVF').innerHTML = VdVF.map(v => {
-    const ic = v.status === 'ok' ? '🟢 OK' : v.status === 'wn' ? '🟡 ATENÇÃO' : '🔴 NÃO ATENDE';
-    return `<div class="verif ${v.status}"><div class="st ${v.status}">${ic}</div>
-      <div><div class="nm">${v.nome}</div><div class="dt">${v.detalhe}</div></div></div>`;
-  }).join('');
-
-  const Vv = verificarVF(R);
-  $('resVerifVF').innerHTML = Vv.map(v => {
-    const ic = v.status === 'ok' ? '🟢 OK' : v.status === 'wn' ? '🟡 ATENÇÃO' : '🔴 NÃO ATENDE';
-    return `<div class="verif ${v.status}"><div class="st ${v.status}">${ic}</div>
-      <div><div class="nm">${v.nome}</div><div class="dt">${v.detalhe}</div></div></div>`;
-  }).join('');
-
+    kpi('σ P (unif.)', sgnT(R.sigma_p_uni).toFixed(2)+' MPa') + kpi('σ P (flexão)', sgnT(R.sigma_p_mom).toFixed(2)+' MPa') +
+    kpi('fct,m', R.fctm.toFixed(2)+' MPa') + kpi('fct,inf', R.fctk_inf.toFixed(2)+' MPa');
+  $('resTensaoDetalhada').innerHTML =
+    kpi('σ_P sup', R.sigma_P_sup.toFixed(2)) + kpi('σ_P inf', R.sigma_P_inf.toFixed(2)) +
+    kpi('σ_g sup', R.sigma_g_sup.toFixed(2)) + kpi('σ_g inf', R.sigma_g_inf.toFixed(2)) +
+    kpi('σ_V sup', R.sigma_V_sup.toFixed(2), R.sigma_V_sup >= 0 ? 'ok' : 'er') +
+    kpi('σ_V inf', R.sigma_V_inf.toFixed(2), R.sigma_V_inf <= 0 ? 'ok' : 'er') +
+    kpi('σ_q sup', R.sigma_q_sup.toFixed(2)) + kpi('σ_q inf', R.sigma_q_inf.toFixed(2)) +
+    kpi('σ_S sup', R.sigma_S_sup.toFixed(2)) +
+    kpi('σ_S inf', R.sigma_S_inf.toFixed(2), R.sigma_S_inf <= 0 ? 'ok' : 'er');
+  $('resVerif').innerHTML = verificar(R).map(v => renderVerifItem(v)).join('');
+  $('resSigpi').innerHTML = verificarSigpi(R).map(v => renderVerifItem(v)).join('');
+  $('resPuncao').innerHTML = verificarPuncao(R).map(v => renderVerifItem(v)).join('');
+  $('resProtMin').innerHTML = verificarProtensaoMinima(R).map(v => renderVerifItem(v)).join('');
+  $('resDescomp').innerHTML = verificarDescompressao(R).map(v => renderVerifItem(v)).join('');
+  $('resDescompVF').innerHTML = verificarDescompressaoVF(R).map(v => renderVerifItem(v)).join('');
+  $('resVerifVF').innerHTML = verificarVF(R).map(v => renderVerifItem(v)).join('');
+  $('resVaoVF').innerHTML = verificarVaoVF(R).map(v => renderVerifItem(v)).join('');
+  $('resAnc').innerHTML = verificarAncoragens(R).map(v => renderVerifItem(v)).join('');
   let vfRows = '';
   if (R.vf && R.vf.ativa) {
     const vfConc = R.vf.vigas.reduce((s, v) => s + R.vf.bf * R.vf.hvf * R.vf.Lvao, 0);
-    const vfAs = R.vf.vigas.reduce((s, v) => s + v.As_req_vf_cm2, 0) / 1e4 * R.vf.Lvao * 7850 / 1e3;
-    const vfProt_kg = R.vf.prot && R.vf.prot.ativa
-      ? R.vf.prot.Ap_total / 1e6 * R.vf.Lvao * 7850 * R.vf.n : 0;
-    vfRows = `
-      <tr><td>Vigas-faixa (concreto)</td><td>${vfConc.toFixed(2)}</td><td>m³</td></tr>
-      <tr><td>Vigas-faixa (aço As)</td><td>${vfAs.toFixed(1)}</td><td>kg</td></tr>
-      <tr><td>Vigas-faixa (cordoalha)</td><td>${vfProt_kg.toFixed(1)}</td><td>kg</td></tr>
-      <tr><td>Nº vigas-faixa</td><td>${R.vf.n}</td><td>un</td></tr>`;
+    const vfProt_kg = R.vf.prot && R.vf.prot.ativa ? R.vf.prot.Ap_total / 1e6 * R.vf.Lvao * 7850 * R.vf.n : 0;
+    vfRows = `<tr><td>VFs (concreto)</td><td>${vfConc.toFixed(2)}</td><td>m³</td></tr>
+      <tr><td>VFs (cordoalha)</td><td>${vfProt_kg.toFixed(1)}</td><td>kg</td></tr>
+      <tr><td>PP VF total</td><td>${(R.vf.pp_VF_total * R.vf.n).toFixed(1)}</td><td>kN</td></tr>`;
   }
   $('resQuant').innerHTML = `
     <table>
       <tr><th>Material</th><th>Quantidade</th><th>Unidade</th></tr>
       <tr><td>Concreto (laje)</td><td>${R.Vc.toFixed(2)}</td><td>m³</td></tr>
-      <tr><td>Aço CA-50 (positivo)</td><td>${R.peso_aco_pos.toFixed(1)}</td><td>kg</td></tr>
-      <tr><td>Aço CA-50 (negativo)</td><td>${R.peso_aco_neg.toFixed(1)}</td><td>kg</td></tr>
+      <tr><td>Aço CA-50 (pos)</td><td>${R.peso_aco_pos.toFixed(1)}</td><td>kg</td></tr>
+      <tr><td>Aço CA-50 (neg)</td><td>${R.peso_aco_neg.toFixed(1)}</td><td>kg</td></tr>
       <tr><td>Cordoalha CP-190</td><td>${R.peso_cord.toFixed(1)}</td><td>kg</td></tr>
       <tr><td>Comprimento de cabos</td><td>${R.comp_cabos.toFixed(1)}</td><td>m</td></tr>
-      <tr><td>Ancoragens</td><td>${R.nAncor}</td><td>un</td></tr>
+      <tr><td>Ancoragens (laje)</td><td>${R.nAncor}</td><td>un</td></tr>
       <tr><td>Área de forma</td><td>${R.Vforma.toFixed(2)}</td><td>m²</td></tr>
       ${vfRows}
     </table>`;
-
   $('resMemoria').innerHTML = gerarMemoria(R);
-
   const av = $('avisoRetangular');
   if (R.ehRetangular) {
     av.classList.add('show');
     $('avisoRazao').textContent = R.razao.toFixed(3);
     $('avisoLmenor').textContent = R.L_menor.toFixed(2);
-  } else {
-    av.classList.remove('show');
-  }
+  } else av.classList.remove('show');
 }
-
+function renderVaoVencer(R) {
+  const box = $('vvStatus'); if (!box) return;
+  const cor = R.status_h === 'ok' ? 'var(--ok)' : R.status_h === 'wn' ? 'var(--wn)' : 'var(--er)';
+  const icone = R.status_h === 'ok' ? '🟢' : R.status_h === 'wn' ? '🟡' : '🔴';
+  box.innerHTML = `
+    <div style="color:${cor};font-weight:700;margin-bottom:4px">${icone} h sugerido = ${(R.h_final*100).toFixed(1)} cm</div>
+    <div style="color:var(--mut);font-size:10px;line-height:1.6">
+      Vão: <b>${R.vv_vao.toFixed(2)} m</b> · Sistema: <b>${R.vv_sis}</b><br>
+      h atual = <b>${(R.h_atual*100).toFixed(1)} cm</b> · Razão = <b>${R.razao_h.toFixed(2)}</b><br>
+      ${R.vf_classificacao !== '—' ? `VF: <b>${R.vf_classificacao}</b>` : ''}
+    </div>`;
+}
+function renderVFSugestao(R) {
+  const box = $('vfStatus'); if (!box) return;
+  const S = sugerirPosicoesVF(R);
+  if (!S.aplicavel) { box.innerHTML = `<div style="color:var(--mut)">${S.msg}</div>`; return; }
+  const cor = S.status === 'ok' ? 'var(--ok)' : S.status === 'wn' ? 'var(--wn)' : 'var(--er)';
+  const icone = S.status === 'ok' ? '🟢' : S.status === 'wn' ? '🟡' : '🔴';
+  const posStr = S.posicoes.map((p, i) => `y${i+1}=${p.toFixed(2)}`).join(' · ') || '—';
+  box.innerHTML = `
+    <div style="color:${cor};font-weight:700;margin-bottom:4px">${icone} ${S.n_vf_ideal} VFs sugeridas (atual: ${S.n_vf_atual})</div>
+    <div style="color:var(--mut);font-size:10px;line-height:1.6">
+      Ltrans = <b>${S.Ltrans.toFixed(2)} m</b> · Painel máx = <b>${S.painel_max.toFixed(1)} m</b><br>
+      Posições: <b>${posStr}</b><br>${S.msg}
+    </div>`;
+}
+function renderOtim(R) {
+  const box = $('resOtim'); if (!box) return;
+  const configs = compararConfigVF(R);
+  if (!configs || configs.length === 0) { box.innerHTML = '<div style="color:var(--mut)">Configure VFs.</div>'; return; }
+  const otimo = otimizarPorCusto(R);
+  let html = '<table><tr><th>Nº VFs</th><th>Espaç.</th><th>δ máx (mm)</th><th>Custo (R$)</th><th>Status</th></tr>';
+  configs.forEach(c => {
+    const isOtimo = otimo && c.nVF === otimo.nVF;
+    const st = c.atende ? (isOtimo ? '🟢 ÓTIMO' : '✓ OK') : '🔴 Não atende';
+    html += `<tr style="${isOtimo ? 'background:rgba(34,197,94,.1);font-weight:700' : ''}">
+      <td>${c.nVF}</td><td>${c.esp.toFixed(2)} m</td>
+      <td>${(c.delta_max*1000).toFixed(2)}</td><td>${c.custo.toFixed(0)}</td><td>${st}</td></tr>`;
+  });
+  html += '</table>';
+  if (otimo) html += `<div class="cfg-opt">💰 <b>Ótimo:</b> ${otimo.nVF} VFs em ${otimo.esp.toFixed(2)} m · R$ ${otimo.custo.toFixed(0)}</div>`;
+  box.innerHTML = html;
+  const boxDiag = $('resDiag');
+  if (boxDiag) boxDiag.innerHTML = verificarVaoVF(R).map(v => renderVerifItem(v)).join('');
+  drawOtim(R);
+}
 function renderVigasFaixaDetalhe(R) {
-  const box = $('resVigasFaixa');
-  const mem = $('memVigasFaixa');
-  const tab = $('resVigasFaixaTabela');
+  const box = $('resVigasFaixa'), mem = $('memVigasFaixa'), tab = $('resVigasFaixaTabela');
   if (!box || !mem || !tab) return;
   if (!R.vf || !R.vf.ativa) {
-    box.innerHTML = kpi('Vigas-faixa', 'Não ativas');
-    mem.textContent = 'Ative o módulo "3.1 · Vigas-faixa" no painel esquerdo.';
-    tab.innerHTML = '';
-    drawVF(R); drawVFDef(R);
-    return;
+    box.innerHTML = kpi('VFs', 'Não ativas');
+    mem.textContent = ''; tab.innerHTML = ''; drawVF(R); drawVFDef(R); return;
   }
-  const vf = R.vf;
+  const vf = R.vf, prot = vf.prot;
   const Mmax = Math.max(...vf.vigas.map(v => v.M));
   const MnetMax = Math.max(...vf.vigas.map(v => v.M_net));
   const Vmax = Math.max(...vf.vigas.map(v => v.V));
   const dMax = Math.max(...vf.vigas.map(v => Math.abs(v.delta_tot)));
   const AsMax = Math.max(...vf.vigas.map(v => v.As_req_vf_cm2));
   const wMax = Math.max(...vf.vigas.map(v => v.w));
-  const prot = vf.prot;
-
   box.innerHTML =
-    kpi('Direção', vf.direcao === 'x' ? 'Sentido Lx' : 'Sentido Ly') +
-    kpi('Vão Lvao', vf.Lvao.toFixed(2) + ' m') +
-    kpi('Nº vigas', vf.n) +
-    kpi('bf × hvf', `${vf.bf.toFixed(2)} × ${vf.hvf.toFixed(2)} m`) +
-    kpi('w_max (carga)', wMax.toFixed(2) + ' kN/m') +
-    kpi('M_max (carga)', Mmax.toFixed(2) + ' kN·m') +
-    kpi('M_net (prot.)', MnetMax.toFixed(2) + ' kN·m', prot && prot.ativa ? 'ok' : '') +
-    kpi('V_max', Vmax.toFixed(2) + ' kN') +
-    kpi('δ_max', (dMax*1000).toFixed(2) + ' mm') +
+    kpi('Direção', vf.direcao === 'x' ? 'Lx' : 'Ly') + kpi('Vão', vf.Lvao.toFixed(2) + ' m') +
+    kpi('Nº', vf.n) + kpi('bf × hvf', `${vf.bf.toFixed(2)} × ${vf.hvf.toFixed(2)} m`) +
+    kpi('w_max', wMax.toFixed(2) + ' kN/m') + kpi('M_max', Mmax.toFixed(2) + ' kN·m') +
+    kpi('M_net', MnetMax.toFixed(2) + ' kN·m') +
+    kpi('V_max', Vmax.toFixed(2) + ' kN') + kpi('δ_max', (dMax*1000).toFixed(2) + ' mm') +
     kpi('As req_max', AsMax.toFixed(2) + ' cm²') +
+    kpi('PP VF/m', vf.pp_VF_por_m.toFixed(2) + ' kN/m', 'ok') +
+    kpi('PP VF total', vf.pp_VF_total.toFixed(1) + ' kN') +
     (prot && prot.ativa
-      ? kpi('w_bal (prot.)', prot.w_bal.toFixed(2) + ' kN/m', 'ok') +
+      ? kpi('w_bal', prot.w_bal.toFixed(2) + ' kN/m', 'ok') +
         kpi('P_ef VF', prot.P_ef.toFixed(0) + ' kN') +
-        kpi('e_vf', (prot.e*1000).toFixed(0) + ' mm')
+        kpi('Ancoragem', prot.anc_sel ? prot.anc_sel.codigo : '—', prot.espac_ok ? 'ok' : 'er')
       : kpi('Protensão VF', 'Não ativa'));
-
-  const L = [];
-  const P = s => L.push(s);
-  P('VIGAS-FAIXA — TRIBUTARY WIDTH + PROTENSÃO CONCENTRADA (v17.3)');
-  P('='.repeat(72));
+  const L = []; const P = s => L.push(s);
+  P('VIGAS-FAIXA — v18.4.1'); P('='.repeat(72)); P('');
+  P(`Direção: ${vf.direcao.toUpperCase()} | Lvao = ${vf.Lvao.toFixed(2)} m`);
+  P(`Nº VFs: ${vf.n} | bf = ${vf.bf.toFixed(2)} m | hvf = ${vf.hvf.toFixed(2)} m`);
   P('');
-  P(`Direção: ${vf.direcao.toUpperCase()}  |  Lvao = ${vf.Lvao.toFixed(2)} m  |  Ltrans = ${vf.Ltrans.toFixed(2)} m`);
-  P(`Nº vigas-faixa: ${vf.n}  |  bf = ${vf.bf.toFixed(2)} m  |  hvf = ${vf.hvf.toFixed(2)} m`);
-  P(`Peso próprio adicional: ${vf.extraPP.toFixed(3)} kN/m`);
-  P('');
-  P('Distribuição tributária:');
-  P(`  Apoio de borda 0: trib = ${vf.trib_edge_1.toFixed(3)} m`);
-  vf.vigas.forEach(v => {
-    P(`  VF${v.index} (y = ${v.y.toFixed(2)} m): trib = ${v.trib.toFixed(3)} m → w_carga = ${v.w_carga.toFixed(2)} kN/m`);
-  });
-  P(`  Apoio de borda Ltrans: trib = ${vf.trib_edge_2.toFixed(3)} m`);
-  P(`  Verificação Σ trib = ${(vf.trib_edge_1 + vf.vigas.reduce((s,v)=>s+v.trib,0) + vf.trib_edge_2).toFixed(3)} m ≈ Ltrans = ${vf.Ltrans.toFixed(3)} m`);
-  P('');
+  P('PESO PRÓPRIO DA VF:');
+  P(`  PP/m linear  = ${vf.pp_VF_por_m.toFixed(3)} kN/m`);
+  P(`  PP total 1VF = ${vf.pp_VF_total.toFixed(2)} kN`);
+  P(`  PP/m²        = ${vf.pp_VF_por_m2.toFixed(3)} kN/m²`);
+  P(`  Volume 1VF   = ${vf.vol_VF.toFixed(4)} m³`);
   if (prot && prot.ativa) {
-    P('PROTENSÃO CONCENTRADA NAS VIGAS-FAIXA:');
-    P(`  Nº cabos por VF  = ${prot.nCabos}`);
-    P(`  Cordoalhas/cabo  = ${prot.nCord}`);
-    P(`  Ap por cabo      = ${prot.Ap_cabo.toFixed(0)} mm²`);
-    P(`  Ap total         = ${prot.Ap_total.toFixed(0)} mm²`);
-    P(`  σpi              = ${prot.sigma_pi.toFixed(0)} MPa`);
-    P(`  Pi               = ${prot.Pi.toFixed(1)} kN`);
-    P(`  Perda total      = ${prot.perda_pct.toFixed(1)}%`);
-    P(`  P_ef             = ${prot.P_ef.toFixed(1)} kN`);
-    P(`  Excentricidade   = ${(prot.e*1000).toFixed(0)} mm`);
-    P(`  d_cabo_vf        = ${(prot.d*1000).toFixed(0)} mm`);
-    P(`  w_bal = 8 · P_ef · e / Lvao² = ${prot.w_bal.toFixed(2)} kN/m`);
-    P(`  Carga balanceada = ${(100 * prot.w_bal / Math.max(0.01, wMax)).toFixed(0)}% da carga tributária`);
     P('');
+    P(`CABO NA VF:`);
+    P(`  d_inf=${(prot.d_inf*100).toFixed(2)}cm · d_sup=${(prot.d_sup*100).toFixed(2)}cm`);
+    P(`  w_bal = ${prot.w_bal.toFixed(2)} kN/m`);
+    P(`  P_ef = ${prot.P_ef.toFixed(0)} kN · Ap=${prot.Ap_total.toFixed(0)} mm²`);
+    if (prot.anc_sel) {
+      P('');
+      P(`ANCORAGEM: ${prot.anc_sel.codigo} (${prot.anc_sel.tipo})`);
+    }
   }
-  P('Resultados por viga:');
+  P('');
   vf.vigas.forEach(v => {
-    P(`  ── VF${v.index} (y = ${v.y.toFixed(2)} m) ──`);
-    P(`     Carga w_carga   = ${v.w_carga.toFixed(2)} kN/m`);
-    if (prot && prot.ativa) {
-      P(`     Balanceamento   = ${v.w_bal.toFixed(2)} kN/m`);
-      P(`     Carga líquida   = ${v.w_liq.toFixed(2)} kN/m`);
-    }
-    P(`     M_carga         = ${v.M_carga.toFixed(2)} kN·m`);
-    P(`     M_net (projeto) = ${v.M_net.toFixed(2)} kN·m`);
-    P(`     V               = ${v.V.toFixed(2)} kN`);
-    P(`     I_vf            = ${v.I_vf.toExponential(3)} m⁴`);
-    P(`     EI_vf           = ${v.EI_vf.toExponential(3)} kN·m²`);
-    P(`     δ imediata      = ${(v.delta_imd*1000).toFixed(2)} mm`);
-    P(`     δ total (φ)     = ${(v.delta_tot*1000).toFixed(2)} mm  |  δlim = ${(v.delta_lim*1000).toFixed(2)} mm  → ${v.ok_flecha ? 'OK' : 'NÃO'}`);
-    P(`     Md              = ${v.Md_vf.toFixed(2)} kN·m`);
-    P(`     As (flexão)     = ${v.As_vf_cm2.toFixed(2)} cm²`);
-    P(`     As,min (0,15%)  = ${v.As_min_vf_cm2.toFixed(2)} cm²`);
-    P(`     As adotado      = ${v.As_req_vf_cm2.toFixed(2)} cm²`);
-    P(`     τ_wd            = ${v.tau_wd.toFixed(3)} · τ_Rd2 = ${v.tau_Rd2_vf.toFixed(3)} MPa → ${v.ok_cort ? 'OK' : 'NÃO'}`);
-    if (prot && prot.ativa) {
-      P(`     ── Tensões na VF (com protensão) ──`);
-      P(`        σ_inf           = ${v.sigma_inf_vf.toFixed(3)} MPa`);
-      P(`        σ_sup           = ${v.sigma_sup_vf.toFixed(3)} MPa`);
-      P(`        σ_inf,freq      = ${v.sigma_inf_vf_freq.toFixed(3)} MPa  → ${v.ok_descomp_vf ? 'OK' : 'NÃO'}`);
-      P(`        σ_sup,freq      = ${v.sigma_sup_vf_freq.toFixed(3)} MPa`);
-    }
-    P('');
+    P(`  VF${v.index} (y=${v.y.toFixed(2)}): trib=${v.trib.toFixed(3)} → w=${v.w_carga.toFixed(2)} · M_net=${v.M_net.toFixed(2)} · δ=${(v.delta_tot*1000).toFixed(2)}mm · As=${v.As_req_vf_cm2.toFixed(2)}cm²`);
   });
-  P('Observações:');
-  P('  • Modelo: viga bi-apoiada, seção retangular bf × hvf');
-  P('  • Carga: distribuição tributária (bissetrizes entre apoios)');
-  P('  • Protensão: w_bal = 8·P_ef·e/L² subtrai do momento e flecha');
-  P('  • Fluência: (1 + φ) aplicada à flecha imediata');
-  P('  • Tensões: cálculo direto σ = −P/A ± P·e/W ± M/W');
   mem.textContent = L.join('\n');
-
-  let html = '<table><tr><th>#</th><th>y (m)</th><th>trib (m)</th><th>w (kN/m)</th><th>w_bal</th><th>M (kN·m)</th><th>M_net</th><th>V (kN)</th><th>δ (mm)</th><th>As (cm²)</th><th>σfreq</th><th>Status</th></tr>';
+  let html = '<table><tr><th>#</th><th>y</th><th>trib</th><th>w</th><th>w_bal</th><th>M_net</th><th>V</th><th>δ</th><th>As</th><th>St</th></tr>';
   vf.vigas.forEach(v => {
     const status = (v.ok_flecha && v.ok_cort && v.ok_descomp_vf) ? '🟢' : '🔴';
-    html += `<tr>
-      <td>VF${v.index}</td>
-      <td>${v.y.toFixed(2)}</td>
-      <td>${v.trib.toFixed(2)}</td>
-      <td>${v.w_carga.toFixed(2)}</td>
-      <td>${v.w_bal.toFixed(2)}</td>
-      <td>${v.M_carga.toFixed(2)}</td>
-      <td><b>${v.M_net.toFixed(2)}</b></td>
-      <td>${v.V.toFixed(2)}</td>
-      <td>${(v.delta_tot*1000).toFixed(2)}</td>
-      <td>${v.As_req_vf_cm2.toFixed(2)}</td>
-      <td>${v.sigma_inf_vf_freq.toFixed(2)}</td>
-      <td>${status}</td>
-    </tr>`;
+    html += `<tr><td>VF${v.index}</td><td>${v.y.toFixed(2)}</td><td>${v.trib.toFixed(2)}</td><td>${v.w_carga.toFixed(2)}</td><td>${v.w_bal.toFixed(2)}</td><td><b>${v.M_net.toFixed(2)}</b></td><td>${v.V.toFixed(2)}</td><td>${(v.delta_tot*1000).toFixed(2)}</td><td>${v.As_req_vf_cm2.toFixed(2)}</td><td>${status}</td></tr>`;
   });
   html += '</table>';
   tab.innerHTML = html;
-
-  drawVF(R);
-  drawVFDef(R);
+  drawVF(R); drawVFDef(R);
 }
-
 function renderBiAssim(R) {
   const card = $('cardBiAssim');
   if (R.modo_prot !== 'bi_assim') { card.style.display = 'none'; return; }
@@ -2701,174 +3154,95 @@ function renderBiAssim(R) {
   const nf = R.faixas_X.length;
   let kpisFaixas = '';
   R.faixas_X.forEach((fx) => {
-    kpisFaixas += kpi(`Faixa ${fx.label}`, `${fx.n} cabos · ${fx.banda.toFixed(2)} m · e=${(fx.e*1000).toFixed(0)} mm`);
-    kpisFaixas += kpi(`σcp ${fx.label}`, fx.sigma_cp.toFixed(2) + ' MPa', fx.sigma_cp >= 1.0 ? 'ok' : 'wn');
+    kpisFaixas += kpi(`Faixa ${fx.label}`, `${fx.n} cabos · e=${(fx.e*1000).toFixed(0)} mm`);
   });
-  $('resBiAssim').innerHTML =
-    kpisFaixas +
-    kpi('Nº faixas X', nf) +
-    kpi('Nº cabos X', R.nCabos_X) +
-    kpi('Nº cabos Y', R.nCabos_Y) +
-    kpi('Pi_X', R.Pi_X.toFixed(1) + ' kN') +
-    kpi('Pi_Y', R.Pi_Y.toFixed(1) + ' kN') +
-    kpi('P ef X', R.P_efetiva_X.toFixed(1) + ' kN') +
-    kpi('P ef Y', R.P_efetiva_Y.toFixed(1) + ' kN') +
-    kpi('Mprot_X', R.Mprot_X.toFixed(2) + ' kN·m/m') +
-    kpi('Mprot_Y', R.Mprot_Y.toFixed(2) + ' kN·m/m');
-  $('memBiAssim').textContent = `Modo bi_assim — ${nf} faixas em X · ${R.nCabos_Y} cabos em Y`;
+  $('resBiAssim').innerHTML = kpisFaixas +
+    kpi('Nº faixas', nf) + kpi('Cabos X', R.nCabos_X) + kpi('Cabos Y', R.nCabos_Y) +
+    kpi('Pi_X', R.Pi_X.toFixed(1)) + kpi('Pi_Y', R.Pi_Y.toFixed(1));
+  $('memBiAssim').textContent = `Modo bi_assim — ${nf} faixas em X`;
 }
-
 function gerarMemoria(R) {
-  const Lm = [];
-  const P = s => Lm.push(s);
-  P('MEMÓRIA — APAVAN v17.3');
-  P('Bugs #1/#2 corrigidos · Vigas-faixa · ELS-D · Protensão VF · Balanceamento dinâmico + Aplicar cabos · Corte com cotas e áreas');
-  P('='.repeat(72));
+  const Lm = []; const P = s => Lm.push(s);
+  P('MEMÓRIA — APAVAN v18.4.1'); P('='.repeat(72));
   P(`Projeto: ${$('p_nome').value}`);
-  P(`Modo laje: ${R.modo_prot}`);
   P(`Lx = ${R.Lx.toFixed(2)} m · Ly = ${R.Ly.toFixed(2)} m · h = ${R.h.toFixed(3)} m`);
-  P(`fck = ${R.fck} MPa · Ecs = ${R.Ecm.toFixed(0)} MPa`);
-  P(`p = ${R.p.toFixed(2)} kN/m² · Mx = ${R.Mx.toFixed(2)} kN·m/m`);
+  P(`fck = ${R.fck} MPa · Ep = ${(R.Ep/1000).toFixed(0)} GPa`);
   P('');
-  P('ÁREAS DE AÇO ATIVO:');
-  const Ap_X_mm2 = R.modo_prot === 'bi_assim' ? R.faixas_X.reduce((s,fx)=>s+fx.Ap,0) : R.Ap_total;
-  const Ap_Y_mm2 = R.modo_prot === 'bi_assim' ? R.nCabos_Y * R.Ap_cabo : 0;
-  P(`  Direção X: ${R.modo_prot === 'bi_assim' ? R.nCabos_X : R.nCabos} cabos · Ap = ${Ap_X_mm2.toFixed(0)} mm² = ${(Ap_X_mm2/100).toFixed(2)} cm²`);
-  P(`  Direção Y: ${R.modo_prot === 'bi_assim' ? R.nCabos_Y : 0} cabos · Ap = ${Ap_Y_mm2.toFixed(0)} mm² = ${(Ap_Y_mm2/100).toFixed(2)} cm²`);
-  P(`  TOTAL: ${R.nCabos} cabos · Ap = ${R.Ap_total.toFixed(0)} mm² = ${(R.Ap_total/100).toFixed(2)} cm²`);
+  P(`h sugerido = ${(R.h_final*100).toFixed(1)} cm · atual = ${(R.h*100).toFixed(1)} cm`);
+  P(`VF: ${R.vf_classificacao}`);
   P('');
-  P('TRAJETÓRIA DO CABO (laje):');
-  P(`  d_inf meio = ${(R.dinf*1000).toFixed(0)} mm · e_meio = ${(R.e_meio*1000).toFixed(0)} mm`);
-  P(`  d_sup apoio = ${(R.dsup*1000).toFixed(0)} mm`);
-  P('');
-  P('DESCOMPRESSÃO DA LAJE (ELS-D):');
-  P(`  ψ₁ = ${R.psi1.toFixed(2)} · p_freq = ${R.p_freq.toFixed(2)} kN/m²`);
-  P(`  σ_inf_freq = ${R.sigma_inf_freq.toFixed(3)} MPa → ${R.ok_descomp_inf ? 'OK' : 'NÃO'}`);
-  P(`  σ_sup_freq = ${R.sigma_sup_freq.toFixed(3)} MPa → ${R.ok_descomp_sup ? 'OK' : 'NÃO'}`);
-  P('');
-  if (R.vf && R.vf.ativa) {
-    P('VIGAS-FAIXA:');
-    P(`  Direção: ${R.vf.direcao.toUpperCase()} · vão = ${R.vf.Lvao.toFixed(2)} m`);
-    P(`  Nº = ${R.vf.n} · bf = ${R.vf.bf.toFixed(2)} m · hvf = ${R.vf.hvf.toFixed(2)} m`);
-    if (R.vf.prot && R.vf.prot.ativa) {
-      P(`  PROTENSÃO CONCENTRADA: ${R.vf.prot.nCabos} cabos × ${R.vf.prot.nCord} cord.`);
-      P(`  P_ef = ${R.vf.prot.P_ef.toFixed(1)} kN · e = ${(R.vf.prot.e*1000).toFixed(0)} mm · w_bal = ${R.vf.prot.w_bal.toFixed(2)} kN/m`);
-      P(`  Ap total VFs = ${(R.vf.prot.Ap_total * R.vf.n).toFixed(0)} mm² = ${(R.vf.prot.Ap_total * R.vf.n / 100).toFixed(2)} cm²`);
-    }
-    R.vf.vigas.forEach(v => {
-      P(`  VF${v.index} (y=${v.y.toFixed(2)}m): w=${v.w_carga.toFixed(2)} (w_bal=${v.w_bal.toFixed(2)}) · M=${v.M_carga.toFixed(2)} → M_net=${v.M_net.toFixed(2)} kN·m`);
-      P(`     δ=${(v.delta_tot*1000).toFixed(2)} mm · As=${v.As_req_vf_cm2.toFixed(2)} cm² · σfreq=${v.sigma_inf_vf_freq.toFixed(2)} MPa`);
-    });
-    P('');
+  P(`PERDAS: ${R.perda_total_pct.toFixed(2)} %`);
+  if (R.modo_prot === 'bi_assim' && R.perdas_detalhado) {
+    P(`  X: ${R.perdas_detalhado.perda_X_pct.toFixed(2)} % · Y: ${R.perdas_detalhado.perda_Y_pct.toFixed(2)} %`);
   }
-  if (R.modo_prot === 'bi_assim') {
-    R.faixas_X.forEach(fx => {
-      P(`  ${fx.label}: ${fx.n} cabos · banda ${fx.banda.toFixed(2)} m · e=${fx.e.toFixed(3)} m · σcp=${fx.sigma_cp.toFixed(2)} MPa`);
-    });
-  }
-  P(`P efetiva laje = ${R.P_efetiva.toFixed(1)} kN (perda ${R.perda_total_pct.toFixed(1)}%)`);
-  P(`δ total laje = ${(R.del_total*1000).toFixed(2)} mm · δlim = ${(R.del_lim*1000).toFixed(2)} mm`);
+  P('');
+  P(`Ap total = ${(R.Ap_total/100).toFixed(2)} cm²`);
+  P(`P efetiva = ${R.P_efetiva.toFixed(1)} kN`);
+  P(`δ total = ${(R.del_total*1000).toFixed(2)} mm`);
+  P('');
+  P('TENSÕES VAZIO:');
+  P(`  σ_sup = ${R.sigma_V_sup.toFixed(2)} · σ_inf = ${R.sigma_V_inf.toFixed(2)} MPa`);
+  P('TENSÕES SERVIÇO:');
+  P(`  σ_sup = ${R.sigma_S_sup.toFixed(2)} · σ_inf = ${R.sigma_S_inf.toFixed(2)} MPa`);
   return Lm.join('\n');
 }
-
 function renderAlongamento(R) {
   $('resAlongamento').innerHTML =
-    kpi('Pi (ativa)', R.P_inicio_along.toFixed(1) + ' kN') +
-    kpi('P médio', R.P_medio_along.toFixed(1) + ' kN') +
-    kpi('ΔL teórico', R.deltaL_cabo_mm.toFixed(1) + ' mm') +
-    kpi('ε específica', R.deltaL_mm_m.toFixed(2) + ' mm/m') +
-    kpi('Faixa admissível', R.deltaL_min.toFixed(1) + ' a ' + R.deltaL_max.toFixed(1) + ' mm');
-  $('memAlongamento').textContent = `ΔL = ${R.deltaL_cabo_mm.toFixed(2)} mm (faixa ${R.deltaL_min.toFixed(1)}–${R.deltaL_max.toFixed(1)} mm)`;
+    kpi('Pi', R.P_inicio_along.toFixed(1)) + kpi('P médio', R.P_medio_along.toFixed(1)) +
+    kpi('ΔL', R.deltaL_cabo_mm.toFixed(1) + ' mm') + kpi('ε', R.deltaL_mm_m.toFixed(2)) +
+    kpi('Faixa', R.deltaL_min.toFixed(1) + ' a ' + R.deltaL_max.toFixed(1));
+  $('memAlongamento').textContent = `ΔL = ${R.deltaL_cabo_mm.toFixed(2)} mm`;
 }
-
 function renderFaixas(R) {
   const fext = 0.25 * R.L_ef, fint = 0.50 * R.L_ef;
   const mneg = 1.4 * R.Mx, mpos = 1.4 * R.Mx;
-  $('resFaixas').innerHTML =
-    kpi('Faixa ext (m)', fext.toFixed(2)) +
-    kpi('Faixa int (m)', fint.toFixed(2)) +
-    kpi('mNeg ext', (0.375*mneg/fext).toFixed(2)) +
-    kpi('mNeg int', (0.250*mneg/fint).toFixed(2)) +
-    kpi('mPos ext', (0.275*mpos/fext).toFixed(2)) +
-    kpi('mPos int', (0.450*mpos/fint).toFixed(2));
-  $('memFaixas').textContent = `Faixa ext = ${fext.toFixed(2)} m · Faixa int = ${fint.toFixed(2)} m`;
+  $('resFaixas').innerHTML = kpi('Faixa ext', fext.toFixed(2)) + kpi('Faixa int', fint.toFixed(2)) +
+    kpi('mNeg ext', (0.375*mneg/fext).toFixed(2)) + kpi('mNeg int', (0.250*mneg/fint).toFixed(2)) +
+    kpi('mPos ext', (0.275*mpos/fext).toFixed(2)) + kpi('mPos int', (0.450*mpos/fint).toFixed(2));
 }
-
 function dimensionarCabos(R) {
-  const fyd = 500 / 1.15;
-  const d = R.h - R.cob - 0.01;
-  const z = 0.9 * d;
-  const Md = 1.4 * R.Mx;
-  const As_total_cm2_m = Md * 1e6 / (fyd * z * 1000) / 100;
+  const fyd = 500/1.15, d = R.h - R.cob - 0.01, z = 0.9 * d, Md = 1.4 * R.Mx;
+  const As_total_cm2_m = Md*1e6/(fyd*z*1000)/100;
   const As_min_cm2_m = 0.0015 * (100 * R.h * 100);
   const As_def_cm2_m = Math.max(0, As_total_cm2_m - As_min_cm2_m);
-  const A_cord_cm2 = R.Ap_cord / 100;
-  const A_cabo_geom_cm2 = A_cord_cm2 * R.nCord;
+  const A_cabo_geom_cm2 = (R.Ap_cord / 100) * R.nCord;
   const F_cabo_kN = R.nCabos > 0 ? R.P_efetiva / R.nCabos : 0;
-  const sigma_efetiva_MPa = (A_cabo_geom_cm2 > 0) ? F_cabo_kN * 1000 / (A_cabo_geom_cm2 * 100) : 0;
+  const sigma_efetiva_MPa = A_cabo_geom_cm2 > 0 ? F_cabo_kN * 1000 / (A_cabo_geom_cm2 * 100) : 0;
   const A_cabo_eq_CA50_cm2 = sigma_efetiva_MPa > 0 ? sigma_efetiva_MPa * A_cabo_geom_cm2 / fyd : A_cabo_geom_cm2;
   const n_ideal = A_cabo_eq_CA50_cm2 > 0 ? (As_def_cm2_m * R.L_ef) / A_cabo_eq_CA50_cm2 : 0;
-  const n_adot = Math.ceil(n_ideal);
-  return { Md, sigma_efetiva_MPa, A_cabo_geom_cm2, A_cabo_eq_CA50_cm2, n_ideal, n_adot };
+  return { Md, sigma_efetiva_MPa, n_adot: Math.ceil(n_ideal) };
 }
-
 function renderDim(R) {
   const D = dimensionarCabos(R);
-  $('resDim').innerHTML =
-    kpi('Md', D.Md.toFixed(2) + ' kN·m/m') +
-    kpi('σ efetiva', D.sigma_efetiva_MPa.toFixed(0) + ' MPa') +
-    kpi('A_eq CA-50', D.A_cabo_eq_CA50_cm2.toFixed(2) + ' cm²') +
-    kpi('Nº sugerido', D.n_adot) +
-    kpi('Nº sugerido (σcp 2)', R.n_sugerido_cp) +
-    kpi('Nº atual', R.nCabos);
-  $('memDim').textContent = `Nº sugerido = ${D.n_adot} · σcp alvo = ${R.n_sugerido_cp}`;
+  $('resDim').innerHTML = kpi('Md', D.Md.toFixed(2) + ' kN·m/m') + kpi('σ efetiva', D.sigma_efetiva_MPa.toFixed(0) + ' MPa') +
+    kpi('Nº sugerido', D.n_adot) + kpi('Nº atual', R.nCabos) + kpi('σcp alvo', R.n_sugerido_cp);
 }
-
 function renderPassivaNBR(R) {
-  const fyd = 500 / 1.15;
-  const d = R.h - R.cob - 0.01;
-  const z = 0.9 * d;
-  const Md = 1.4 * R.Mx;
+  const fyd = 500/1.15, d = R.h - R.cob - 0.01, z = 0.9*d, Md = 1.4 * R.Mx;
   const P_por_m = R.modo_prot === 'bi_assim' ? R.Np_X : R.P_efetiva / R.L_transv;
   const M_pret = P_por_m * (R.modo_prot === 'bi_assim' ? R.e_X : R.e_meio);
   const M_resid = Math.max(0, Md - M_pret);
-  const As_flex_cm2_m = M_resid * 1e6 / (fyd * z * 1000) / 100;
-  const h_cm = R.h * 100;
-  const Ac_cm2_m = 100 * h_cm;
+  const As_flex_cm2_m = M_resid*1e6/(fyd*z*1000)/100;
+  const h_cm = R.h*100, Ac_cm2_m = 100*h_cm;
   const rho_min_pct = R.fck <= 30 ? 0.150 : R.fck <= 35 ? 0.164 : 0.179;
   const rho_p = (h_cm/12) * (R.Ap_cord/100);
-  const As_min_NBR = Math.max(0, (rho_min_pct/100) * Ac_cm2_m - 0.5 * rho_p);
+  const As_min_NBR = Math.max(0, (rho_min_pct/100)*Ac_cm2_m - 0.5*rho_p);
   const As_pass_req = Math.max(As_flex_cm2_m, As_min_NBR);
-  const As_adot_cm2_m = R.As_adot_pos / 100;
+  const As_adot_cm2_m = R.As_adot_pos/100;
   const atende = As_adot_cm2_m >= As_pass_req;
-  $('resPassivaNBR').innerHTML =
-    kpi('Md', Md.toFixed(2) + ' kN·m/m') +
-    kpi('M protensão', M_pret.toFixed(2) + ' kN·m/m') +
-    kpi('M residual', M_resid.toFixed(2) + ' kN·m/m') +
-    kpi('As,flexão', As_flex_cm2_m.toFixed(2) + ' cm²/m') +
-    kpi('As,mín NBR', As_min_NBR.toFixed(2) + ' cm²/m') +
-    kpi('As requerido', As_pass_req.toFixed(2) + ' cm²/m') +
-    kpi('As adotado', As_adot_cm2_m.toFixed(2) + ' cm²/m', atende ? 'ok' : 'er');
-  $('memPassivaNBR').textContent = `As requerido = ${As_pass_req.toFixed(2)} cm²/m`;
+  $('resPassivaNBR').innerHTML = kpi('Md', Md.toFixed(2)) + kpi('M prot', M_pret.toFixed(2)) + kpi('M resid', M_resid.toFixed(2)) +
+    kpi('As,flexão', As_flex_cm2_m.toFixed(2)) + kpi('As,mín NBR', As_min_NBR.toFixed(2)) +
+    kpi('As requerido', As_pass_req.toFixed(2)) + kpi('As adotado', As_adot_cm2_m.toFixed(2), atende ? 'ok' : 'er');
 }
-
 function renderVerifNBR(R) {
   const n_cabos = R.modo_prot === 'bi_assim' ? R.nCabos_X : R.nCabos;
-  const Ly_faixa_m = R.modo_prot === 'bi_assim' ? R.banda_X / Math.max(1, n_cabos) : (n_cabos > 0 ? R.L_transv / n_cabos : R.L_transv);
-  const P_cabo_kN = n_cabos > 0 ? (R.modo_prot === 'bi_assim' ? R.P_efetiva_X / n_cabos : R.P_efetiva / n_cabos) : 0;
+  const Ly_faixa_m = R.modo_prot === 'bi_assim' ? R.banda_X/Math.max(1,n_cabos) : (n_cabos>0 ? R.L_transv/n_cabos : R.L_transv);
+  const P_cabo_kN = n_cabos > 0 ? (R.modo_prot === 'bi_assim' ? R.P_efetiva_X/n_cabos : R.P_efetiva/n_cabos) : 0;
   const e_uso = R.modo_prot === 'bi_assim' ? R.e_X : R.e_meio;
-  const omega = 8 * P_cabo_kN * e_uso / (R.L_ef * R.L_ef);
-  const omega_m2 = Ly_faixa_m > 0 ? omega / Ly_faixa_m : 0;
-  const ratio = R.pp > 0 ? omega_m2 / R.pp : 0;
+  const omega_m2 = Ly_faixa_m > 0 ? (8 * P_cabo_kN * e_uso / (R.L_ef*R.L_ef)) / Ly_faixa_m : 0;
   const ok_bal = omega_m2 >= R.pp;
-  $('resVerifNBR').innerHTML =
-    kpi('Faixa/cabo (m)', Ly_faixa_m.toFixed(2)) +
-    kpi('P/cabo (kN)', P_cabo_kN.toFixed(1)) +
-    kpi('ω_bal', omega_m2.toFixed(2) + ' kN/m²') +
-    kpi('pp', R.pp.toFixed(2) + ' kN/m²') +
-    kpi('ω/pp', ratio.toFixed(2), ok_bal ? 'ok' : 'er') +
-    kpi('Status', ok_bal ? '🟢 OK' : '🔴 insuficiente', ok_bal ? 'ok' : 'er');
-  $('memVerifNBR').textContent = `ω = ${omega_m2.toFixed(2)} kN/m² · pp = ${R.pp.toFixed(2)} · ω/pp = ${ratio.toFixed(2)}`;
+  $('resVerifNBR').innerHTML = kpi('ω_bal', omega_m2.toFixed(2)) + kpi('pp', R.pp.toFixed(2)) +
+    kpi('ω/pp', (omega_m2/R.pp).toFixed(2), ok_bal ? 'ok' : 'er');
 }
 
 /* ==================== UPDATE ==================== */
@@ -2884,6 +3258,11 @@ function atualizar() {
     renderVerifNBR(R);
     renderFaixas(R);
     renderAlongamento(R);
+    renderVaoVencer(R);
+    renderVFSugestao(R);
+    renderAncoragem(R);
+    renderPPVF(R);
+    renderOtim(R);
     drawEsf(R, $('selEsf').value);
     drawMapa(R, $('selMapa').value);
     drawPerdas(R);
@@ -2892,8 +3271,14 @@ function atualizar() {
     drawBal(R);
     drawFlecha(R);
     drawTensao(R);
+    drawTensaoDetalhada(R);
     drawCorte(R);
+    drawCaboVF(R);
     draw3D(R);
+    const viewAtiva = document.querySelector('.view.active');
+    if (viewAtiva && viewAtiva.id === 'v-grelha') {
+      try { renderGrelha(R); } catch (e) { console.error('Grelha:', e); }
+    }
   } catch (e) { console.error('Erro:', e); }
 }
 
@@ -2925,6 +3310,15 @@ $('chk_convCompPos').addEventListener('change', (e) => {
   if (lastR) { renderResumo(lastR); drawTensao(lastR); }
 });
 
+/* Tooltip listeners */
+(function initGrelhaTooltip(){
+  const cv = $('cvGrelha');
+  if (!cv) return;
+  cv.addEventListener('mousemove', onGrelhaMouseMove);
+  cv.addEventListener('mouseleave', onGrelhaMouseLeave);
+  cv.style.cursor = 'crosshair';
+})();
+
 let dragging = false, lastX = 0, lastY = 0;
 const cv3d = $('cv3d');
 cv3d.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
@@ -2941,27 +3335,11 @@ cv3d.addEventListener('wheel', e => {
   cam.zoom = Math.max(0.25, Math.min(6.0, cam.zoom * (e.deltaY > 0 ? 0.92 : 1.08)));
   if (lastR) draw3D(lastR);
 }, { passive: false });
-cv3d.addEventListener('dblclick', () => {
-  cam.yaw = -0.6; cam.pitch = 0.9; cam.zoom = 1.0;
-  if (lastR) draw3D(lastR);
-});
-cv3d.addEventListener('touchstart', e => {
-  if (e.touches.length === 1) { dragging = true; lastX = e.touches[0].clientX; lastY = e.touches[0].clientY; }
-});
-cv3d.addEventListener('touchmove', e => {
-  if (!dragging || !lastR || e.touches.length !== 1) return;
-  e.preventDefault();
-  cam.yaw += (e.touches[0].clientX - lastX) * 0.01;
-  cam.pitch = Math.max(0.1, Math.min(1.5, cam.pitch + (e.touches[0].clientY - lastY) * 0.01));
-  lastX = e.touches[0].clientX; lastY = e.touches[0].clientY;
-  draw3D(lastR);
-}, { passive: false });
-cv3d.addEventListener('touchend', () => dragging = false);
-
+cv3d.addEventListener('dblclick', () => { cam.yaw = -0.6; cam.pitch = 0.9; cam.zoom = 1.0; if (lastR) draw3D(lastR); });
 $('v_persp').onclick = () => { cam.yaw = -0.6; cam.pitch = 0.9; cam.zoom = 1.0; lastR && draw3D(lastR); };
-$('v_sup').onclick   = () => { cam.yaw = 0;    cam.pitch = 1.5; cam.zoom = 1.0; lastR && draw3D(lastR); };
-$('v_front').onclick = () => { cam.yaw = 0;    cam.pitch = 0.15; cam.zoom = 1.0; lastR && draw3D(lastR); };
-$('v_lat').onclick   = () => { cam.yaw = Math.PI / 2; cam.pitch = 0.15; cam.zoom = 1.0; lastR && draw3D(lastR); };
+$('v_sup').onclick   = () => { cam.yaw = 0; cam.pitch = 1.5; cam.zoom = 1.0; lastR && draw3D(lastR); };
+$('v_front').onclick = () => { cam.yaw = 0; cam.pitch = 0.15; cam.zoom = 1.0; lastR && draw3D(lastR); };
+$('v_lat').onclick   = () => { cam.yaw = Math.PI/2; cam.pitch = 0.15; cam.zoom = 1.0; lastR && draw3D(lastR); };
 $('v_fit').onclick   = () => { cam.zoom = 1.0; lastR && draw3D(lastR); };
 
 function loop() {
@@ -2983,60 +3361,76 @@ $('btnSpeed').addEventListener('click', () => {
   $('btnSpeed').textContent = '⚡' + simSpeed + 'x';
 });
 $('v_escala').addEventListener('change', () => lastR && draw3D(lastR));
-$('bal_frac').addEventListener('change', () => { atualizar(); });
-$('bal_tipo').addEventListener('change', () => { atualizar(); });
+$('bal_frac').addEventListener('change', atualizar);
+$('bal_tipo').addEventListener('change', atualizar);
 $('bal_modo').addEventListener('change', () => { if (window.lastR) drawBal(window.lastR); });
+
+$('btnAplicarH').addEventListener('click', () => {
+  if (!lastR) { alert('Simule primeiro.'); return; }
+  $('g_h').value = lastR.h_final.toFixed(3);
+  atualizar();
+});
+$('btnSugerirVF').addEventListener('click', () => {
+  if (!lastR) { alert('Simule primeiro.'); return; }
+  const S = sugerirPosicoesVF(lastR);
+  if (!S.aplicavel || S.n_vf_ideal === 0) { alert(S.msg || 'Nada a sugerir.'); return; }
+  $('vf_n').value = S.n_vf_ideal;
+  for (let i = 1; i <= 5; i++) {
+    const el = $('vf_y' + i);
+    if (el && el.parentElement) el.parentElement.style.display = (i <= S.n_vf_ideal) ? 'block' : 'none';
+  }
+  S.posicoes.forEach((pos, i) => {
+    const el = $('vf_y' + (i + 1));
+    if (el) el.value = pos.toFixed(2);
+  });
+  atualizar();
+});
+$('btnOtimizar').addEventListener('click', () => {
+  if (!lastR) { alert('Simule primeiro.'); return; }
+  const otimo = otimizarPorCusto(lastR);
+  if (!otimo) { alert('Nenhuma configuração atende L/350.'); return; }
+  $('vf_n').value = otimo.nVF || 1;
+  for (let i = 1; i <= 5; i++) {
+    const el = $('vf_y' + i);
+    if (el && el.parentElement) el.parentElement.style.display = (i <= (otimo.nVF || 1)) ? 'block' : 'none';
+  }
+  otimo.posicoes.forEach((pos, i) => {
+    const el = $('vf_y' + (i + 1));
+    if (el) el.value = pos.toFixed(2);
+  });
+  atualizar();
+});
 $('btnAplicarCabos').addEventListener('click', () => {
   if (!lastR) return;
   if (lastR.modo_prot === 'bi_assim') {
     $('pr_ncabos_X1').value = Math.ceil(lastR.n_sugerido_cp * 0.2);
     $('pr_ncabos_X2').value = Math.ceil(lastR.n_sugerido_cp * 0.2);
     $('pr_ncabos_Y').value = Math.ceil(lastR.n_sugerido_cp * 0.6);
-  } else {
-    $('pr_ncabos').value = lastR.n_sugerido_cp;
-  }
+  } else $('pr_ncabos').value = lastR.n_sugerido_cp;
   atualizar();
   alert('Cabos atualizados.');
 });
-
 $('btnAplicarBal').addEventListener('click', () => {
   if (!window.lastBal || !lastR) { alert('Simule primeiro.'); return; }
   const bal = window.lastBal;
   const modo = $('bal_modo').value;
   const nReq = bal.n_cabos_req;
-  const vfAtiva = $('vf_ativa').checked;
-  const vfProtAtiva = $('vf_prot_ativa').checked;
+  const aplicarLaje = (modo === 'laje') || (modo === 'auto' && !$('vf_ativa').checked);
+  const aplicarVF = (modo === 'vf') || (modo === 'auto' && $('vf_ativa').checked && $('vf_prot_ativa').checked);
   let aplicado = '';
-  let aplicouLaje = false, aplicouVF = false;
-  const aplicarLaje = (modo === 'laje') || (modo === 'auto' && !vfAtiva);
-  const aplicarVF   = (modo === 'vf')   || (modo === 'auto' && vfAtiva && vfProtAtiva);
-  if (aplicarLaje) {
-    $('pr_ncabos').value = nReq;
-    aplicouLaje = true;
-    aplicado += `laje (${nReq} cabos)`;
-  }
+  if (aplicarLaje) { $('pr_ncabos').value = nReq; aplicado += `laje(${nReq})`; }
   if (aplicarVF) {
-    const nVF = Math.max(1, Math.min(5, parseInt($('vf_n').value) || 2));
-    const e_vf = $n('vf_e');
-    const e_laje = lastR.e_meio;
-    const fator_efic = Math.max(0.15, e_laje / Math.max(0.001, e_vf));
-    const nReqVF = Math.max(1, Math.ceil(nReq * fator_efic));
-    const porVF_ef = Math.ceil(nReqVF / nVF);
-    $('vf_ncabos').value = porVF_ef;
-    aplicouVF = true;
-    aplicado += `${aplicado ? ' + ' : ''}vigas-faixa (${porVF_ef} cabos × ${nVF} VFs = ${porVF_ef * nVF} cabos)`;
+    const nVF = Math.max(1, parseInt($('vf_n').value) || 2);
+    const fator = Math.max(0.15, lastR.e_meio / Math.max(0.001, $n('vf_e')));
+    const porVF = Math.ceil(Math.ceil(nReq * fator) / nVF);
+    $('vf_ncabos').value = porVF;
+    aplicado += ` VFs(${porVF}×${nVF})`;
   }
-  if (!aplicouLaje && !aplicouVF) {
-    alert('Nada a aplicar — verifique o modo selecionado ou ative as vigas-faixa.');
-    return;
-  }
+  if (!aplicado) { alert('Nada a aplicar.'); return; }
   atualizar();
-  const status = $('balStatus');
-  status.innerHTML = `✅ Aplicado em: <b>${aplicado}</b>`;
-  status.style.color = 'var(--ok)';
-  console.log('[v17.3] Aplicar cabos:', { nReq, modo, aplicouLaje, aplicouVF });
+  const st = $('balStatus');
+  if (st) { st.innerHTML = `✅ Aplicado: <b>${aplicado}</b>`; st.style.color = 'var(--ok)'; }
 });
-
 $('btnTheme').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme');
   const nw = cur === 'dark' ? 'light' : 'dark';
@@ -3048,29 +3442,20 @@ $('btnPrint').addEventListener('click', () => window.print());
 $('btnExemplo').addEventListener('click', () => {
   $('g_tipo').value = 'macia'; $('g_dir').value = 'bi'; $('g_uso').value = 'piso';
   $('g_Lx').value = 8; $('g_Ly').value = 6; $('g_h').value = 0.20;
-  $('pr_modo').value = 'uni';
-  $('pr_ncabos').value = 8; $('pr_ncord').value = 4;
-  $('c_q').value = 3.0; $('m_idade').value = 7;
-  $('vf_ativa').checked = true;
-  $('vf_n').value = 2;
-  $('vf_b').value = 1.20;
-  $('vf_h').value = 0.35;
-  $('vf_dir').value = 'x';
-  $('vf_y1').value = 2.00;
-  $('vf_y2').value = 4.00;
-  $('vf_prot_ativa').checked = true;
-  $('vf_ncabos').value = 2;
-  $('vf_ncord').value = 7;
-  $('vf_e').value = 0.12;
-  $('vf_d').value = 0.05;
-  $('bal_frac').value = '0.8';
-  $('bal_tipo').value = 'pp';
-  $('bal_modo').value = 'auto';
+  $('pr_modo').value = 'bi_assim';
+  $('c_q').value = 3.0; $('m_idade').value = 7; $('pr_slip').value = 4;
+  $('vf_ativa').checked = true; $('vf_n').value = 2; $('vf_b').value = 1.00; $('vf_h').value = 0.20;
+  $('vf_embutida').checked = true; $('vf_dir').value = 'x';
+  $('vf_y1').value = 2.00; $('vf_y2').value = 4.00;
+  $('vf_prot_ativa').checked = true; $('vf_ncabos').value = 2; $('vf_ncord').value = 7;
+  $('vf_diam').value = '12.7'; $('vf_anc_tipo').value = 'auto';
+  $('vf_d_inf').value = 0.07; $('vf_d_sup').value = 0.05;
+  $('vv_vao').value = 8; $('vv_tipo').value = 'biapoiada'; $('vv_sis').value = 'maciça_prot';
+  $('bal_frac').value = '0.8'; $('bal_tipo').value = 'pp'; $('bal_modo').value = 'auto';
   $('blocoNervurada').classList.add('bloco-oculto');
-  $('blocoProtBiAssim').classList.add('bloco-oculto');
-  $('blocoProtUni').classList.remove('bloco-oculto');
-  $('blocoVF').style.display = 'block';
-  $('blocoVFProt').style.display = 'block';
+  $('blocoProtBiAssim').classList.remove('bloco-oculto');
+  $('blocoProtUni').classList.add('bloco-oculto');
+  $('blocoVF').style.display = 'block'; $('blocoVFProt').style.display = 'block';
   for (let i = 1; i <= 5; i++) {
     const el = $('vf_y' + i);
     if (el && el.parentElement) el.parentElement.style.display = (i <= 2) ? 'block' : 'none';
@@ -3082,24 +3467,21 @@ $('btnSalvar').addEventListener('click', () => {
   document.querySelectorAll('.panel input, .panel select').forEach(el => {
     dados[el.id] = el.type === 'checkbox' ? el.checked : el.value;
   });
-  dados['bal_frac'] = $('bal_frac').value;
-  dados['bal_tipo'] = $('bal_tipo').value;
-  dados['bal_modo'] = $('bal_modo').value;
+  ['bal_frac','bal_tipo','bal_modo','grelha_dx'].forEach(k => { const el=$(k); if(el) dados[k]=el.value; });
   localStorage.setItem('apavan_laje', JSON.stringify(dados));
-  alert('Projeto salvo localmente.');
+  alert('Projeto salvo.');
 });
 $('btnAbrir').addEventListener('click', () => {
   const s = localStorage.getItem('apavan_laje');
-  if (!s) { alert('Nenhum projeto salvo.'); return; }
+  if (!s) { alert('Nada salvo.'); return; }
   const dados = JSON.parse(s);
   Object.keys(dados).forEach(k => {
     const el = $(k); if (!el) return;
     if (el.type === 'checkbox') el.checked = dados[k]; else el.value = dados[k];
   });
-  $('pr_modo').dispatchEvent(new Event('change'));
-  $('pr_nfaixas_X').dispatchEvent(new Event('change'));
-  $('vf_ativa').dispatchEvent(new Event('change'));
-  $('vf_n').dispatchEvent(new Event('change'));
+  ['pr_modo','pr_nfaixas_X','vf_ativa','vf_n'].forEach(id => {
+    const el = $(id); if (el) el.dispatchEvent(new Event('change'));
+  });
   atualizar();
 });
 $('btnExp').addEventListener('click', () => {
@@ -3107,10 +3489,8 @@ $('btnExp').addEventListener('click', () => {
   document.querySelectorAll('.panel input, .panel select').forEach(el => {
     dados[el.id] = el.type === 'checkbox' ? el.checked : el.value;
   });
-  dados['bal_frac'] = $('bal_frac').value;
-  dados['bal_tipo'] = $('bal_tipo').value;
-  dados['bal_modo'] = $('bal_modo').value;
-  const blob = new Blob([JSON.stringify({_apavan:17.3, dados, ts:Date.now()}, null, 2)], {type:'application/json'});
+  ['bal_frac','bal_tipo','bal_modo','grelha_dx'].forEach(k => { const el=$(k); if(el) dados[k]=el.value; });
+  const blob = new Blob([JSON.stringify({_apavan:18.41, dados, ts:Date.now()}, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = ($('p_nome').value || 'projeto') + '.prot';
@@ -3130,10 +3510,9 @@ $('btnImp').addEventListener('click', () => {
           const el = $(k); if (!el) return;
           if (el.type === 'checkbox') el.checked = dados[k]; else el.value = dados[k];
         });
-        $('pr_modo').dispatchEvent(new Event('change'));
-        $('pr_nfaixas_X').dispatchEvent(new Event('change'));
-        $('vf_ativa').dispatchEvent(new Event('change'));
-        $('vf_n').dispatchEvent(new Event('change'));
+        ['pr_modo','pr_nfaixas_X','vf_ativa','vf_n'].forEach(id => {
+          const el = $(id); if (el) el.dispatchEvent(new Event('change'));
+        });
         atualizar();
       } catch (err) { alert('Arquivo inválido.'); }
     };
