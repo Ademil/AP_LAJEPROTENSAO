@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>APAVAN — Simulador de Laje Protendida v18.5.0</title>
+<title>APAVAN — Simulador de Laje Protendida v18.5.2</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='22' fill='%233d7dff'/><text x='50' y='68' font-size='54' text-anchor='middle' fill='white' font-weight='bold' font-family='sans-serif'>AP</text></svg>">
 <style>
 :root{--bg:#0b1220;--bg2:#131c2e;--bg3:#1c2740;--fg:#e8eefc;--mut:#8fa3c4;--ac:#3d7dff;--ok:#22c55e;--wn:#f59e0b;--er:#ef4444;--bd:#243352}
@@ -42,7 +42,7 @@ input[type=checkbox]{width:auto;margin-left:6px}
 .aviso-retangular{margin-bottom:12px;padding:12px 16px;background:rgba(245,158,11,.18);border-left:4px solid var(--wn);border-radius:8px;font-size:12px;color:var(--fg);display:none}
 .aviso-retangular.show{display:block}
 .aviso-retangular b{color:var(--wn)}
-.toast{position:fixed;top:70px;right:16px;background:var(--er);color:#fff;padding:12px 18px;border-radius:8px;font-size:12px;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:400px;display:none}
+.toast{position:fixed;top:70px;right:16px;background:var(--er);color:#fff;padding:12px 18px;border-radius:8px;font-size:12px;z-index:999;box-shadow:0 4px 16px rgba(0,0,0,.3);max-width:420px;display:none}
 .toast.show{display:block}
 .toast.info{background:var(--ac)}.toast.ok{background:var(--ok)}.toast.wn{background:var(--wn)}
 .stage{min-width:0}
@@ -103,7 +103,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     <div class="logo">AP</div>
     <div>
       <div class="brand-name">APAVAN ENGENHARIA E CONSULTORIA</div>
-      <div class="brand-sub">SIMULADOR DE LAJE PROTENDIDA v18.5.0</div>
+      <div class="brand-sub">SIMULADOR DE LAJE PROTENDIDA v18.5.2</div>
     </div>
   </div>
   <div class="top-actions">
@@ -143,7 +143,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   </select></label>
 </details>
 
-<details open><summary>3.0 · Vão a vencer <span class="vv-badge">v18.5.0</span></summary>
+<details open><summary>3.0 · Vão a vencer <span class="vv-badge">v18.5.2</span></summary>
   <div class="grid2">
     <label>Vão a vencer (m)<input id="vv_vao" type="number" step="0.05" value="8.00"></label>
     <label>Tipo de apoio<select id="vv_tipo">
@@ -190,7 +190,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <label>Contorno<select id="g_cont"><option value="biapoiada" selected>Bi-apoiada</option><option value="engaste_apoio">Engastada/apoiada</option><option value="biengastada">Bi-engastada</option></select></label>
 </details>
 
-<details open><summary>3.1 · Vigas-faixa <span class="vf-badge">v18.5.0</span> <span class="anc-badge">Rudloff</span></summary>
+<details open><summary>3.1 · Vigas-faixa <span class="vf-badge">v18.5.2</span> <span class="anc-badge">Rudloff</span></summary>
   <label style="display:flex;align-items:center;gap:6px">
     <input type="checkbox" id="vf_ativa" checked> Ativar vigas-faixa
   </label>
@@ -210,7 +210,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     </label>
     <label style="display:flex;align-items:center;gap:6px;margin-top:4px">
       <input type="checkbox" id="vf_acoplar" checked>
-      <span>Acoplar rigidez das VFs ao solver de placa <span class="fix-badge">v18.5.0</span></span>
+      <span>Acoplar rigidez das VFs ao solver de placa <span class="fix-badge">v18.5.2</span></span>
     </label>
     <label style="margin-top:6px">Posições perpendiculares (m)</label>
     <div class="grid3">
@@ -238,7 +238,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
 
     <label style="display:flex;align-items:center;gap:6px;margin-top:10px;padding-top:8px;border-top:1px dashed var(--bd)">
       <input type="checkbox" id="vf_prot_ativa" checked> Protensão concentrada nas vigas-faixa
-      <span class="vf-protn">v18.5.0</span>
+      <span class="vf-protn">v18.5.2</span>
     </label>
     <div id="blocoVFProt">
       <div class="grid2">
@@ -274,7 +274,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   </div>
 </details>
 
-<details open><summary>3.2 · Otimização & Diagnóstico <span class="vv-badge">v18.5.0</span></summary>
+<details open><summary>3.2 · Otimização & Diagnóstico <span class="vv-badge">v18.5.2</span></summary>
   <div class="grid2">
     <label>Preço concreto (R$/m³)<input id="opt_pc" type="number" step="10" value="500"></label>
     <label>Preço aço CA-50 (R$/kg)<input id="opt_pa" type="number" step="0.5" value="12"></label>
@@ -311,7 +311,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
     <label>Esp. fictícia 2Ac/u (m)<input id="m_hfic" type="number" step="0.01" value="0.20"></label>
   </div>
   <label style="display:flex;align-items:center;gap:6px">
-    <input type="checkbox" id="m_auto_flu"> Calcular φ e εcs pelo Anexo A NBR 6118 <span class="fix-badge">v18.5.0</span>
+    <input type="checkbox" id="m_auto_flu"> Calcular φ e εcs pelo Anexo A NBR 6118 <span class="fix-badge">v18.5.2</span>
   </label>
 </details>
 
@@ -688,7 +688,7 @@ th{color:var(--mut);font-weight:600;font-size:11px;text-transform:uppercase}
   <div class="view" id="v-grelha">
     <div class="card">
       <div class="card-head">
-        <span>Solver de placa <span class="gr-badge">v18.5.0</span> <span class="fix-badge">Navier + FD</span> <span class="tt-badge">VF acoplada</span></span>
+        <span>Solver de placa <span class="gr-badge">v18.5.2</span> <span class="fix-badge">Navier + FD</span> <span class="tt-badge">VF acoplada</span></span>
         <div class="chips">
           <button class="chip active" id="grelha_w">Deslocamento w</button>
           <button class="chip" id="grelha_Mx">Momento Mx</button>
@@ -773,7 +773,7 @@ const $n = id => { const el = $(id); if (!el) return 0; const v = parseFloat(el.
 let convCompPos = false;
 
 /* ============================================================
-   TOAST — v18.5.0 (substitui try/catch silencioso)
+   TOAST
    ============================================================ */
 let toastTimer = null;
 function toast(msg, tipo='er', ms=5000) {
@@ -825,20 +825,21 @@ function espacMinAncoragem(nCord, diam) {
 }
 
 /* ============================================================
-   SOLVER DE PLACA v18.5.0
-   - Navier (exato, biapoiada)
-   - Diferenças finitas 13 pontos + SOR (engaste)
-   - VF acoplada: D majorado localmente
+   SOLVER DE PLACA v18.5.2
+   - Navier (exato, biapoiada) — nMax=25, malha 31×31
+   - FD 13 pontos + SOR
+   - VF acoplada via D majorado (usa .pos)
    ============================================================ */
-function navierBiapoiada(Lx, Ly, p, D, nu, nMax=80) {
+function navierBiapoiada(Lx, Ly, p, D, nu, nMax=25) {
   const a = Lx, b = Ly;
-  const coeffBase = 16 * p / (Math.PI**6 * D);
+  const coeffBase = 16 * p / (Math.PI*Math.PI*Math.PI*Math.PI*Math.PI*Math.PI * D);
   function wAt(x, y) {
     let soma = 0;
     for (let m = 1; m <= nMax; m += 2) {
       for (let n = 1; n <= nMax; n += 2) {
         const mn = m * n;
-        const denom = Math.pow(m*m/(a*a) + n*n/(b*b), 2);
+        const m2 = m*m/(a*a), n2 = n*n/(b*b);
+        const denom = (m2 + n2) * (m2 + n2);
         soma += Math.sin(m*Math.PI*x/a) * Math.sin(n*Math.PI*y/b) / (mn * denom);
       }
     }
@@ -850,8 +851,7 @@ function navierBiapoiada(Lx, Ly, p, D, nu, nMax=80) {
       for (let n = 1; n <= nMax; n += 2) {
         const mn = m * n;
         const m2 = m*m/(a*a), n2 = n*n/(b*b);
-        const denom = (m2 + n2)**2;
-        // FIX v18.5.1: extrair quadrados para variáveis evita `-(expr)**2`
+        const denom = (m2 + n2) * (m2 + n2);
         const kx2 = Math.pow(m*Math.PI/a, 2);
         const ky2 = Math.pow(n*Math.PI/b, 2);
         const sinmx = Math.sin(m*Math.PI*x/a);
@@ -869,7 +869,7 @@ function navierBiapoiada(Lx, Ly, p, D, nu, nMax=80) {
       for (let n = 1; n <= nMax; n += 2) {
         const mn = m * n;
         const m2 = m*m/(a*a), n2 = n*n/(b*b);
-        const denom = (m2 + n2)**2;
+        const denom = (m2 + n2) * (m2 + n2);
         const kx2 = Math.pow(m*Math.PI/a, 2);
         const ky2 = Math.pow(n*Math.PI/b, 2);
         const sinmx = Math.sin(m*Math.PI*x/a);
@@ -881,7 +881,7 @@ function navierBiapoiada(Lx, Ly, p, D, nu, nMax=80) {
     }
     return -D * coeffBase * soma;
   }
-  const nx = 41, ny = 41;
+  const nx = 31, ny = 31;
   const x = new Float64Array(nx), y = new Float64Array(ny);
   for (let i=0; i<nx; i++) x[i] = i*Lx/(nx-1);
   for (let j=0; j<ny; j++) y[j] = j*Ly/(ny-1);
@@ -905,9 +905,6 @@ function navierBiapoiada(Lx, Ly, p, D, nu, nMax=80) {
 }
 
 function fdPlaca(R, dx) {
-  // Solver FD 13 pontos + SOR
-  // Suporta: biapoiada, engaste_apoio (borda y=Ly engastada, resto apoiada), biengastada
-  // VF acoplada via D(x,y) majorado
   const Lx = R.Lx, Ly = R.Ly, h = R.h, p = R.p, nu = R.nu;
   const E = R.Ecm_kPa;
   const D0 = E * Math.pow(h, 3) / (12 * (1 - nu * nu));
@@ -917,44 +914,39 @@ function fdPlaca(R, dx) {
   const dx4 = dx2 * dx2;
   const contorno = R.contorno;
 
-  // Field de D(x,y) com VFs
   const D = new Float64Array(nx * ny).fill(D0);
   if (R.vf && R.vf.ativa && R.vf.acoplar) {
-  const bf = R.vf.bf;
-  const hvf = R.vf.hvf;
-  const rigFactor = Math.pow(hvf / h, 3);
-  const beta = 0.85;
-  // FIX v18.5.1: usar R.vf.pos (array de posições y) em vez de R.vf.vigas
-  // (que ainda não existe no estágio em que o solver é chamado)
-  const posicoes = R.vf.pos || [];
-  for (let i = 0; i < nx; i++) {
-    for (let j = 0; j < ny; j++) {
-      const x = i * dx, y = j * dx;
-      for (const yPos of posicoes) {
-        const dist = (R.vf.direcao === 'x')
-          ? Math.abs(y - yPos)
-          : Math.abs(x - yPos);
-        if (dist < bf / 2) {
-          const w_shape = 1 - Math.pow(dist / (bf / 2), 2);
-          D[i * ny + j] = D0 * (1 + (rigFactor - 1) * beta * w_shape);
+    const bf = R.vf.bf;
+    const hvf = R.vf.hvf;
+    const rigFactor = Math.pow(hvf / h, 3);
+    const beta = 0.85;
+    const posicoes = R.vf.pos || (R.vf.vigas ? R.vf.vigas.map(v => v.y) : []);
+    for (let i = 0; i < nx; i++) {
+      for (let j = 0; j < ny; j++) {
+        const x = i * dx, y = j * dx;
+        for (const yPos of posicoes) {
+          const dist = (R.vf.direcao === 'x')
+            ? Math.abs(y - yPos)
+            : Math.abs(x - yPos);
+          if (dist < bf / 2) {
+            const w_shape = 1 - Math.pow(dist / (bf / 2), 2);
+            D[i * ny + j] = D0 * (1 + (rigFactor - 1) * beta * w_shape);
+          }
         }
       }
     }
   }
-}
 
   const w = new Float64Array(nx * ny);
   const omega = 1.85;
   const maxIter = 15000;
   const tol = 1e-9;
 
-  // Reflexão — depende do tipo de borda
   const isEngastadaY0 = (contorno === 'biengastada');
   const isEngastadaY1 = (contorno === 'biengastada' || contorno === 'engaste_apoio');
   const isEngastadaX0 = (contorno === 'biengastada');
   const isEngastadaX1 = (contorno === 'biengastada');
 
-  // BC: w=0 nas bordas sempre. Para bordas engastadas, reflexão simétrica (dw/dn=0).
   const getw = (M, i, j) => {
     let sign = 1;
     let isSimetrico = false;
@@ -965,8 +957,6 @@ function fdPlaca(R, dx) {
     return (isSimetrico ? 1 : sign) * M[i * ny + j];
   };
 
-  // RHS = p·dx⁴/D local (não uniforme quando D varia)
-  // Usamos p uniforme, D varia
   let iter = 0, maxDiff = 0;
   for (iter = 0; iter < maxIter; iter++) {
     maxDiff = 0;
@@ -983,13 +973,11 @@ function fdPlaca(R, dx) {
         w[idx] = w[idx] + omega * (w_new - w[idx]);
       }
     }
-    // Aplicar w=0 nas bordas
     for (let i = 0; i < nx; i++) { w[i*ny + 0] = 0; w[i*ny + ny-1] = 0; }
     for (let j = 0; j < ny; j++) { w[0*ny + j] = 0; w[(nx-1)*ny + j] = 0; }
     if (maxDiff < tol) break;
   }
 
-  // Momentos — usa D local
   const Mx = new Float64Array(nx * ny);
   const My = new Float64Array(nx * ny);
   for (let i = 1; i < nx - 1; i++) {
@@ -1025,11 +1013,31 @@ function resolverPlaca(R, dx, metodo='auto') {
   else if (metodo === 'auto' && bc === 'biapoiada' && !temVF) usarNavier = true;
 
   if (usarNavier) {
-    const result = navierBiapoiada(R.Lx, R.Ly, R.p, D0, nu, 60);
+    const result = navierBiapoiada(R.Lx, R.Ly, R.p, D0, nu, 25);
     result.metodo = 'Navier';
     return result;
   }
   return fdPlaca(R, dx);
+}
+
+/* ============================================================
+   CACHE DO SOLVER — v18.5.2 (evita recálculo em cada clique)
+   ============================================================ */
+let _solverCache = { sig: '', result: null };
+function getPlacaResult(R_parcial, dx, metodo) {
+  const sig = [
+    R_parcial.Lx.toFixed(4), R_parcial.Ly.toFixed(4), R_parcial.h.toFixed(4),
+    R_parcial.p.toFixed(3), R_parcial.nu.toFixed(3), R_parcial.Ecm_kPa.toFixed(0),
+    R_parcial.contorno, dx, metodo,
+    R_parcial.vf
+      ? 'VF:' + R_parcial.vf.direcao + ':' + R_parcial.vf.pos.join(',') +
+        ':' + R_parcial.vf.bf + ':' + R_parcial.vf.hvf + ':' + R_parcial.vf.acoplar
+      : 'noVF'
+  ].join('|');
+  if (_solverCache.sig === sig && _solverCache.result) return _solverCache.result;
+  const r = resolverPlaca(R_parcial, dx, metodo);
+  _solverCache = { sig, result: r };
+  return r;
 }
 
 let grelhaResult = null;
@@ -1042,50 +1050,32 @@ let mostrarNosValores = true;
    NBR 6118 ANEXO A — Fluência e Retração
    ============================================================ */
 function calcFluenciaRetracao(R) {
-  // Fluência: φ(t∞, t0) = φa + φf + φd
-  // φa = encurtamento elástico
-  // φf = fluência rápida
-  // φd = fluência de longa duração
   const fck = R.fck;
-  const t0 = R.idade; // idade na aplicação da carga
+  const t0 = R.idade;
   const UR = $n('m_ur') || 75;
-  const hfic = $n('m_hfic') || R.h; // espessura fictícia
+  const hfic = $n('m_hfic') || R.h;
 
-  // fck → resistência característica
-  const fc = fck; // MPa
-
-  // Φa e Φf (fluência rápida e elástica)
-  const phi_a = 0.8 * (1 - fc/80);
-  const phi_f = 0.8 * (1 - fc/80);
-  // Φd (longa duração) — depende de hfic
+  const phi_a = 0.8 * (1 - fck/80);
+  const phi_f = 0.8 * (1 - fck/80);
   const h_mm = hfic * 1000;
-  const phi_1c = 4.45 - 0.035 * UR; // coeficiente base
+  const phi_1c = 4.45 - 0.035 * UR;
   const phi_2c = (function(){
-    // Tabela A.2 simplificada
     if (h_mm <= 200) return 0.42 + h_mm/1000;
     return 0.62;
   })();
 
-  // Fator de tempo
   const t_inf = 10000;
-  const beta_f = Math.pow(t_inf, 0.31) / (Math.pow(t_inf, 0.31) + Math.pow(t0, 0.31)); // aproximação
+  const beta_f = Math.pow(t_inf, 0.31) / (Math.pow(t_inf, 0.31) + Math.pow(t0, 0.31));
   const beta_d_t0 = Math.pow(100, 0.31) / (Math.pow(100, 0.31) + Math.pow(t0, 0.31));
-
-  const phi_d = phi_1c * phi_2c * (beta_f - beta_d_t0); // simplificado
-
+  const phi_d = phi_1c * phi_2c * (beta_f - beta_d_t0);
   const phi_total = phi_a + phi_f + phi_d;
 
-  // Retração
-  // εcs(t∞, t0) = εcs∞ - εcs(t0)
-  // εcs∞ = ε1s + ε2s
   const eps_1s = function(){
-    // depende de UR e fck
-    // ε1s∞ (Tabela A.6 simplificada)
     if (UR <= 40) return -1.0e-3;
     if (UR <= 75) return -0.5e-3 - (UR - 40) * 0.012e-3;
     return -0.1e-3 - (UR - 75) * 0.003e-3;
   }();
-  const eps_2s = 0.5e-3; // variação por espessura (simplificado)
+  const eps_2s = 0.5e-3;
   const eps_cs_inf = eps_1s + eps_2s;
 
   return {
@@ -1096,18 +1086,13 @@ function calcFluenciaRetracao(R) {
 }
 
 /* ============================================================
-   ELS-F e ELS-W (abertura de fissura)
+   ELS-F e ELS-W
    ============================================================ */
 function verificarELSF(R) {
-  // ELS-F: formação de fissura em concreto protendido
-  // A protensão garante σ_c,max ≥ 0 (compressão) na combinação rara
   const V = [];
-  // Tensão na fibra inferior com combinação rara (g + q) — já é sigma_inf/sigma_sup
-  // ELS-F: verifica se há tração > fctk,inf
   const sigma_rara_sup = R.sigma_sup;
   const sigma_rara_inf = R.sigma_inf;
   const fctk_inf = R.fctk_inf;
-
   V.push({
     nome: 'σ_sup (rara) ≤ fctk,inf',
     detalhe: `σ = ${sigma_rara_sup.toFixed(3)} MPa · fctk,inf = ${fctk_inf.toFixed(2)} MPa`,
@@ -1120,47 +1105,23 @@ function verificarELSF(R) {
   });
   return V;
 }
-
 function verificarELSW(R) {
-  // ELS-W: abertura de fissura w_k
-  // Fórmula NBR 6118 17.3.3.2: w_k = s_max · ε_sm / E_s
-  // s_max = φ/(4ρ) · (3 + ...) ou simplificado
   const V = [];
   const fyd = 500/1.15;
-  const Es = 210000; // MPa
-  // tensão no aço: aproximação via M_resid / (0.9d·As)
+  const Es = 210000;
   const d = R.h - R.cob - 0.01;
   const M_resid = Math.max(0, 1.4 * R.Mx - R.Np * R.e_meio);
-  const As_cm2_m = R.As_adot_pos / 100; // cm²/m
+  const As_cm2_m = R.As_adot_pos / 100;
   const As_mm2_m = As_cm2_m * 100;
-
-  // Taxa de armadura
-  const Ac_cm2_m = 100 * R.h * 100; // cm²/m
+  const Ac_cm2_m = 100 * R.h * 100;
   const rho = As_cm2_m / Ac_cm2_m;
-
-  // Tensão no aço
   const z = 0.9 * d;
-  const sigma_s = M_resid * 1e6 / (z * 1000 * As_mm2_m); // MPa (M_resid em kN·m/m, z em m, As em mm²/m)
-
-  // φ em mm
+  const sigma_s = As_mm2_m > 0 ? M_resid * 1e6 / (z * 1000 * As_mm2_m) : 0;
   const phi_mm = $n('a_phi') || 10;
-  // s_max segundo NBR 6118 17.3.3.2
-  // s_max = 3c + 0.3φ/ρ + 0.1φ/ρ · ...  (simplificado)
-  // Fórmula simplificada: s_max ≤ min(2h, 200mm) se σ_s grande
-  // Usamos: w_k = φ/(4ρ) · σ_s / E_s  (aproximação)
-  const w_k_mm = (phi_mm / (4 * rho)) * (sigma_s / Es);
-  const w_k_lim = 0.3; // mm (CAA II - protendida ELS-W)
-
-  V.push({
-    nome: 'σ_s (ELU)',
-    detalhe: `${sigma_s.toFixed(1)} MPa (fyd = ${fyd.toFixed(0)})`,
-    status: sigma_s <= fyd ? 'ok' : 'er'
-  });
-  V.push({
-    nome: 'ρ armadura',
-    detalhe: `${(rho*100).toFixed(3)} %`,
-    status: rho >= 0.0015 ? 'ok' : 'wn'
-  });
+  const w_k_mm = rho > 0 ? (phi_mm / (4 * rho)) * (sigma_s / Es) : 0;
+  const w_k_lim = 0.3;
+  V.push({ nome: 'σ_s (ELU)', detalhe: `${sigma_s.toFixed(1)} MPa (fyd = ${fyd.toFixed(0)})`, status: sigma_s <= fyd ? 'ok' : 'er' });
+  V.push({ nome: 'ρ armadura', detalhe: `${(rho*100).toFixed(3)} %`, status: rho >= 0.0015 ? 'ok' : 'wn' });
   V.push({
     nome: 'w_k estimado',
     detalhe: `${w_k_mm.toFixed(3)} mm (lim = ${w_k_lim} mm)`,
@@ -1170,7 +1131,7 @@ function verificarELSW(R) {
 }
 
 /* ============================================================
-   LEITURA DE DADOS E CÁLCULO CENTRAL
+   LEITURA DE DADOS
    ============================================================ */
 function lerDados() {
   const fck = parseFloat($('m_fck').value);
@@ -1213,7 +1174,6 @@ function lerDados() {
   const Ep = 202000;
   const alpha_p = Ep / Ecm_j;
 
-  // Anexo A automático
   let anexoA = null;
   if ($('m_auto_flu') && $('m_auto_flu').checked) {
     anexoA = calcFluenciaRetracao({ fck, idade, h });
@@ -1221,7 +1181,6 @@ function lerDados() {
     ecs = anexoA.ecs;
   }
 
-  // Peso próprio
   let pp;
   if (tipo === 'macia') pp = gc * h;
   else {
@@ -1235,19 +1194,13 @@ function lerDados() {
   const q = $n('c_q');
   const p = g + q;
 
-  // Propriedades geométricas
   let A, W_inf, W_sup, I, y_inf, y_sup, e_meio_base, e_apoio_base;
   if (tipo === 'macia') {
     A = 1 * h; I = h**3 / 12;
     y_inf = h/2; y_sup = h/2;
     W_inf = I / y_inf; W_sup = I / y_sup;
-    // CONVENÇÃO DOCUMENTADA v18.5.0:
-    //   e > 0 → cabo ABAIXO do CG (armadura ativa trabalha a favor do momento positivo)
-    //   e < 0 → cabo ACIMA do CG
-    //   e_meio (meio do vão): d_inf medido do fundo → e_meio = y_inf - d_inf > 0
-    //   e_apoio (apoio): d_sup medido do topo → e_apoio = d_sup - y_inf < 0 (cabo sobe)
     e_meio_base = y_inf - Math.max(cob, $n('pr_dinf'));
-    e_apoio_base = Math.max(cob, $n('pr_dsup')) - y_sup;   // FIX v18.5.0: sinal correto
+    e_apoio_base = Math.max(cob, $n('pr_dsup')) - y_sup;
   } else {
     const n = 1/s;
     const Aw = n * bw * (h - hf);
@@ -1284,12 +1237,6 @@ function lerDados() {
 
   const contorno = $('g_cont').value;
 
-  // === SOLVER DE PLACA (v18.5.0) ===
-  const R_parcial = {
-    Lx, Ly, h, p, nu, Ecm_kPa, contorno,
-    vf: null
-  };
-  // Pré-configura VFs para o solver (acoplamento)
   let vf_pre = null;
   if ($('vf_ativa').checked) {
     const nvf = Math.max(1, Math.min(5, parseInt($('vf_n').value) || 2));
@@ -1306,33 +1253,30 @@ function lerDados() {
       acoplar: $('vf_acoplar') && $('vf_acoplar').checked
     };
   }
-  R_parcial.vf = vf_pre;
+  const R_parcial = { Lx, Ly, h, p, nu, Ecm_kPa, contorno, vf: vf_pre };
+
   const dx_solver = parseFloat($('grelha_dx')?.value) || 0.20;
   const metodo_solver = $('grelha_metodo')?.value || 'auto';
   let placaResult = null;
   try {
-    placaResult = resolverPlaca(R_parcial, dx_solver, metodo_solver);
+    placaResult = getPlacaResult(R_parcial, dx_solver, metodo_solver);
   } catch (e) {
     console.error('Erro no solver de placa:', e);
     placaResult = null;
   }
 
-  // Momentos e cortantes (usamos solver quando disponível, senão analítico)
   let Mx, My, Vx, Vy, L_ef, dir_efetiva, metodo_calc = 'analítico';
   const coefs = {biapoiada:{m:1/8,v:1/2}, engaste_apoio:{m:1/8,v:1/2}, biengastada:{m:1/24,v:1/2}}[contorno];
 
   if (placaResult) {
-    // Do solver: Mx_max é momento máximo em qualquer ponto
     Mx = Math.abs(placaResult.Mx_max);
     My = Math.abs(placaResult.My_max);
-    // Cortantes: não calculadas diretamente, usamos analítico
     Vx = p * Lx * coefs.v * 0.6;
     Vy = p * Ly * coefs.v * 0.6;
     L_ef = Math.min(Lx, Ly);
     dir_efetiva = (ehRetangular ? 'uni_ret' : (dir === 'bi' ? 'bi' : 'uni'));
     metodo_calc = placaResult.metodo;
   } else {
-    // Fallback analítico
     if (ehRetangular) {
       dir_efetiva = 'uni_ret'; L_ef = L_menor;
       Mx = p * L_menor**2 * coefs.m; My = 0;
@@ -1353,7 +1297,6 @@ function lerDados() {
     }
   }
 
-  // Momentos para g e q separadamente (para tensões em vazio)
   const kx_g = (dir === 'bi' ? 1/(1+Math.pow(Ly/Lx,4)) : 1);
   const Mx_g = g * Lx**2 * coefs.m * kx_g * 1.2;
   const Mx_q = q * Lx**2 * coefs.m * kx_g * 1.2;
@@ -1361,7 +1304,6 @@ function lerDados() {
   const p_x = p * Ly;
   const p_y = p * Lx;
 
-  // Protensão
   let Ap_total, nCabos, sigma_pi, Pi, Ap_cabo;
   let Pi_X = 0, Pi_Y = 0, Np_X = 0, Np_Y = 0;
   let Mprot_X = 0, Mprot_Y = 0, Mprot = 0;
@@ -1416,16 +1358,13 @@ function lerDados() {
     sigma_cp_Y = Np_Y / h / 1000;
     sigma_cp_MPa = Math.min(sigma_cp_X, sigma_cp_Y);
 
-    // Relaxação — interpolação contínua NBR 7483
     const r = sigma_pi / fptk;
     const psi_1000_pct = (function(){
       if ($('pr_relx').value === 'RB') {
-        // Curva suave para RB
         if (r <= 0.5) return 0;
         if (r >= 0.8) return 3.5;
-        // Interpolação polinomial entre 0.5 e 0.8
         const t = (r - 0.5) / 0.3;
-        return 3.5 * (0.371*t*t*t - 0.786*t*t + 1.414*t); // suavizada
+        return 3.5 * (0.371*t*t*t - 0.786*t*t + 1.414*t);
       } else {
         if (r <= 0.5) return 0;
         if (r >= 0.8) return 12.0;
@@ -1533,7 +1472,6 @@ function lerDados() {
 
   const perda_total_pct = Pi > 0 ? Math.max(0, (1 - P_efetiva / Pi) * 100) : 0;
 
-  // Recalcula perdas detalhadas para modo uni
   let Patrito_meio = 0, Patrito_ponta = 0, x_inf = 0, dP_acom = 0, Ppos_acom = 0;
   let dP_elast = 0, P_imd = 0;
   let dP_relax_MPa = 0, dP_relax = 0, dP_retrac_MPa = 0, dP_retrac = 0;
@@ -1584,7 +1522,6 @@ function lerDados() {
     sigma_c_prot = sigma_cp_X;
   }
 
-  // Alongamento
   const P_inicio_along = Pi;
   const P_meio_along   = Patrito_meio;
   const P_fim_along    = Patrito_ponta;
@@ -1594,7 +1531,6 @@ function lerDados() {
   const deltaL_min     = 0.95 * deltaL_cabo_mm;
   const deltaL_max     = 1.05 * deltaL_cabo_mm;
 
-  // Tensões
   const Np_m = modo_prot === 'bi_assim' ? (Np_X + Np_Y) / 2 : P_efetiva / Math.max(0.001, L_transv);
   const sigma_inf_carga =  Mx / W_inf / 1000;
   const sigma_sup_carga = -Mx / W_sup / 1000;
@@ -1630,10 +1566,8 @@ function lerDados() {
   const ok_descompressao = ok_descomp_inf && ok_descomp_sup;
   const sigma_descomp_min = Math.min(sigma_inf_freq, sigma_sup_freq);
 
-  // Flechas — usa resultado do solver quando disponível
   let del_carga, del_prot, del_imd, del_dif, del_total, del_lim;
   if (placaResult) {
-    // Flecha do solver = elástica imediata para carga total
     del_carga = Math.abs(placaResult.w_max);
     del_prot  = -Np_m * e_meio * L_ef**2 / (8 * Ecm_kPa * I);
     del_imd   = del_carga + del_prot;
@@ -1642,12 +1576,11 @@ function lerDados() {
     del_prot  = -Np_m * e_meio * L_ef**2 / (8 * Ecm_kPa * I);
     del_imd   = del_carga + del_prot;
   }
-  del_dif   = del_imd * phi / (1 + 50 * 0); // ρ'=0 → (1+50ρ')=1
+  del_dif   = del_imd * phi / (1 + 50 * 0);
   del_total = del_imd + del_dif;
   const flim_den = parseFloat($('ap_flim').value);
   del_lim = L_ef / flim_den;
 
-  // Punção
   const pilarA = Math.max(0.1, $n('ap_a')), pilarB = Math.max(0.1, $n('ap_b'));
   const nPilares = Math.max(1, $n('ap_npilares') || 1);
   const d_util = h - cob - 0.01;
@@ -1666,7 +1599,6 @@ function lerDados() {
   const ok_puncao_C  = tau_Sd_C  < tau_Rd2;
   const ok_puncao_Cp = tau_Sd_Cp < tau_Rd1;
 
-  // Espaçamento cabos
   const e_cabos_m = L_transv / Math.max(1, nCabos);
   const lim_6h = 6 * h;
   const lim_esp = Math.min(lim_6h, 1.20);
@@ -1684,7 +1616,6 @@ function lerDados() {
   const sigma_c_serv_lim = 0.6 * fck;
   const ok_sigma_c_serv = sc_max_serv <= sigma_c_serv_lim;
 
-  // Sugestão de cabos por σcp
   const sigma_cp_alvo = 2.0;
   const perda_estimada = Math.max(0.35, 1 - perda_total_pct/100);
   const P_cabo_inicial_kN = sigma_pi * Ap_cabo / 1000;
@@ -1692,12 +1623,10 @@ function lerDados() {
   const P_ef_alvo_kN = sigma_cp_alvo * h * L_transv * 1000;
   const n_sugerido_cp = P_cabo_efetivo_kN > 0 ? Math.ceil(P_ef_alvo_kN / P_cabo_efetivo_kN) : 0;
 
-  // Frequência natural
   const m_massa = (g + 0.3*q) * 1000 / 9.81;
   const D_placa = Ecm_kPa * h**3 / (12*(1 - nu**2));
   const f1 = (Math.PI/2) * Math.sqrt(D_placa / (m_massa * L_ef**4)) * 1000;
 
-  // Armadura passiva
   const d = h - cob - 0.005;
   const Msd_kNm = 1.4 * Mx;
   const As_calc = Msd_kNm * 1e6 / (0.9 * d * 1000 * fck/1.15 * 0.8);
@@ -1715,7 +1644,6 @@ function lerDados() {
   const VRd1_cort = (tau_Rd_cort * k_cort * (1.2 + 40 * rho_L) + 0.15 * sigma_cp_cort) * 1000 * d_util;
   const Vsd_cort = 1.4 * Vx;
 
-  // VFs — CORRIGIDO v18.5.0: extraPP incluído na carga
   let vf_resultados = { ativa: false };
   if (vf_pre) {
     const nvf = vf_pre.n;
@@ -1733,7 +1661,7 @@ function lerDados() {
     }
     const trib_edge_1 = suportes[1] / 2;
     const trib_edge_2 = (Ltrans - suportes[nvf]) / 2;
-    const extraPP = hvf > h ? gc * (hvf - h) * bf : 0;   // FIX v18.5.0
+    const extraPP = hvf > h ? gc * (hvf - h) * bf : 0;
     const pp_VF_por_m = bf * hvf * gc;
     const pp_VF_total = pp_VF_por_m * Lvao;
     const pp_VF_por_m2 = hvf * gc;
@@ -1750,9 +1678,8 @@ function lerDados() {
       const anc_tipo_pref = $('vf_anc_tipo').value;
       const d_inf_vf = Math.max(0.02, Math.min(hvf - 0.02, $n('vf_d_inf')));
       const d_sup_vf = Math.max(0.02, Math.min(hvf - 0.02, $n('vf_d_sup')));
-      // CONVENÇÃO: e_vf > 0 → abaixo do CG
       const e_meio_vf  = hvf/2 - d_inf_vf;
-      const e_apoio_vf = d_sup_vf - hvf/2;   // FIX: agora consistente
+      const e_apoio_vf = d_sup_vf - hvf/2;
       if ($('vf_e')) $('vf_e').value = e_meio_vf.toFixed(4);
       if ($('vf_d')) $('vf_d').value = d_inf_vf.toFixed(4);
       if ($('vf_e_meio_txt'))  $('vf_e_meio_txt').textContent  = e_meio_vf.toFixed(4);
@@ -1806,7 +1733,7 @@ function lerDados() {
     }
     const fydCA = 500 / 1.15;
     const vigas = pos.map((y, i) => {
-      const w_carga = p * tribs[i] + extraPP + pp_VF_por_m;   // FIX: inclui PP próprio da VF
+      const w_carga = p * tribs[i] + extraPP + pp_VF_por_m;
       const w_bal = vf_prot ? vf_prot.w_bal : 0;
       const w_liq = w_carga - w_bal;
       const M_carga = w_carga * Lvao * Lvao / 8;
@@ -1853,7 +1780,6 @@ function lerDados() {
     };
   }
 
-  // Quantitativos
   const area = Lx * Ly;
   const Vc = tipo === 'macia' ? area * h : area * (hf + bw*(h-hf)/s);
   const peso_aco_pos = As_adot_pos/1e6 * area * 7850;
@@ -1863,7 +1789,6 @@ function lerDados() {
   const nAncor = nCabos * 2;
   const Vforma = 2*(Lx+Ly)*h;
 
-  // Vão a vencer
   const vv_vao  = Math.max(1, $n('vv_vao'));
   const vv_tipo = $('vv_tipo').value;
   const vv_uso  = $('vv_uso').value;
@@ -2150,7 +2075,15 @@ function renderGrelha(R) {
   try {
     const metodo = $('grelha_metodo')?.value || 'auto';
     const dx = parseFloat($('grelha_dx').value) || 0.20;
-    grelhaResult = resolverPlaca(R, dx, metodo);
+    const R_parcial = {
+      Lx: R.Lx, Ly: R.Ly, h: R.h, p: R.p, nu: R.nu,
+      Ecm_kPa: R.Ecm_kPa, contorno: R.contorno,
+      vf: R.vf && R.vf.ativa ? {
+        ativa: true, direcao: R.vf.direcao, pos: R.vf.pos,
+        bf: R.vf.bf, hvf: R.vf.hvf, acoplar: R.vf.acoplar
+      } : null
+    };
+    grelhaResult = getPlacaResult(R_parcial, dx, metodo);
     const G = grelhaResult;
     $('resGrelha').innerHTML =
       kpi('Método', G.metodo) +
@@ -2438,7 +2371,7 @@ function onGrelhaMouseLeave() {
 }
 
 /* ============================================================
-   DEMAIS CANVAS (mantidos, com pequenos ajustes)
+   DEMAIS CANVAS
    ============================================================ */
 function drawCaboGenerico(cv, R, dir, e_dir, label, corForcada) {
   if (!cv) return;
@@ -2836,39 +2769,63 @@ function drawCorte(R) {
   cv.dataset.h = '320';
   const { ctx, w, h } = setupCanvas(cv);
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0, 0, w, h);
-  const padL = 70, padR = 90, padT = 45, padB = 70;
+  const padL = 70, padR = 110, padT = 45, padB = 70;
   const secX0 = padL, secX1 = w - padR;
   const secY0 = h - padB, secY1 = padT;
   const secW = secX1 - secX0, secH = secY0 - secY1;
   const dirCabo = R.dir_cabo === 'y' ? 'y' : 'x';
   const largura_corte = dirCabo === 'x' ? R.Ly : R.Lx;
   const largura_label = dirCabo === 'x' ? 'Ly' : 'Lx';
-  const vfEmbutida = R.vf && R.vf.ativa && $('vf_embutida') && $('vf_embutida').checked;
-  const hvf_desenho = R.vf && R.vf.ativa && !vfEmbutida && R.vf.hvf > R.h ? R.vf.hvf : R.h;
-  const hMax = Math.max(R.h, hvf_desenho) * 1.30;
-  const escalaV = secH / hMax, escalaH = secW / largura_corte;
-  const Hpx = R.h * escalaV;
-  const yTopLaje = secY1 + 8;
-  const yBotLaje = yTopLaje + Hpx;
 
+  // ====== v18.5.3 FIX: geometria real da VF ======
+  const vfEmbutida = !!(R.vf && R.vf.ativa && $('vf_embutida') && $('vf_embutida').checked);
+  const hvf_real = (R.vf && R.vf.ativa) ? R.vf.hvf : R.h;
+  const projetaAbaixo = !vfEmbutida && hvf_real > R.h;
+  const projAltura = projetaAbaixo ? (hvf_real - R.h) : 0;
+  // Altura do VF a desenhar (completa se projeta, senão = laje)
+  const hvf_desenho = projetaAbaixo ? hvf_real : R.h;
+
+  // Escala vertical baseada na MAIOR altura (laje ou VF)
+  const hMax = Math.max(R.h, hvf_desenho) * 1.30;
+  const escalaV = secH / hMax;
+  const escalaH = secW / largura_corte;
+  const Hpx_slab = R.h * escalaV;
+  const Hpx_vf   = hvf_desenho * escalaV;
+
+  // Topo comum (laje e VF compartilham o topo); fundo diferente se projeta
+  const yTopLaje = secY1 + 8;
+  const yBotLaje = yTopLaje + Hpx_slab;
+  const yBotVF   = yTopLaje + Hpx_vf;
+
+  // 1) DESENHA AS VFs (com projeção abaixo, se aplicável)
   if (R.vf && R.vf.ativa) {
     R.vf.vigas.forEach((v) => {
       const y_rel = (R.vf.direcao === 'x') ? v.y / R.vf.Ltrans : v.y / R.vf.Lvao;
       const xc = secX0 + y_rel * secW;
       const bf_px = R.vf.bf * escalaH;
-      ctx.fillStyle = 'rgba(61,125,255,0.55)'; ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 1.5;
-      ctx.fillRect(xc - bf_px/2, yTopLaje, bf_px, Hpx);
-      ctx.strokeRect(xc - bf_px/2, yTopLaje, bf_px, Hpx);
+
+      // Concreto da VF — usa Hpx_vf (altura REAL da viga-faixa)
+      ctx.fillStyle = 'rgba(61,125,255,0.55)';
+      ctx.strokeStyle = '#3d7dff';
+      ctx.lineWidth = 1.5;
+      ctx.fillRect(xc - bf_px/2, yTopLaje, bf_px, Hpx_vf);
+      ctx.strokeRect(xc - bf_px/2, yTopLaje, bf_px, Hpx_vf);
+
+      // Cabos dentro da VF — d_inf medido do FUNDO da VF (não da laje)
       if (R.vf.prot && R.vf.prot.ativa && R.vf.prot.nCabos > 0) {
-        const d_inf_vf = Math.min(R.vf.prot.d_inf, R.h - 0.02);
-        const d_sup_vf = Math.min(R.vf.prot.d_sup, R.h - 0.02);
-        const y_cabo_meio  = yBotLaje - d_inf_vf * escalaV;
+        const hvf_efetivo = R.vf.hvf;
+        const d_inf_vf = Math.max(0.02, Math.min(hvf_efetivo - 0.02, R.vf.prot.d_inf));
+        const d_sup_vf = Math.max(0.02, Math.min(hvf_efetivo - 0.02, R.vf.prot.d_sup));
+        // Posição do cabo: medida a partir do FUNDO da VF
+        const y_cabo_meio  = yBotVF - d_inf_vf * escalaV;
         const y_cabo_apoio = yTopLaje + d_sup_vf * escalaV;
         const nShowVF = Math.min(R.vf.prot.nCabos, 5);
         for (let k = 0; k < nShowVF; k++) {
           const xk = xc - bf_px/2 + bf_px * ((k + 0.5) / nShowVF);
+          // Cabo no apoio (topo)
           ctx.fillStyle = '#86efac'; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8;
           ctx.beginPath(); ctx.arc(xk, y_cabo_apoio, 2.5, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
+          // Cabo no meio (fundo)
           ctx.fillStyle = '#22c55e';
           ctx.beginPath(); ctx.arc(xk, y_cabo_meio, 3, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
         }
@@ -2877,8 +2834,14 @@ function drawCorte(R) {
       ctx.fillText(`VF${v.index}`, xc, yTopLaje - 4); ctx.textAlign = 'left';
     });
   }
-  ctx.fillStyle = 'rgba(80,120,200,0.35)'; ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
-  ctx.fillRect(secX0, yTopLaje, secW, Hpx); ctx.strokeRect(secX0, yTopLaje, secW, Hpx);
+
+  // 2) DESENHA A LAJE (por cima, semitransparente para VF aparecer)
+  ctx.fillStyle = 'rgba(80,120,200,0.35)';
+  ctx.strokeStyle = '#3d7dff'; ctx.lineWidth = 2;
+  ctx.fillRect(secX0, yTopLaje, secW, Hpx_slab);
+  ctx.strokeRect(secX0, yTopLaje, secW, Hpx_slab);
+
+  // 3) Cabos da LAJE (medidos do fundo da LAJE)
   const y_cabo = yBotLaje - R.dinf * escalaV;
   const nShow = Math.min(R.nCabos, 14);
   const corCabo = R.modo_prot === 'bi_assim' ? '#f59e0b' : '#ef4444';
@@ -2887,14 +2850,50 @@ function drawCorte(R) {
     ctx.fillStyle = corCabo; ctx.strokeStyle = '#fff'; ctx.lineWidth = 0.8;
     ctx.beginPath(); ctx.arc(xc, y_cabo, 3, 0, 2*Math.PI); ctx.fill(); ctx.stroke();
   }
+
+  // 4) COTAS — altura da laje (h) e altura da VF (hvf)
   const xDimH = secX1 + 22;
   ctx.strokeStyle = '#f59e0b'; ctx.fillStyle = '#f59e0b'; ctx.lineWidth = 1; ctx.font = 'bold 10px system-ui';
   ctx.beginPath(); ctx.moveTo(xDimH, yTopLaje); ctx.lineTo(xDimH, yBotLaje); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(xDimH-4, yTopLaje); ctx.lineTo(xDimH+4, yTopLaje); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(xDimH-4, yBotLaje); ctx.lineTo(xDimH+4, yBotLaje); ctx.stroke();
   ctx.save(); ctx.translate(xDimH + 18, (yTopLaje + yBotLaje) / 2); ctx.rotate(-Math.PI/2); ctx.textAlign = 'center';
-  ctx.fillText(`h = ${(R.h*100).toFixed(1)} cm`, 0, 0); ctx.restore();
+  ctx.fillText(`h laje = ${(R.h*100).toFixed(1)} cm`, 0, 0); ctx.restore();
+
+  if (projetaAbaixo) {
+    const xDimVF = xDimH + 48;
+    ctx.strokeStyle = '#22c55e'; ctx.fillStyle = '#22c55e';
+    ctx.beginPath(); ctx.moveTo(xDimVF, yTopLaje); ctx.lineTo(xDimVF, yBotVF); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xDimVF-4, yTopLaje); ctx.lineTo(xDimVF+4, yTopLaje); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(xDimVF-4, yBotVF); ctx.lineTo(xDimVF+4, yBotVF); ctx.stroke();
+    ctx.save(); ctx.translate(xDimVF + 18, (yTopLaje + yBotVF) / 2); ctx.rotate(-Math.PI/2); ctx.textAlign = 'center';
+    ctx.fillText(`h VF = ${(hvf_real*100).toFixed(1)} cm`, 0, 0); ctx.restore();
+
+    // Linha tracejada no nível do fundo da laje (visualiza a projeção)
+    ctx.strokeStyle = 'rgba(34,197,94,0.5)';
+    ctx.setLineDash([4, 3]); ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(secX0, yBotLaje); ctx.lineTo(secX1, yBotLaje); ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Seta de projeção
+    ctx.fillStyle = 'rgba(34,197,94,0.9)';
+    const xSeta = secX0 + secW * 0.5;
+    ctx.beginPath();
+    ctx.moveTo(xSeta, yBotLaje + 2);
+    ctx.lineTo(xSeta - 4, yBotLaje + 10);
+    ctx.lineTo(xSeta + 4, yBotLaje + 10);
+    ctx.closePath(); ctx.fill();
+  }
+
+  // Legenda inferior
   ctx.textAlign = 'left'; ctx.font = '9px system-ui'; ctx.fillStyle = '#8fa3c4';
   ctx.fillText(`Cobrimento=${(R.cob*1000).toFixed(0)}mm · ${largura_corte.toFixed(2)}m (${largura_label})`, 10, h - 6);
+  if (projetaAbaixo) {
+    ctx.fillStyle = '#22c55e'; ctx.font = 'bold 9px system-ui';
+    ctx.fillText(`VF projeta ${(projAltura*100).toFixed(1)} cm abaixo da laje`, 10, h - 22);
+  }
 
+  // Tabela de cabos (mantida)
   const Ap_X_mm2 = R.modo_prot === 'bi_assim' ? R.faixas_X.reduce((s,fx)=>s+fx.Ap,0) : R.Ap_total;
   const nX = R.modo_prot === 'bi_assim' ? R.nCabos_X : R.nCabos;
   const infoHTML = `
@@ -3036,7 +3035,6 @@ function draw3D(R) {
   ctx.fillStyle = '#0a0f1c'; ctx.fillRect(0,0,w,h);
   const Lx = R.Lx, Ly = R.Ly, H = R.h;
   const cx = Lx/2, cy = Ly/2;
-  // FIX v18.5.0: escala 3D consistente (sem o +1 arbitrário)
   const diag = Math.sqrt(Lx * Lx + Ly * Ly + (H * 4) * (H * 4));
   cam.autoScale = (Math.min(w, h) / diag) * cam.zoom * 1.25;
   const escala = parseFloat($('v_escala').value) || 100;
@@ -3435,7 +3433,7 @@ function renderVigasFaixaDetalhe(R) {
         kpi('Ancoragem', prot.anc_sel ? prot.anc_sel.codigo : '—', prot.espac_ok ? 'ok' : 'er')
       : kpi('Protensão VF', 'Não ativa'));
   const L = []; const P = s => L.push(s);
-  P('VIGAS-FAIXA — v18.5.0'); P('='.repeat(72)); P('');
+  P('VIGAS-FAIXA — v18.5.2'); P('='.repeat(72)); P('');
   P(`Direção: ${vf.direcao.toUpperCase()} | Lvao = ${vf.Lvao.toFixed(2)} m`);
   P(`Nº VFs: ${vf.n} | bf = ${vf.bf.toFixed(2)} m | hvf = ${vf.hvf.toFixed(2)} m`);
   P(`Acoplamento ao solver: ${vf.acoplar ? 'SIM' : 'NÃO'}`);
@@ -3488,7 +3486,7 @@ function renderBiAssim(R) {
 }
 function gerarMemoria(R) {
   const Lm = []; const P = s => Lm.push(s);
-  P('MEMÓRIA DE CÁLCULO — APAVAN v18.5.0'); P('='.repeat(72));
+  P('MEMÓRIA DE CÁLCULO — APAVAN v18.5.2'); P('='.repeat(72));
   P(`Projeto: ${$('p_nome').value}`);
   P(`Data: ${new Date().toLocaleString('pt-BR')}`);
   P('');
@@ -3635,18 +3633,32 @@ function renderVerifNBR(R) {
 }
 
 /* ============================================================
-   UPDATE PRINCIPAL — com tratamento de erro granular
+   UPDATE PRINCIPAL — v18.5.2 (renderiza só canvases visíveis)
    ============================================================ */
 function atualizar() {
-  const R = lerDados();
+  let R;
+  try {
+    R = lerDados();
+  } catch (e) {
+    console.error('Erro em lerDados:', e);
+    toast('Erro ao processar dados: ' + e.message);
+    return;
+  }
   lastR = R; window.lastR = R;
 
-  // Renderização com try/catch por bloco para não bloquear tudo
   const safe = (nome, fn) => {
     try { fn(); }
     catch (e) { console.error(`Erro em ${nome}:`, e); }
   };
 
+  const cvVisible = (id) => {
+    const el = $(id);
+    if (!el) return false;
+    const view = el.closest('.view');
+    return !view || view.classList.contains('active');
+  };
+
+  // Painéis laterais — sempre (HTML leve)
   safe('renderResumo', () => renderResumo(R));
   safe('renderVigasFaixaDetalhe', () => renderVigasFaixaDetalhe(R));
   safe('renderBiAssim', () => renderBiAssim(R));
@@ -3660,22 +3672,43 @@ function atualizar() {
   safe('renderAncoragem', () => renderAncoragem(R));
   safe('renderPPVF', () => renderPPVF(R));
   safe('renderOtim', () => renderOtim(R));
-  safe('drawEsf', () => drawEsf(R, $('selEsf').value));
-  safe('drawMapa', () => drawMapa(R, $('selMapa').value));
-  safe('drawPerdas', () => drawPerdas(R));
-  safe('drawCaboX', () => drawCaboX(R));
-  safe('drawCaboY', () => drawCaboY(R));
-  safe('drawBal', () => drawBal(R));
-  safe('drawFlecha', () => drawFlecha(R));
-  safe('drawTensao', () => drawTensao(R));
-  safe('drawTensaoDetalhada', () => drawTensaoDetalhada(R));
-  safe('drawCorte', () => drawCorte(R));
-  safe('drawCaboVF', () => drawCaboVF(R));
-  safe('draw3D', () => draw3D(R));
-  const viewAtiva = document.querySelector('.view.active');
-  if (viewAtiva && viewAtiva.id === 'v-grelha') {
+
+  // Canvases — só se visíveis
+  if (cvVisible('cv3d'))     safe('draw3D', () => draw3D(R));
+  if (cvVisible('cvCorte'))  safe('drawCorte', () => drawCorte(R));
+  if (cvVisible('cvCaboVF')) safe('drawCaboVF', () => drawCaboVF(R));
+
+  if (cvVisible('cvEsf'))    safe('drawEsf', () => drawEsf(R, $('selEsf').value));
+  if (cvVisible('cvMapa'))   safe('drawMapa', () => drawMapa(R, $('selMapa').value));
+
+  if (cvVisible('cvPerdas')) safe('drawPerdas', () => drawPerdas(R));
+  if (cvVisible('cvCaboX'))  safe('drawCaboX', () => drawCaboX(R));
+  if (cvVisible('cvCaboY'))  safe('drawCaboY', () => drawCaboY(R));
+
+  if (cvVisible('cvBal'))    safe('drawBal', () => drawBal(R));
+
+  if (cvVisible('cvFlecha')) safe('drawFlecha', () => drawFlecha(R));
+
+  if (cvVisible('cvTensao')) safe('drawTensao', () => drawTensao(R));
+  if (cvVisible('cvTensaoDetalhada')) safe('drawTensaoDetalhada', () => drawTensaoDetalhada(R));
+
+  if (cvVisible('cvVF'))     safe('drawVF', () => drawVF(R));
+  if (cvVisible('cvVFDef'))  safe('drawVFDef', () => drawVFDef(R));
+
+  if (cvVisible('cvGrelha')) {
     safe('renderGrelha', () => renderGrelha(R));
   }
+}
+
+/* ============================================================
+   DEBOUNCE — v18.5.2
+   ============================================================ */
+let _debTimer = null;
+function atualizarDebounced() {
+  clearTimeout(_debTimer);
+  _debTimer = setTimeout(() => {
+    try { atualizar(); } catch (e) { console.error(e); toast('Erro: ' + e.message); }
+  }, 150);
 }
 
 /* ============================================================
@@ -3700,7 +3733,7 @@ document.querySelectorAll('#chips3d .chip').forEach(c => {
 $('selEsf').addEventListener('change', () => lastR && drawEsf(lastR, $('selEsf').value));
 $('selMapa').addEventListener('change', () => lastR && drawMapa(lastR, $('selMapa').value));
 document.querySelectorAll('.panel input, .panel select').forEach(el => {
-  el.addEventListener('input', () => { try { atualizar(); } catch(e) { console.error(e); toast('Erro: ' + e.message); } });
+  el.addEventListener('input', atualizarDebounced);
   el.addEventListener('change', () => { try { atualizar(); } catch(e) { console.error(e); toast('Erro: ' + e.message); } });
 });
 $('chk_convCompPos').addEventListener('change', (e) => {
@@ -3708,19 +3741,13 @@ $('chk_convCompPos').addEventListener('change', (e) => {
   if (lastR) { renderResumo(lastR); drawTensao(lastR); }
 });
 
-/* Sincronização vv_vao ↔ g_Lx */
 $('vv_sinc').addEventListener('change', () => {
-  if ($('vv_sinc').checked) {
-    $('vv_vao').value = $n('g_Lx').toFixed(2);
-  }
+  if ($('vv_sinc').checked) $('vv_vao').value = $n('g_Lx').toFixed(2);
 });
 $('g_Lx').addEventListener('input', () => {
-  if ($('vv_sinc').checked) {
-    $('vv_vao').value = $n('g_Lx').toFixed(2);
-  }
+  if ($('vv_sinc').checked) $('vv_vao').value = $n('g_Lx').toFixed(2);
 });
 
-/* Tooltip do solver */
 (function initGrelhaTooltip(){
   const cv = $('cvGrelha');
   if (!cv) return;
@@ -3729,7 +3756,6 @@ $('g_Lx').addEventListener('input', () => {
   cv.style.cursor = 'crosshair';
 })();
 
-/* Eventos de listeners adicionais */
 $('pr_bainha').addEventListener('change', () => {
   const [mu, k] = $('pr_bainha').value.split(',').map(Number);
   $('pr_mu').value = mu; $('pr_k').value = k;
@@ -3766,7 +3792,6 @@ $('vf_n').addEventListener('change', () => {
   }
 });
 
-/* 3D interação */
 let dragging = false, lastX = 0, lastY = 0;
 const cv3d = $('cv3d');
 cv3d.addEventListener('mousedown', e => { dragging = true; lastX = e.clientX; lastY = e.clientY; });
@@ -3912,26 +3937,36 @@ $('btnExemplo').addEventListener('click', () => {
   atualizar();
 });
 $('btnSalvar').addEventListener('click', () => {
-  const dados = {};
-  document.querySelectorAll('.panel input, .panel select').forEach(el => {
-    if (el.id) dados[el.id] = el.type === 'checkbox' ? el.checked : el.value;
-  });
-  ['bal_frac','bal_tipo','bal_modo','grelha_dx','grelha_metodo'].forEach(k => { const el=$(k); if(el) dados[k]=el.value; });
-  localStorage.setItem('apavan_laje', JSON.stringify(dados));
-  alert('Projeto salvo.');
+  try {
+    const dados = {};
+    document.querySelectorAll('.panel input, .panel select').forEach(el => {
+      if (el.id) dados[el.id] = el.type === 'checkbox' ? el.checked : el.value;
+    });
+    ['bal_frac','bal_tipo','bal_modo','grelha_dx','grelha_metodo'].forEach(k => { const el=$(k); if(el) dados[k]=el.value; });
+    localStorage.setItem('apavan_laje', JSON.stringify(dados));
+    toast('Projeto salvo com sucesso.', 'ok');
+  } catch (e) {
+    toast('localStorage bloqueado (file://). Use o botão .prot para exportar.', 'wn', 7000);
+  }
 });
 $('btnAbrir').addEventListener('click', () => {
-  const s = localStorage.getItem('apavan_laje');
-  if (!s) { alert('Nada salvo.'); return; }
-  const dados = JSON.parse(s);
-  Object.keys(dados).forEach(k => {
-    const el = $(k); if (!el) return;
-    if (el.type === 'checkbox') el.checked = dados[k]; else el.value = dados[k];
-  });
-  ['pr_modo','pr_nfaixas_X','vf_ativa','vf_n'].forEach(id => {
-    const el = $(id); if (el) el.dispatchEvent(new Event('change'));
-  });
-  atualizar();
+  let s = null;
+  try { s = localStorage.getItem('apavan_laje'); } catch (e) { /* silencioso */ }
+  if (!s) { toast('Nada salvo (ou localStorage bloqueado). Use .prot para importar.', 'wn'); return; }
+  try {
+    const dados = JSON.parse(s);
+    Object.keys(dados).forEach(k => {
+      const el = $(k); if (!el) return;
+      if (el.type === 'checkbox') el.checked = dados[k]; else el.value = dados[k];
+    });
+    ['pr_modo','pr_nfaixas_X','vf_ativa','vf_n'].forEach(id => {
+      const el = $(id); if (el) el.dispatchEvent(new Event('change'));
+    });
+    atualizar();
+    toast('Projeto carregado.', 'ok');
+  } catch (e) {
+    toast('Dados salvos inválidos.', 'er');
+  }
 });
 $('btnExp').addEventListener('click', () => {
   const dados = {};
@@ -3939,11 +3974,12 @@ $('btnExp').addEventListener('click', () => {
     if (el.id) dados[el.id] = el.type === 'checkbox' ? el.checked : el.value;
   });
   ['bal_frac','bal_tipo','bal_modo','grelha_dx','grelha_metodo'].forEach(k => { const el=$(k); if(el) dados[k]=el.value; });
-  const blob = new Blob([JSON.stringify({_apavan:18.50, dados, ts:Date.now()}, null, 2)], {type:'application/json'});
+  const blob = new Blob([JSON.stringify({_apavan:18.52, dados, ts:Date.now()}, null, 2)], {type:'application/json'});
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
   a.download = ($('p_nome').value || 'projeto') + '.prot';
   a.click();
+  toast('Arquivo .prot exportado.', 'ok');
 });
 $('btnImp').addEventListener('click', () => {
   const inp = document.createElement('input');
@@ -3963,7 +3999,8 @@ $('btnImp').addEventListener('click', () => {
           const el = $(id); if (el) el.dispatchEvent(new Event('change'));
         });
         atualizar();
-      } catch (err) { alert('Arquivo inválido.'); }
+        toast('Arquivo importado.', 'ok');
+      } catch (err) { toast('Arquivo inválido.', 'er'); }
     };
     rd.readAsText(f);
   };
@@ -3973,7 +4010,6 @@ window.addEventListener('resize', () => { if (lastR) atualizar(); });
 $('p_data').valueAsDate = new Date();
 $('pr_bainha').dispatchEvent(new Event('change'));
 
-/* Init */
 try {
   atualizar();
 } catch (e) {
